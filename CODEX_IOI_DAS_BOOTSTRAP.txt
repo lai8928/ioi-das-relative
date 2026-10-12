@@ -1,0 +1,234 @@
+IOI DAS RELATIVE-POSITION PROJECT — CODEX IMPLEMENTATION BRIEF
+
+Act as the implementation engineer for a new, small research project named
+ioi-das-relative. Extract the necessary IOI/DAS tutorial sources from pyvene,
+then develop the project incrementally. Implement Phase 0 and Phase 1 in this
+session. Phases 2–4 are a roadmap, not authorization to run them now.
+
+Write project code, identifiers, comments, docstrings, CLI help, error messages,
+documentation, configuration descriptions, and plot labels in English.
+Explain progress and findings to me in Traditional Chinese.
+
+1. OBJECTIVE AND WORKING SCOPE
+
+Two changes are required:
+1) Separate the responsibilities currently combined in find_variable_at().
+2) Support variable-length original IOI prompts and per-example intervention
+   locations: GOAL_NAME, N, N-1, N-2, etc., with matching plot labels.
+
+Begin by inspecting the current directory, git status, applicable AGENTS.md
+instructions, and available Python environment. If I opened a new project
+directory containing only this brief, use that directory as the project root.
+If the directory belongs to an existing project, preserve it and create an
+isolated subdirectory named ioi-das-relative. Do not overwrite existing work.
+Do not create a remote repository or push changes in this session.
+
+On my lab server, prefer the existing Conda environment named ioi-das-v2 if
+available. Discover its real interpreter path rather than assuming one. Do not
+recreate that environment, install packages, or change CUDA/system packages in
+this first session. Report missing dependencies and proposed commands, while
+completing any work that does not depend on them. Tokenizer-only downloads are
+in scope if needed and available; downloading model weights is not needed for
+Phase 1. Record the interpreter and installed package versions actually used.
+
+2. SOURCE EXTRACTION AND PROVENANCE
+
+Repository: https://github.com/stanfordnlp/pyvene
+Directory: https://github.com/stanfordnlp/pyvene/tree/main/tutorials/advanced_tutorials
+Use this inspected upstream commit for the initial snapshot:
+9e333904dcf9e597ca76170010d17f4d4580de8d
+
+Retrieve these files at that exact commit:
+- tutorials/advanced_tutorials/IOI_with_DAS.ipynb
+- tutorials/advanced_tutorials/tutorial_ioi_utils.py
+- tutorials/advanced_tutorials/tutorial_data/names.json
+- tutorials/advanced_tutorials/tutorial_data/objects.json
+- tutorials/advanced_tutorials/tutorial_data/places.json
+- tutorials/advanced_tutorials/tutorial_data/templates.json
+- LICENSE
+- pyproject.toml, for upstream dependency reference only
+
+Inspect transitive dependencies and add another source file only when a concrete
+requirement justifies it. Preserve upstream attribution, including the dataset
+generator's credit to activation-patching-illusion. Do not blindly import the
+entire advanced_tutorials directory or vendor the whole pyvene package.
+
+Fetch exact files through available GitHub tools, raw file downloads, or a
+temporary sparse checkout. Keep the extracted originals byte-for-byte unchanged
+under vendor/pyvene_upstream/, preserving their repository-relative paths.
+Put all adapted code under src/ioi_das/. Treat pyvene as a versioned external
+dependency. Do not copy its packaging configuration into our project root.
+
+Create docs/UPSTREAM.md with repository URL, full commit, original paths,
+SHA-256 hashes of extracted files, retrieval date, and source-to-module mapping.
+Record adapted behavior and compatibility fixes separately. If retrieval is
+blocked, report the exact failure; never invent source contents or silently
+substitute another revision.
+
+3. ARCHITECTURE
+
+Use a small Python package and CLI. A notebook may later display results, but
+must not contain the core experiment implementation. Plan these modules:
+
+- data.py: original prompt sampling, role metadata, counterfactual labels,
+  serialization, and fixed train/test splits.
+- tokenization.py: tokenizer loading, right padding, attention masks, character
+  offsets, name token spans, and encoded examples.
+- positions.py: convert named anchors and relative offsets into per-example
+  token indices; no sampling, optimization, or plotting.
+- intervention.py: build the pyvene intervention and share one intervention
+  forward function between training and evaluation.
+- train.py: train alignment parameters while keeping language-model weights
+  frozen; preserve gradient flow needed to learn the intervention.
+- evaluate.py: factual IOI accuracy, counterfactual IIA, per-example predictions,
+  and readout at the last valid base token.
+- experiment.py: run_condition() for one condition and run_sweep() for several.
+- plot.py: render figures from saved experiment results without training.
+- cli.py: command-line entry points for each phase.
+
+Keep configuration under configs/, generated fixed samples under data/generated/,
+and audit/experiment outputs under outputs/. Resolve paths relative to explicit
+project/config locations, not an accidental working directory. Create only the
+modules required by the current phase; document later modules without building
+an unnecessary framework or filling the repository with empty stubs.
+
+4. DATA AND POSITION CONTRACTS
+
+Preserve the original POSITION-task sampling rules:
+- Training: base ABB/BAB crossed with source ABB/BAB, 50 examples per pairing,
+  giving 200 base/source pairs.
+- Test: ABB to BAB and BAB to ABB, 50 examples each, giving 100 pairs.
+- Names, objects, and places: original first-half/second-half split.
+- Templates: original first two for training and remaining templates for test.
+
+Generate once, save train.jsonl and test.jsonl, and reuse the saved examples
+across experiment conditions. Record seed, generator revision, tokenizer
+identity/revision, and file hashes. A seed alone is not a saved dataset. Inspect
+unordered-set iteration or other nondeterminism; document any deterministic
+implementation change. Do not claim these are my historical 200 examples.
+
+Each pair must retain a stable ID, base/source text, template identifier,
+pattern information, each prompt's factual IO name and subject, occurrence-level
+name character spans, and the counterfactual answer name. Preserve names as text
+as well as token IDs, so the same examples can later use another tokenizer.
+
+Distinguish three concepts explicitly:
+- target_variable: the high-level causal variable, initially "position";
+- intervention_location: the activation site, e.g. IO or END with an offset;
+- readout_location: the last valid base token, even when intervening at N-2.
+
+The original io_pos and s1_pos describe first/second NAME order, not token
+indices. Do not use them directly as tensor positions. For the POSITION task,
+construct the counterfactual answer by applying the source position variable to
+the base names, following upstream logic. It is not always the source answer.
+
+Define anchors for each prompt independently:
+- IO / GOAL_NAME: the occurrence of that prompt's factual indirect-object name
+  inside its input. This is not a generated answer or a counterfactual target.
+- S1: first occurrence of the subject.
+- S2: second occurrence of the subject.
+- END / N: last non-padding input token.
+
+Track character spans during prompt construction and map them to token spans
+using offsets from a compatible fast tokenizer. Verify that token IDs match
+the intended GPT-2 tokenization. Do not locate repeated names by searching for
+the first matching token ID. Store full spans; the initial scalar name anchor
+is the last token of the selected span. Record this policy explicitly.
+
+For right-padded input: N = attention_mask.sum() - 1; END with offset -k maps
+to N-k. Compute this separately for every base and source example. A base of
+18 tokens and source of 22 tokens have N-1 indices 16 and 20, respectively.
+Do not force all examples to 18 tokens. Do not truncate, discard, or rewrite
+prompts merely to satisfy the old assertion. Padding is not part of the prompt.
+Do not append the target answer to the model input. Reject invalid anchors or
+out-of-range offsets with sample IDs and actionable diagnostics.
+
+Retain separate base and source position arrays in the batching API. Pass each
+side's attention mask in later model/pyvene calls. Evaluate next-token predictions
+at each base example's N, never blindly at the batch tensor's final column.
+
+Initially use single-token answer evaluation. Check the actual continuation
+tokenization, including the leading space and prompt boundary. If an answer
+requires multiple tokens, preserve and report the example and mark this as an
+unsupported evaluation case. Never silently use only its first token.
+
+5. PHASE 0 — EXTRACT AND DOCUMENT
+
+Complete source extraction and environment inspection. Create:
+- README.md: purpose, setup assumptions, and the current runnable commands.
+- AGENTS.md: concise durable project rules from this brief, respecting existing
+  instructions and without replacing any existing rules.
+- docs/PLAN.md: architecture, data contracts, phases, and acceptance criteria.
+- docs/STATUS.md: completed work, evidence, known issues, and the next command.
+- docs/UPSTREAM.md: provenance and any documented behavior changes.
+
+Do not merely propose the files: retrieve and write them in the project.
+
+6. PHASE 1 — POSITION-AUDIT PROTOTYPE
+
+Implement only data generation/loading, tokenization, position resolution, and
+a runnable audit CLI, for example python -m ioi_das.cli audit --config ... .
+Use the existing tokenizer dependencies if available. Do not load GPT-2 weights,
+start DAS optimization, or require a GPU for this phase.
+
+Run the audit over all 200 training and 100 test pairs when dependencies permit.
+Save a dataset manifest, machine-readable audit output, and an English summary.
+For every pair, retain base/source token IDs and readable tokens, valid lengths,
+IO/S1/S2 spans, resolved GOAL_NAME and N/N-1/N-2 indices, and factual and
+counterfactual answer checks. Show a small human-readable subset containing
+different lengths and both ABB/BAB patterns.
+
+Use focused correctness checks:
+- Independently verify a few hand-checked ABB/BAB role and counterfactual cases.
+- Confirm name spans refer to the correct occurrence rather than just the same
+  string elsewhere in the prompt.
+- Check a synthetic unequal-length base/source pair, even if sampled pairs do
+  not exercise this case, and distinguish it from the original research data.
+- Resolve END and END-k in mixed-length padded batches; compare against the same
+  examples tokenized individually, with explicit expected indices.
+- Diagnose invalid offsets and multi-token answer cases without silent drops.
+
+Do not write redundant tests for trivial wrappers. If runtime dependencies or
+network access prevent the audit, finish the implementation, identify the exact
+blocked acceptance criteria, and report the exact command needed to resume.
+Do not present fixture-only checks as a completed real-tokenizer audit.
+
+Stop after this Phase 0/1 checkpoint. Report the actual project path, files
+created, execution command, validation evidence, unresolved issues, and the
+next recommended action. Do not ask for permission for each routine file edit.
+
+7. LATER PHASES — RECORD NOW, IMPLEMENT WHEN REQUESTED
+
+Phase 2: one actual DAS condition using the saved original data: GPT-2,
+block_output, layer 8, END/N, rank 1, target_variable="position". Extract training
+and evaluation from upstream without silently changing optimizer/scheduler
+behavior. Document intentional fixes. Save config, losses, counts, predictions,
+and alignment weights. Verify frozen model weights, an identity intervention,
+and batch-versus-individual consistency on variable lengths. Remove hooks or
+other per-condition state before starting another condition. Keep a short smoke
+run clearly distinct from the configured full experiment.
+
+Phase 3: independently train eight conditions: layers [7, 8] crossed with
+[GOAL_NAME, N, N-1, N-2]. Reuse the same examples and record initialization seeds.
+Store per-example actual indices alongside semantic labels. Plot END-relative
+IIA by layer in explicit offset order; display GOAL_NAME separately. IO-based
+location selection uses known task roles and must be interpreted accordingly.
+END-k aligns distance from the end, not necessarily the same syntactic role.
+
+Phase 4: expand to layers 0–11 and N-4 through N, add checkpointing/resume and
+failure analysis. Then consider rank changes, controlled data variations, or
+larger models one factor at a time. Preserve held-out test data for evaluation;
+use a separate validation split before tuning hyperparameters or selecting a
+best condition. Do not start these extensions in the bootstrap session.
+
+Future results must come from this project's saved runs, not tutorial CSVs or
+embedded notebook outputs. Save IIA numerator/denominator and full precision;
+round only for display. The upstream metric called kl_div is not a true KL
+divergence; do not repeat that label without checking or correcting its meaning.
+
+8. EXECUTION INSTRUCTION
+
+Start now with workspace inspection, then complete Phase 0 and Phase 1 within
+the stated scope. Make reasonable implementation choices and document them.
+Keep the code small and understandable. Before finishing, update docs/STATUS.md
+so a later Codex session can continue without relying on this chat history.

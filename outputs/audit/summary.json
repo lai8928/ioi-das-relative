@@ -1,0 +1,93 @@
+{
+  "answer_status_counts": {
+    "supported_single_token": 1800
+  },
+  "artifacts": {
+    "environment.json": "ca4ad87d0c26ebaaac479ca00ad5aca855ceaa8b70b5a37247342b111cce85aa",
+    "focused_checks.json": "356432984f0661f0e9a7ef2c7d92f47a8500eccb2536c518419ca728dab41476",
+    "pairs.jsonl": "f5f0ff10d1304498bb0117f2a80938cf7b0c64ceb7adff0faa65f493a21ce324"
+  },
+  "batch_individual_position_comparisons": 2400,
+  "completed_at_utc": "2026-10-12T18:15:39.359848+00:00",
+  "config_sha256": "d8f12ac9e064c785600a905d5da98e09c2df7de075b1f17997660f2166a1b0dd",
+  "counts": {
+    "test": 100,
+    "train": 200
+  },
+  "das_training_started": false,
+  "dataset_manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+  "dataset_reused": true,
+  "fast_reference_comparisons": {
+    "batched_sides": 30,
+    "continuations": 1800,
+    "inputs": 600
+  },
+  "focused_checks": "passed",
+  "implementation_sha256": {
+    "__init__.py": "6b2cac83b6926f48e4fe131a7d60f0bce7544fe4be30aaf27fa16f9de2203c41",
+    "audit.py": "24678bc046ded94b53a006be1414121fe9cb7759c12322916abf3a43c64490dc",
+    "checks.py": "8c685dc8e6effeee57deb1512bc39a81e75c58f680df4c8f8a3b631dc47de7f1",
+    "cli.py": "afafa78b868fd9186a9d80926f02e32b948c076587abea24a6acf29c5f8d56ab",
+    "data.py": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+    "environment.py": "5be5feaa9763fd33428589f7ee688e5c464abd347e7f3abf863b6d9ab9d1f8f7",
+    "positions.py": "b38c1d90ed96f77d9229d66f68d64a272681363d60657b10dc7e0f2136bc3078",
+    "tokenization.py": "65ed374f80c9f76f7f33b44281dce188655629d0be760fadffc2921c2bc8bb4d"
+  },
+  "model_weights_loaded": false,
+  "pairing_counts": {
+    "test": {
+      "ABB->BAB": 50,
+      "BAB->ABB": 50
+    },
+    "train": {
+      "ABB->ABB": 50,
+      "ABB->BAB": 50,
+      "BAB->ABB": 50,
+      "BAB->BAB": 50
+    }
+  },
+  "policies": {
+    "name_scalar": "last token of full factual occurrence span",
+    "padding": "independent right padding, no truncation or appended answers",
+    "readout": "base N = sum(base attention_mask) - 1"
+  },
+  "status": "passed",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "unequal_length_original_pairs": 0,
+  "unsupported_answer_checks": [],
+  "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+  "valid_length_counts": {
+    "test": {
+      "base": {
+        "14": 17,
+        "15": 45,
+        "16": 7,
+        "17": 11,
+        "18": 10,
+        "20": 10
+      },
+      "source": {
+        "14": 17,
+        "15": 45,
+        "16": 7,
+        "17": 11,
+        "18": 10,
+        "20": 10
+      }
+    },
+    "train": {
+      "base": {
+        "15": 87,
+        "19": 113
+      },
+      "source": {
+        "15": 87,
+        "19": 113
+      }
+    }
+  }
+}

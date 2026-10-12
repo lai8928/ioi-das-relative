@@ -1,0 +1,16 @@
+{
+  "project_root": "..",
+  "upstream_dir": "vendor/pyvene_upstream",
+  "generated_dir": "data/generated",
+  "output_dir": "outputs/audit",
+  "seed": 42,
+  "batch_size": 20,
+  "target_variable": "position",
+  "intervention_locations": ["GOAL_NAME", "N", "N-1", "N-2"],
+  "readout_location": "N",
+  "tokenizer": {
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+    "local_files_only": true
+  }
+}

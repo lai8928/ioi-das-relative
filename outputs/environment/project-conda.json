@@ -1,0 +1,35 @@
+{
+  "das_training_started": false,
+  "environment_variables": {
+    "CONDA_DEFAULT_ENV": null,
+    "CONDA_PREFIX": null,
+    "CUDA_VISIBLE_DEVICES": null
+  },
+  "executable": "/home/ilingl/projects/ioi-das-relative/.conda/bin/python",
+  "gpu": {
+    "error": "ModuleNotFoundError: No module named 'torch'",
+    "requested_device": "cuda:0",
+    "status": "failed"
+  },
+  "gpu_required": true,
+  "missing_phase1_test_dependencies": [
+    "transformers",
+    "tokenizers",
+    "pytest"
+  ],
+  "model_weights_loaded": false,
+  "packages": {
+    "numpy": null,
+    "packaging": "26.3",
+    "pip": "26.2.1",
+    "pytest": null,
+    "pyvene": null,
+    "tokenizers": null,
+    "torch": null,
+    "transformers": null
+  },
+  "phase1_dependency_status": "missing_dependencies",
+  "prefix": "/home/ilingl/projects/ioi-das-relative/.conda",
+  "python": "3.11.17",
+  "status": "failed"
+}

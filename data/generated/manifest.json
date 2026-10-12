@@ -1,0 +1,57 @@
+{
+  "files": {
+    "test": {
+      "count": 100,
+      "path": "test.jsonl",
+      "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+    },
+    "train": {
+      "count": 200,
+      "path": "train.jsonl",
+      "sha256": "3867b316d469df4b4c2d80136324c8cda4e001c617c584c30703283ad75db346"
+    }
+  },
+  "generation": {
+    "generator_revision": "ioi-position-v1-ordered-symbols",
+    "generator_sha256": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+    "seed": 42,
+    "target_variable": "position",
+    "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+    "upstream_sha256": {
+      "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+      "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+      "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+      "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+      "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+      "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+      "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+    }
+  },
+  "pairing_counts": {
+    "test": {
+      "ABB->BAB": 50,
+      "BAB->ABB": 50
+    },
+    "train": {
+      "ABB->ABB": 50,
+      "ABB->BAB": 50,
+      "BAB->ABB": 50,
+      "BAB->BAB": 50
+    }
+  },
+  "policies": {
+    "historical_samples": false,
+    "name_span": "construction-time half-open character spans for formatted occurrences",
+    "resource_split": "original first/second halves; templates first two/rest",
+    "reuse": "verify manifest and hashes; never regenerate on an audit rerun",
+    "source_sampling": "resample each base using the same A/B names, template, object, place",
+    "symbol_order": "first occurrence, replacing upstream unordered set iteration"
+  },
+  "schema_version": 1,
+  "tokenizer_at_generation": {
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  }
+}

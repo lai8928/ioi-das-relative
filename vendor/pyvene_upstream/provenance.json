@@ -1,0 +1,56 @@
+{
+  "repository": "https://github.com/stanfordnlp/pyvene",
+  "commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+  "retrieved_on": "2026-10-12",
+  "method": "HTTPS GET of raw.githubusercontent.com URLs at the pinned commit with curl --fail --location; file bytes preserved without transformation.",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "bytes": 11357,
+      "url": "https://raw.githubusercontent.com/stanfordnlp/pyvene/9e333904dcf9e597ca76170010d17f4d4580de8d/LICENSE"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+      "bytes": 2017,
+      "url": "https://raw.githubusercontent.com/stanfordnlp/pyvene/9e333904dcf9e597ca76170010d17f4d4580de8d/pyproject.toml"
+    },
+    {
+      "path": "tutorials/advanced_tutorials/IOI_with_DAS.ipynb",
+      "sha256": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+      "bytes": 2336116,
+      "url": "https://raw.githubusercontent.com/stanfordnlp/pyvene/9e333904dcf9e597ca76170010d17f4d4580de8d/tutorials/advanced_tutorials/IOI_with_DAS.ipynb"
+    },
+    {
+      "path": "tutorials/advanced_tutorials/tutorial_ioi_utils.py",
+      "sha256": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c",
+      "bytes": 40757,
+      "url": "https://raw.githubusercontent.com/stanfordnlp/pyvene/9e333904dcf9e597ca76170010d17f4d4580de8d/tutorials/advanced_tutorials/tutorial_ioi_utils.py"
+    },
+    {
+      "path": "tutorials/advanced_tutorials/tutorial_data/names.json",
+      "sha256": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+      "bytes": 1208,
+      "url": "https://raw.githubusercontent.com/stanfordnlp/pyvene/9e333904dcf9e597ca76170010d17f4d4580de8d/tutorials/advanced_tutorials/tutorial_data/names.json"
+    },
+    {
+      "path": "tutorials/advanced_tutorials/tutorial_data/objects.json",
+      "sha256": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+      "bytes": 98,
+      "url": "https://raw.githubusercontent.com/stanfordnlp/pyvene/9e333904dcf9e597ca76170010d17f4d4580de8d/tutorials/advanced_tutorials/tutorial_data/objects.json"
+    },
+    {
+      "path": "tutorials/advanced_tutorials/tutorial_data/places.json",
+      "sha256": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+      "bytes": 103,
+      "url": "https://raw.githubusercontent.com/stanfordnlp/pyvene/9e333904dcf9e597ca76170010d17f4d4580de8d/tutorials/advanced_tutorials/tutorial_data/places.json"
+    },
+    {
+      "path": "tutorials/advanced_tutorials/tutorial_data/templates.json",
+      "sha256": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+      "bytes": 1404,
+      "url": "https://raw.githubusercontent.com/stanfordnlp/pyvene/9e333904dcf9e597ca76170010d17f4d4580de8d/tutorials/advanced_tutorials/tutorial_data/templates.json"
+    }
+  ]
+}

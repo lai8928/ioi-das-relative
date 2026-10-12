@@ -1,0 +1,23 @@
+[project]
+name = "ioi-das-relative"
+version = "0.1.0"
+description = "Original IOI data and per-example relative-position audit"
+requires-python = ">=3.10"
+dependencies = ["transformers>=4.55.0", "tokenizers>=0.20.0"]
+
+[project.optional-dependencies]
+das = ["pyvene==0.1.8"]
+
+[project.scripts]
+ioi-das = "ioi_das.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

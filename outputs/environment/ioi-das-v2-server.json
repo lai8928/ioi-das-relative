@@ -1,0 +1,49 @@
+{
+  "das_training_started": false,
+  "environment_variables": {
+    "CONDA_DEFAULT_ENV": null,
+    "CONDA_PREFIX": null,
+    "CUDA_VISIBLE_DEVICES": null
+  },
+  "executable": "/home/ilingl/.conda/envs/ioi-das-v2/bin/python",
+  "gpu": {
+    "compute_capability": [
+      7,
+      5
+    ],
+    "cuda_available": true,
+    "device_name": "NVIDIA GeForce RTX 2080 Ti",
+    "logical_device_index": 0,
+    "requested_device": "cuda:0",
+    "smoke_test": {
+      "all_elements_correct": true,
+      "allocated_memory_bytes": 9043968,
+      "expected_each_element": 256,
+      "input_device": "cuda:0",
+      "observed_first_element": 256.0,
+      "operation": "256x256 float32 matrix multiplication",
+      "result_device": "cuda:0"
+    },
+    "status": "passed",
+    "torch_cuda_runtime": "12.1",
+    "total_memory_bytes": 11546394624,
+    "visible_device_count": 7
+  },
+  "gpu_required": true,
+  "missing_phase1_test_dependencies": [],
+  "model_weights_loaded": false,
+  "packages": {
+    "numpy": "2.2.6",
+    "packaging": "26.3",
+    "pip": "26.2.1",
+    "pytest": "9.1.1",
+    "pyvene": "0.1.8",
+    "tokenizers": "0.22.2",
+    "torch": "2.5.1+cu121",
+    "transformers": "4.57.6"
+  },
+  "phase1_dependency_status": "ready",
+  "prefix": "/home/ilingl/.conda/envs/ioi-das-v2",
+  "python": "3.10.21",
+  "status": "passed"
+}
