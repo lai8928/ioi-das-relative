@@ -1,0 +1,45 @@
+{
+  "project_root": "..",
+  "upstream_dir": "vendor/pyvene_upstream",
+  "generated_dir": "data/generated",
+  "output_dir": "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42",
+  "dataset_seed": 42,
+  "seed": 42,
+  "device": "cuda:0",
+  "cpu_threads": 8,
+  "target_variable": "position",
+  "intervention_location": "N",
+  "readout_location": "N",
+  "layer": 8,
+  "component": "block_output",
+  "rank": 1,
+  "model": {
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+    "local_files_only": true,
+    "dtype": "float32",
+    "attn_implementation": "eager"
+  },
+  "tokenizer": {
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+    "local_files_only": true
+  },
+  "training": {
+    "epochs": 10,
+    "batch_size": 20,
+    "optimizer": "Adam",
+    "learning_rate": 0.01,
+    "betas": [0.9, 0.999],
+    "eps": 1e-8,
+    "weight_decay": 0.0,
+    "scheduler": {
+      "name": "LinearLR",
+      "start_factor": 0.3333333333333333,
+      "end_factor": 0.1,
+      "total_iters": 10,
+      "step_interval": "batch"
+    }
+  },
+  "evaluation_batch_size": 20
+}

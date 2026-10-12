@@ -1,4 +1,4 @@
-"""Command-line interface for Phase 1 auditing and environment diagnostics."""
+"""Command-line interface for auditing, diagnostics, and the single Phase 2 condition."""
 
 import argparse
 import json
@@ -30,7 +30,7 @@ def load_config(path: Path, output_override: str | None = None) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Audit original IOI POSITION samples using only a tokenizer.")
+    parser = argparse.ArgumentParser(description="Run IOI audits, environment diagnostics, and one Phase 2 DAS condition.")
     commands = parser.add_subparsers(dest="command", required=True)
     audit = commands.add_parser("audit", help="Save or reuse original samples and audit per-example positions.")
     audit.add_argument("--config", required=True, type=Path, help="Explicit JSON configuration path.")
@@ -39,6 +39,10 @@ def main(argv: list[str] | None = None) -> int:
     doctor.add_argument("--require-gpu", action="store_true", help="Require CUDA and run a small GPU matrix multiplication.")
     doctor.add_argument("--device", default="cuda:0", help="Logical CUDA device after CUDA_VISIBLE_DEVICES mapping.")
     doctor.add_argument("--output", type=Path, help="Optional explicit JSON report path, resolved from the current directory.")
+    run = commands.add_parser("run", help="Run only GPT-2 layer 8 / block_output / N / rank 1 POSITION DAS.")
+    run.add_argument("--config", required=True, type=Path, help="Explicit Phase 2 JSON configuration path.")
+    run.add_argument("--output-dir", help="New artifact root relative to configured project root, or an absolute path.")
+    run.add_argument("--smoke", action="store_true", help="Run a separately labeled balanced 20-pair / one-update smoke check.")
     args = parser.parse_args(argv)
     if args.command == "doctor":
         report = inspect_environment(args.require_gpu, args.device)
@@ -46,6 +50,15 @@ def main(argv: list[str] | None = None) -> int:
             write_json(args.output.expanduser().resolve(), report)
         print(json.dumps(report, indent=2, sort_keys=True))
         return 0 if report["status"] == "passed" else 2
+    if args.command == "run":
+        try:
+            from .experiment import load_phase2_config, run_condition
+            config = load_phase2_config(args.config, args.output_dir)
+            run_condition(config, args.smoke)
+        except (OSError, ValueError, KeyError, ImportError, RuntimeError, AssertionError) as error:
+            print(f"Phase 2 run failed: {error}", file=sys.stderr)
+            return 2
+        return 0
     try:
         config = load_config(args.config, args.output_dir)
         summary = run_audit(config)

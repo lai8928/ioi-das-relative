@@ -1,0 +1,552 @@
+{
+  "additional_checks": [
+    {
+      "errors": [],
+      "example_ids": [
+        "test-0000",
+        "test-0012"
+      ],
+      "held_out_only_note_observed": true,
+      "name": "All-test EXAMPLE_IDS explorer",
+      "only_test_stage_and_two_rows_asserted": true,
+      "status": "passed",
+      "training_probability_figures_drawn": 0
+    }
+  ],
+  "cells": [
+    {
+      "elapsed_seconds": 3.450408261269331,
+      "errors": [],
+      "execution_count": 1,
+      "export_only_substitutions": [
+        "Redirect figure, overview, and figure-manifest exports to a temporary directory."
+      ],
+      "message_counts": {
+        "display_data": 2,
+        "execute_input": 1,
+        "status": 2,
+        "stream": 1
+      },
+      "mime_counts": {
+        "text/html": 2,
+        "text/plain": 2
+      },
+      "notebook_cell_index": 1,
+      "source_sha256": "d77d19c83d26a609b4a917ae7aacb21342c6a21c709e06b953cde4046c8e9b82",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.04373886063694954,
+      "errors": [],
+      "execution_count": 2,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 2,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "text/html": 2,
+        "text/plain": 2
+      },
+      "notebook_cell_index": 3,
+      "source_sha256": "43b53fcf668351417a7d490210be25a6135cacd103d304502629cc6db492f761",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.7109234780073166,
+      "errors": [],
+      "execution_count": 3,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 3,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/html": 2,
+        "text/plain": 3
+      },
+      "notebook_cell_index": 5,
+      "source_sha256": "a1dff6925b670733ea94e54f427a928f8191f272183614a77c855bccf449a6b9",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.7633093558251858,
+      "errors": [],
+      "execution_count": 4,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 1,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/plain": 1
+      },
+      "notebook_cell_index": 6,
+      "source_sha256": "df470d568dcbde186398685b0983514e39750d82558bb0ed9a12a3b71a87a61e",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.02023199200630188,
+      "errors": [],
+      "execution_count": 5,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 2,
+        "execute_input": 1,
+        "status": 2,
+        "stream": 1
+      },
+      "mime_counts": {
+        "text/html": 2,
+        "text/plain": 2
+      },
+      "notebook_cell_index": 8,
+      "source_sha256": "1d01492c545cf00a390e4324e0719297951047d863a8a5c142c76f185268b60b",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 1.2495164424180984,
+      "errors": [],
+      "execution_count": 6,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 3,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/html": 2,
+        "text/plain": 3
+      },
+      "notebook_cell_index": 10,
+      "source_sha256": "7bbef0fee469649dd73af5976201894c3def31595ca15e9b710700c1e29aa6cb",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.48176999017596245,
+      "errors": [],
+      "execution_count": 7,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 1,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/plain": 1
+      },
+      "notebook_cell_index": 12,
+      "source_sha256": "6853756ab674df645e6cba5b9801592fc3e50954fd0f3ab993b9dc14ccfb366d",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.03185378760099411,
+      "errors": [],
+      "execution_count": 8,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 4,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "text/html": 4,
+        "text/plain": 4
+      },
+      "notebook_cell_index": 14,
+      "source_sha256": "7e91e2b623ce022547d1442ec4bdb3c6aaafc57e596772b0d364f95a0c9b9d2f",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 1.8771559223532677,
+      "errors": [],
+      "execution_count": 9,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 3,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/html": 2,
+        "text/plain": 3
+      },
+      "notebook_cell_index": 16,
+      "source_sha256": "51aeff632cce22311c6fa288b6134e25ab0806c23d208fb5fb0380377cc0e45d",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.026721343398094177,
+      "errors": [],
+      "execution_count": 10,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 1,
+        "execute_input": 1,
+        "status": 2,
+        "stream": 1
+      },
+      "mime_counts": {
+        "text/html": 1,
+        "text/plain": 1
+      },
+      "notebook_cell_index": 17,
+      "source_sha256": "9d9038b213fac51d096653ee216f1fff655085383fc6789324ed687ed139e6a6",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.4364754669368267,
+      "errors": [],
+      "execution_count": 11,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 2,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/html": 1,
+        "text/plain": 2
+      },
+      "notebook_cell_index": 19,
+      "source_sha256": "6c122868082649e562070e85303a6ee1e840172556aa6167f982c4015ac9f179",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.8110046125948429,
+      "errors": [],
+      "execution_count": 12,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 3,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/html": 1,
+        "text/markdown": 1,
+        "text/plain": 3
+      },
+      "notebook_cell_index": 20,
+      "source_sha256": "49146e4104d51494a38761bf647680dc46d44365e1e1d41ba5fe203a3e2fde6e",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.434262003749609,
+      "errors": [],
+      "execution_count": 13,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 2,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/html": 1,
+        "text/plain": 2
+      },
+      "notebook_cell_index": 22,
+      "source_sha256": "d32e5381e77e61f17613abd623f266d1aace89697685d09d9822a471b497d207",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.019592490047216415,
+      "errors": [],
+      "execution_count": 14,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 2,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "text/html": 2,
+        "text/plain": 2
+      },
+      "notebook_cell_index": 23,
+      "source_sha256": "757fa1bbcb99c4df49cdc6373744b18392d8cb3e1886fb47d28258f98d883378",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.7007276155054569,
+      "errors": [],
+      "execution_count": 15,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 4,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/html": 3,
+        "text/plain": 4
+      },
+      "notebook_cell_index": 25,
+      "source_sha256": "48e998636a9990e3b2fabb31974bf63b669af56971cb93fbeb920c627cf0cbb7",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.7899415455758572,
+      "errors": [],
+      "execution_count": 16,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 3,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/html": 2,
+        "text/plain": 3
+      },
+      "notebook_cell_index": 26,
+      "source_sha256": "edb43241c61c7427ab7bc38088912ad750069546eaac080236764cd774a0f4d4",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 3.1535801589488983,
+      "errors": [],
+      "execution_count": 17,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 2,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/html": 1,
+        "text/plain": 2
+      },
+      "notebook_cell_index": 28,
+      "source_sha256": "9435ac025a9d480a30afad797210502b0eac6d5b73657ea8b71ff9569a073b5f",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.017594970762729645,
+      "errors": [],
+      "execution_count": 18,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 1,
+        "execute_input": 1,
+        "status": 2,
+        "stream": 1
+      },
+      "mime_counts": {
+        "text/html": 1,
+        "text/plain": 1
+      },
+      "notebook_cell_index": 30,
+      "source_sha256": "38fc8b76549e878675046d4c4cda31175789a28543fad69b553c86e30aa6cbeb",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 1.524060133844614,
+      "errors": [],
+      "execution_count": 19,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "display_data": 1,
+        "execute_input": 1,
+        "status": 2
+      },
+      "mime_counts": {
+        "image/png": 1,
+        "text/plain": 1
+      },
+      "notebook_cell_index": 31,
+      "source_sha256": "746bd24beb5a493a891e319a9fcb07fe37f3050fc0dcddbd4d7a16684e6b32cf",
+      "status": "ok"
+    },
+    {
+      "elapsed_seconds": 0.02448897436261177,
+      "errors": [],
+      "execution_count": 20,
+      "export_only_substitutions": [],
+      "message_counts": {
+        "execute_input": 1,
+        "status": 2,
+        "stream": 1
+      },
+      "mime_counts": {},
+      "notebook_cell_index": 33,
+      "source_sha256": "b3984fd13552e0f95ad105306d23dc0df05c9e33500c6144f72aedfe53683a92",
+      "status": "ok"
+    }
+  ],
+  "checked_at_utc": "2026-10-12T18:57:05.758139+00:00",
+  "driver_interpreter": "/home/ilingl/miniforge3/envs/ioi/bin/python",
+  "elapsed_seconds": 17.97818500548601,
+  "embedded_png_outputs_observed": 12,
+  "environment_changes": [],
+  "error_count": 0,
+  "executed_code_cells": 20,
+  "executor": "Existing registered ioi Jupyter kernel through jupyter_client",
+  "expected_code_cells": 20,
+  "failure": null,
+  "input_sha256_after": {
+    "configs/phase2.json": "77242b5d6697ae35c33bf1cbd9577f7028372b1a3f64eb9800688ab2aca01d2e",
+    "data/generated/manifest.json": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+    "data/generated/test.jsonl": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded",
+    "data/generated/train.jsonl": "3867b316d469df4b4c2d80136324c8cda4e001c617c584c30703283ad75db346",
+    "notebooks/phase2_walkthrough.ipynb": "105d67d78f5f7084c764d1897c3b36e29d38cf9f402402f7ba322f524a604a23",
+    "outputs/audit/pairs.jsonl": "f5f0ff10d1304498bb0117f2a80938cf7b0c64ceb7adff0faa65f493a21ce324",
+    "outputs/notebooks/phase2_walkthrough/figure_manifest.json": "a941358d666e557500c9b4986388fe38723c7150a8db3dba335d4f00389f50fa",
+    "outputs/notebooks/phase2_walkthrough/figures/01_dataset_pairings.png": "ecf394fc34ddfe74d4f5e1c4c5477d66cd9c474c9e2462a2aa9c8006d597c0c4",
+    "outputs/notebooks/phase2_walkthrough/figures/01_dataset_pairings.svg": "2cf9baa4ea3da097ba07bf5854111638697305c659601230d35146781e689094",
+    "outputs/notebooks/phase2_walkthrough/figures/02_original_prompt_lengths.png": "83350b36fd0119d7343b1c2dbba5891f81bdf58eb436403c6c1823b54fb7288a",
+    "outputs/notebooks/phase2_walkthrough/figures/02_original_prompt_lengths.svg": "a222d9637f4db3a9fe2bf1367f7afd37cf497e44cd0d7523bf381d5486693d28",
+    "outputs/notebooks/phase2_walkthrough/figures/03_selected_pair_token_positions.png": "9eb509b43db3ad15bc9b392a27710385d99f925694d1ae17daf00df4cba13214",
+    "outputs/notebooks/phase2_walkthrough/figures/03_selected_pair_token_positions.svg": "6dce54dd0daff6c6c73e10579c0cbd5cf5bc7542c15ca7acdce4ec3a9f769573",
+    "outputs/notebooks/phase2_walkthrough/figures/04_rank1_intervention_flow.png": "57373def924f71e7f3ded5e13188918b3d63523d611638159e839c723de634a4",
+    "outputs/notebooks/phase2_walkthrough/figures/04_rank1_intervention_flow.svg": "43bfcec3ce430ed3173cf7dce126923c0db1175cd9f0a8284256b945db05a3ef",
+    "outputs/notebooks/phase2_walkthrough/figures/05_training_trace.png": "3a453f1d65be5a653ddfebfc438f5b506e05a5cdb8ccd95a3bcab2427e50b5a1",
+    "outputs/notebooks/phase2_walkthrough/figures/05_training_trace.svg": "2333579c1afa77379bb968e7c68b842057fb69b7821d3ecabb13410bf8455eb4",
+    "outputs/notebooks/phase2_walkthrough/figures/06_final_metrics.png": "f059708c4c4dd471beded31a287ab99aade715d09575c1c8ecf0e04b7b831d7e",
+    "outputs/notebooks/phase2_walkthrough/figures/06_final_metrics.svg": "ec5089e1f3c3e5efd0320e99f670e49cb35f9efc585ba897c3109e74adbb3afe",
+    "outputs/notebooks/phase2_walkthrough/figures/07_pairing_specific_iia.png": "2dace502216d06a0a38526bccc5a61532273ea3d7b6e609513b78e5110d46586",
+    "outputs/notebooks/phase2_walkthrough/figures/07_pairing_specific_iia.svg": "d03dba64b48e067b2be911b6271132a96c87c85d58e9bd814b9d6a6dcff590b9",
+    "outputs/notebooks/phase2_walkthrough/figures/08_example_target_probabilities.png": "428277c4092ae59682c44943b5a573b4bb7f85836594564040e2220d70041389",
+    "outputs/notebooks/phase2_walkthrough/figures/08_example_target_probabilities.svg": "a32aba7f33863d1650556ea301389e1bbd3a00b23a53009bc9bd80597f9e197a",
+    "outputs/notebooks/phase2_walkthrough/figures/09_test_failure_categories.png": "f4f9b1efbcbc41654671ee42d872d1737e008365ca94991dbf41976699be4c82",
+    "outputs/notebooks/phase2_walkthrough/figures/09_test_failure_categories.svg": "1fbf1a623f448ee3da0d40024e9e2c9fdb552981a4f526a3d0b6123265a1bd48",
+    "outputs/notebooks/phase2_walkthrough/figures/10_length_and_joint_outcomes.png": "b9715235214d1c444118d4847937ec04d3d9e0e8751f199d3a4cb39e4b0a1cd4",
+    "outputs/notebooks/phase2_walkthrough/figures/10_length_and_joint_outcomes.svg": "266dd022784fac5c7c0a0c73cb003d7a35f95407cac5b746ba8f8a6a58cbd389",
+    "outputs/notebooks/phase2_walkthrough/figures/11_alignment_direction.png": "0f627e1bda118e96295eb3b4608a30cbfa74339f3fcbe5f54295cfaee31744c3",
+    "outputs/notebooks/phase2_walkthrough/figures/11_alignment_direction.svg": "1cab10e5cbb43764b69dbb7d258d123df387c0e08bd2c84f39e0ebce611564a5",
+    "outputs/notebooks/phase2_walkthrough/figures/12_synthetic_unequal_positions.png": "cf3349ce3e38996a1e63c11a49bae22bdc1a8c4c8517beb0b5301102e867c563",
+    "outputs/notebooks/phase2_walkthrough/figures/12_synthetic_unequal_positions.svg": "9b88144ac16b8debfb3149e7009f40acf582c9b95e3312bdab27324f1d87c8d6",
+    "outputs/notebooks/phase2_walkthrough/overview.json": "189517e51bfc43ef5b51c3b1bfdc2e7d0b7d3e4027ee8e59a5ad92df98280499",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/alignment.pt": "99e0b38582a600437b54480cd4fe654b06a9bb7adaa220f79d956e03a918c148",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/config.json": "f62065cb5cb166727267971db4a3c32502fcdd667ee2288e9434d8c29122cc2e",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/environment.json": "13f23c58d5ed9ab78619cc98b1d9d575c3dcec3f0e998129350232265352764e",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/initial_alignment.pt": "250b53cce7164a4a346287d620ebf36ffad40944cb39d6fe41c84aff1915e5c0",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/initial_train_predictions.jsonl": "981137aaae9811b841655d924dfcbec9f0cdea189dc993cf4e17af485b07ba51",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/metrics.json": "e319c967693c125ae184dc68150152de67053ea235cca1247e24b453889042df",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/result.json": "3bc36362f47141738ea677ea6a74b99c98d1235a253e99885583e8c2451da619",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/summary.md": "0c9d9941014743909bec748be1d014fe790ecbbea99312faa09b3c9bf0580474",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/test_predictions.jsonl": "fbad256619c4c6fb096eb840f2e88e4f016abf96648e4b633b9ac08caf0a240c",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/train_predictions.jsonl": "749f4101e91838231a939ff080b8cb1217ae2cfd1aabf4195e94f519dd21d90f",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/training.json": "be9a81e081820b568b872054e07e3fbdbbe384c6b3d2539b07147b12b588ea3d",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/training_steps.jsonl": "7e2d91e7db19232a254181552c50146282c116203c10d22adf62f0e872809d33",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/validation.json": "fdd760e35b5f21e30f800571102429ee4687589d663a0fbb5a4044cbada0873f",
+    "src/ioi_das/__init__.py": "6b2cac83b6926f48e4fe131a7d60f0bce7544fe4be30aaf27fa16f9de2203c41",
+    "src/ioi_das/audit.py": "24678bc046ded94b53a006be1414121fe9cb7759c12322916abf3a43c64490dc",
+    "src/ioi_das/checks.py": "8c685dc8e6effeee57deb1512bc39a81e75c58f680df4c8f8a3b631dc47de7f1",
+    "src/ioi_das/cli.py": "b5fd186f829903194f9d6952061d16123b93641c4165e84299da191db93bb5ae",
+    "src/ioi_das/data.py": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+    "src/ioi_das/environment.py": "5be5feaa9763fd33428589f7ee688e5c464abd347e7f3abf863b6d9ab9d1f8f7",
+    "src/ioi_das/evaluate.py": "b534d8da8c4c0c5dbe36146e89b79678e1c1130d535a8c4030afb577d473450d",
+    "src/ioi_das/experiment.py": "eabb728adb05ee98ba99422a224aa80d455ce839e0d5ac4f8835eed080cad08f",
+    "src/ioi_das/intervention.py": "0bbd0169e85158c37e7dbccd9cd5fcd2157ff747a08265407c059eacb745dd13",
+    "src/ioi_das/positions.py": "b38c1d90ed96f77d9229d66f68d64a272681363d60657b10dc7e0f2136bc3078",
+    "src/ioi_das/tokenization.py": "65ed374f80c9f76f7f33b44281dce188655629d0be760fadffc2921c2bc8bb4d",
+    "src/ioi_das/train.py": "7d80e2ce9aa7a37de0db4ede434a1e8fba327714b6f86585e37c08595bcd8b7c",
+    "src/ioi_das/validation.py": "002e20e2f93d115954adcd7014dc9012316f65a5abe2051d9b42108b4865f90d",
+    "vendor/pyvene_upstream/tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+    "vendor/pyvene_upstream/tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+    "vendor/pyvene_upstream/tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+    "vendor/pyvene_upstream/tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523"
+  },
+  "input_sha256_before": {
+    "configs/phase2.json": "77242b5d6697ae35c33bf1cbd9577f7028372b1a3f64eb9800688ab2aca01d2e",
+    "data/generated/manifest.json": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+    "data/generated/test.jsonl": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded",
+    "data/generated/train.jsonl": "3867b316d469df4b4c2d80136324c8cda4e001c617c584c30703283ad75db346",
+    "notebooks/phase2_walkthrough.ipynb": "105d67d78f5f7084c764d1897c3b36e29d38cf9f402402f7ba322f524a604a23",
+    "outputs/audit/pairs.jsonl": "f5f0ff10d1304498bb0117f2a80938cf7b0c64ceb7adff0faa65f493a21ce324",
+    "outputs/notebooks/phase2_walkthrough/figure_manifest.json": "a941358d666e557500c9b4986388fe38723c7150a8db3dba335d4f00389f50fa",
+    "outputs/notebooks/phase2_walkthrough/figures/01_dataset_pairings.png": "ecf394fc34ddfe74d4f5e1c4c5477d66cd9c474c9e2462a2aa9c8006d597c0c4",
+    "outputs/notebooks/phase2_walkthrough/figures/01_dataset_pairings.svg": "2cf9baa4ea3da097ba07bf5854111638697305c659601230d35146781e689094",
+    "outputs/notebooks/phase2_walkthrough/figures/02_original_prompt_lengths.png": "83350b36fd0119d7343b1c2dbba5891f81bdf58eb436403c6c1823b54fb7288a",
+    "outputs/notebooks/phase2_walkthrough/figures/02_original_prompt_lengths.svg": "a222d9637f4db3a9fe2bf1367f7afd37cf497e44cd0d7523bf381d5486693d28",
+    "outputs/notebooks/phase2_walkthrough/figures/03_selected_pair_token_positions.png": "9eb509b43db3ad15bc9b392a27710385d99f925694d1ae17daf00df4cba13214",
+    "outputs/notebooks/phase2_walkthrough/figures/03_selected_pair_token_positions.svg": "6dce54dd0daff6c6c73e10579c0cbd5cf5bc7542c15ca7acdce4ec3a9f769573",
+    "outputs/notebooks/phase2_walkthrough/figures/04_rank1_intervention_flow.png": "57373def924f71e7f3ded5e13188918b3d63523d611638159e839c723de634a4",
+    "outputs/notebooks/phase2_walkthrough/figures/04_rank1_intervention_flow.svg": "43bfcec3ce430ed3173cf7dce126923c0db1175cd9f0a8284256b945db05a3ef",
+    "outputs/notebooks/phase2_walkthrough/figures/05_training_trace.png": "3a453f1d65be5a653ddfebfc438f5b506e05a5cdb8ccd95a3bcab2427e50b5a1",
+    "outputs/notebooks/phase2_walkthrough/figures/05_training_trace.svg": "2333579c1afa77379bb968e7c68b842057fb69b7821d3ecabb13410bf8455eb4",
+    "outputs/notebooks/phase2_walkthrough/figures/06_final_metrics.png": "f059708c4c4dd471beded31a287ab99aade715d09575c1c8ecf0e04b7b831d7e",
+    "outputs/notebooks/phase2_walkthrough/figures/06_final_metrics.svg": "ec5089e1f3c3e5efd0320e99f670e49cb35f9efc585ba897c3109e74adbb3afe",
+    "outputs/notebooks/phase2_walkthrough/figures/07_pairing_specific_iia.png": "2dace502216d06a0a38526bccc5a61532273ea3d7b6e609513b78e5110d46586",
+    "outputs/notebooks/phase2_walkthrough/figures/07_pairing_specific_iia.svg": "d03dba64b48e067b2be911b6271132a96c87c85d58e9bd814b9d6a6dcff590b9",
+    "outputs/notebooks/phase2_walkthrough/figures/08_example_target_probabilities.png": "428277c4092ae59682c44943b5a573b4bb7f85836594564040e2220d70041389",
+    "outputs/notebooks/phase2_walkthrough/figures/08_example_target_probabilities.svg": "a32aba7f33863d1650556ea301389e1bbd3a00b23a53009bc9bd80597f9e197a",
+    "outputs/notebooks/phase2_walkthrough/figures/09_test_failure_categories.png": "f4f9b1efbcbc41654671ee42d872d1737e008365ca94991dbf41976699be4c82",
+    "outputs/notebooks/phase2_walkthrough/figures/09_test_failure_categories.svg": "1fbf1a623f448ee3da0d40024e9e2c9fdb552981a4f526a3d0b6123265a1bd48",
+    "outputs/notebooks/phase2_walkthrough/figures/10_length_and_joint_outcomes.png": "b9715235214d1c444118d4847937ec04d3d9e0e8751f199d3a4cb39e4b0a1cd4",
+    "outputs/notebooks/phase2_walkthrough/figures/10_length_and_joint_outcomes.svg": "266dd022784fac5c7c0a0c73cb003d7a35f95407cac5b746ba8f8a6a58cbd389",
+    "outputs/notebooks/phase2_walkthrough/figures/11_alignment_direction.png": "0f627e1bda118e96295eb3b4608a30cbfa74339f3fcbe5f54295cfaee31744c3",
+    "outputs/notebooks/phase2_walkthrough/figures/11_alignment_direction.svg": "1cab10e5cbb43764b69dbb7d258d123df387c0e08bd2c84f39e0ebce611564a5",
+    "outputs/notebooks/phase2_walkthrough/figures/12_synthetic_unequal_positions.png": "cf3349ce3e38996a1e63c11a49bae22bdc1a8c4c8517beb0b5301102e867c563",
+    "outputs/notebooks/phase2_walkthrough/figures/12_synthetic_unequal_positions.svg": "9b88144ac16b8debfb3149e7009f40acf582c9b95e3312bdab27324f1d87c8d6",
+    "outputs/notebooks/phase2_walkthrough/overview.json": "189517e51bfc43ef5b51c3b1bfdc2e7d0b7d3e4027ee8e59a5ad92df98280499",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/alignment.pt": "99e0b38582a600437b54480cd4fe654b06a9bb7adaa220f79d956e03a918c148",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/config.json": "f62065cb5cb166727267971db4a3c32502fcdd667ee2288e9434d8c29122cc2e",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/environment.json": "13f23c58d5ed9ab78619cc98b1d9d575c3dcec3f0e998129350232265352764e",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/initial_alignment.pt": "250b53cce7164a4a346287d620ebf36ffad40944cb39d6fe41c84aff1915e5c0",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/initial_train_predictions.jsonl": "981137aaae9811b841655d924dfcbec9f0cdea189dc993cf4e17af485b07ba51",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/metrics.json": "e319c967693c125ae184dc68150152de67053ea235cca1247e24b453889042df",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/result.json": "3bc36362f47141738ea677ea6a74b99c98d1235a253e99885583e8c2451da619",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/summary.md": "0c9d9941014743909bec748be1d014fe790ecbbea99312faa09b3c9bf0580474",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/test_predictions.jsonl": "fbad256619c4c6fb096eb840f2e88e4f016abf96648e4b633b9ac08caf0a240c",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/train_predictions.jsonl": "749f4101e91838231a939ff080b8cb1217ae2cfd1aabf4195e94f519dd21d90f",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/training.json": "be9a81e081820b568b872054e07e3fbdbbe384c6b3d2539b07147b12b588ea3d",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/training_steps.jsonl": "7e2d91e7db19232a254181552c50146282c116203c10d22adf62f0e872809d33",
+    "outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/validation.json": "fdd760e35b5f21e30f800571102429ee4687589d663a0fbb5a4044cbada0873f",
+    "src/ioi_das/__init__.py": "6b2cac83b6926f48e4fe131a7d60f0bce7544fe4be30aaf27fa16f9de2203c41",
+    "src/ioi_das/audit.py": "24678bc046ded94b53a006be1414121fe9cb7759c12322916abf3a43c64490dc",
+    "src/ioi_das/checks.py": "8c685dc8e6effeee57deb1512bc39a81e75c58f680df4c8f8a3b631dc47de7f1",
+    "src/ioi_das/cli.py": "b5fd186f829903194f9d6952061d16123b93641c4165e84299da191db93bb5ae",
+    "src/ioi_das/data.py": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+    "src/ioi_das/environment.py": "5be5feaa9763fd33428589f7ee688e5c464abd347e7f3abf863b6d9ab9d1f8f7",
+    "src/ioi_das/evaluate.py": "b534d8da8c4c0c5dbe36146e89b79678e1c1130d535a8c4030afb577d473450d",
+    "src/ioi_das/experiment.py": "eabb728adb05ee98ba99422a224aa80d455ce839e0d5ac4f8835eed080cad08f",
+    "src/ioi_das/intervention.py": "0bbd0169e85158c37e7dbccd9cd5fcd2157ff747a08265407c059eacb745dd13",
+    "src/ioi_das/positions.py": "b38c1d90ed96f77d9229d66f68d64a272681363d60657b10dc7e0f2136bc3078",
+    "src/ioi_das/tokenization.py": "65ed374f80c9f76f7f33b44281dce188655629d0be760fadffc2921c2bc8bb4d",
+    "src/ioi_das/train.py": "7d80e2ce9aa7a37de0db4ede434a1e8fba327714b6f86585e37c08595bcd8b7c",
+    "src/ioi_das/validation.py": "002e20e2f93d115954adcd7014dc9012316f65a5abe2051d9b42108b4865f90d",
+    "vendor/pyvene_upstream/tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+    "vendor/pyvene_upstream/tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+    "vendor/pyvene_upstream/tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+    "vendor/pyvene_upstream/tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523"
+  },
+  "kernel": {
+    "executable": "/home/ilingl/miniforge3/envs/ioi/bin/python",
+    "packages": {
+      "IPython": "8.39.0",
+      "ipykernel": "7.3.0",
+      "jupyter_client": "8.10.0",
+      "matplotlib": "3.10.9",
+      "numpy": "2.2.6",
+      "pandas": "2.3.3",
+      "pyvene": "0.1.8",
+      "tokenizers": "0.23.2",
+      "torch": "2.7.1+cu118",
+      "transformers": "5.17.0"
+    },
+    "python_version": "3.10.21 | packaged by conda-forge | (main, Aug 21 2026, 22:42:31) [GCC 14.4.0]"
+  },
+  "kernel_name": "ioi",
+  "language_model_loaded": false,
+  "optimizer_updates_performed": 0,
+  "original_inputs_and_canonical_figures_unchanged": true,
+  "status": "passed",
+  "sweep_started": false,
+  "temporary_analysis_exports": "/tmp/ioi-phase2-jupyter-check-zcbs073f"
+}

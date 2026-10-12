@@ -1,0 +1,13 @@
+{
+  "cell_count": 34,
+  "code_cells_executed": 20,
+  "completed_at_utc": "2026-10-12T18:55:12.175017+00:00",
+  "embedded_png_count": 12,
+  "executor": "IPython InteractiveShell, in-process",
+  "interpreter": "/home/ilingl/.conda/envs/ioi-das-v2/bin/python",
+  "model_loaded": false,
+  "notebook": "/home/ilingl/projects/ioi-das-relative/notebooks/phase2_walkthrough.ipynb",
+  "notebook_sha256": "105d67d78f5f7084c764d1897c3b36e29d38cf9f402402f7ba322f524a604a23",
+  "optimizer_updates": 0,
+  "validated_nbformat": true
+}

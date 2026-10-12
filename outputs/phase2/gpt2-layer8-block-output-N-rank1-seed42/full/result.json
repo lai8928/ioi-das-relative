@@ -1,0 +1,121 @@
+{
+  "artifacts": {
+    "alignment.pt": "99e0b38582a600437b54480cd4fe654b06a9bb7adaa220f79d956e03a918c148",
+    "config.json": "f62065cb5cb166727267971db4a3c32502fcdd667ee2288e9434d8c29122cc2e",
+    "environment.json": "13f23c58d5ed9ab78619cc98b1d9d575c3dcec3f0e998129350232265352764e",
+    "initial_alignment.pt": "250b53cce7164a4a346287d620ebf36ffad40944cb39d6fe41c84aff1915e5c0",
+    "initial_train_predictions.jsonl": "981137aaae9811b841655d924dfcbec9f0cdea189dc993cf4e17af485b07ba51",
+    "metrics.json": "e319c967693c125ae184dc68150152de67053ea235cca1247e24b453889042df",
+    "summary.md": "0c9d9941014743909bec748be1d014fe790ecbbea99312faa09b3c9bf0580474",
+    "test_predictions.jsonl": "fbad256619c4c6fb096eb840f2e88e4f016abf96648e4b633b9ac08caf0a240c",
+    "train_predictions.jsonl": "749f4101e91838231a939ff080b8cb1217ae2cfd1aabf4195e94f519dd21d90f",
+    "training.json": "be9a81e081820b568b872054e07e3fbdbbe384c6b3d2539b07147b12b588ea3d",
+    "training_steps.jsonl": "7e2d91e7db19232a254181552c50146282c116203c10d22adf62f0e872809d33",
+    "validation.json": "fdd760e35b5f21e30f800571102429ee4687589d663a0fbb5a4044cbada0873f"
+  },
+  "completed_at_utc": "2026-10-12T18:33:25.638213+00:00",
+  "condition": {
+    "component": "block_output",
+    "intervention_location": "N",
+    "layer": 8,
+    "rank": 1,
+    "target_variable": "position"
+  },
+  "config_source_sha256": "77242b5d6697ae35c33bf1cbd9577f7028372b1a3f64eb9800688ab2aca01d2e",
+  "dataset_files": {
+    "test": {
+      "count": 100,
+      "path": "test.jsonl",
+      "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+    },
+    "train": {
+      "count": 200,
+      "path": "train.jsonl",
+      "sha256": "3867b316d469df4b4c2d80136324c8cda4e001c617c584c30703283ad75db346"
+    }
+  },
+  "dataset_manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+  "dataset_reused": true,
+  "elapsed_seconds": 34.36936328187585,
+  "gpu_peak_allocated_bytes": 705610240,
+  "implementation_sha256": {
+    "__init__.py": "6b2cac83b6926f48e4fe131a7d60f0bce7544fe4be30aaf27fa16f9de2203c41",
+    "audit.py": "24678bc046ded94b53a006be1414121fe9cb7759c12322916abf3a43c64490dc",
+    "checks.py": "8c685dc8e6effeee57deb1512bc39a81e75c58f680df4c8f8a3b631dc47de7f1",
+    "cli.py": "b5fd186f829903194f9d6952061d16123b93641c4165e84299da191db93bb5ae",
+    "data.py": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+    "environment.py": "5be5feaa9763fd33428589f7ee688e5c464abd347e7f3abf863b6d9ab9d1f8f7",
+    "evaluate.py": "b534d8da8c4c0c5dbe36146e89b79678e1c1130d535a8c4030afb577d473450d",
+    "experiment.py": "eabb728adb05ee98ba99422a224aa80d455ce839e0d5ac4f8835eed080cad08f",
+    "intervention.py": "0bbd0169e85158c37e7dbccd9cd5fcd2157ff747a08265407c059eacb745dd13",
+    "positions.py": "b38c1d90ed96f77d9229d66f68d64a272681363d60657b10dc7e0f2136bc3078",
+    "tokenization.py": "65ed374f80c9f76f7f33b44281dce188655629d0be760fadffc2921c2bc8bb4d",
+    "train.py": "7d80e2ce9aa7a37de0db4ede434a1e8fba327714b6f86585e37c08595bcd8b7c",
+    "validation.py": "002e20e2f93d115954adcd7014dc9012316f65a5abe2051d9b42108b4865f90d"
+  },
+  "language_model_weights_changed": false,
+  "metrics": {
+    "initial_train": {
+      "factual_accuracy": 0.95,
+      "factual_correct": 190,
+      "factual_total": 200,
+      "iia": 0.47,
+      "iia_correct": 94,
+      "iia_total": 200,
+      "mean_counterfactual_loss": 2.4105425281450152,
+      "mean_factual_loss": 0.7140088380873203,
+      "mean_target_logit": -72.61557306289673,
+      "prediction_rule": "argmax_full_vocabulary"
+    },
+    "test": {
+      "factual_accuracy": 0.98,
+      "factual_correct": 98,
+      "factual_total": 100,
+      "iia": 0.79,
+      "iia_correct": 79,
+      "iia_total": 100,
+      "mean_counterfactual_loss": 1.1641854558885099,
+      "mean_factual_loss": 0.7255913273245096,
+      "mean_target_logit": -77.98089218139648,
+      "prediction_rule": "argmax_full_vocabulary"
+    },
+    "train": {
+      "factual_accuracy": 0.95,
+      "factual_correct": 190,
+      "factual_total": 200,
+      "iia": 0.865,
+      "iia_correct": 173,
+      "iia_total": 200,
+      "mean_counterfactual_loss": 0.9297437125071883,
+      "mean_factual_loss": 0.7140088380873203,
+      "mean_target_logit": -72.21829441070557,
+      "prediction_rule": "argmax_full_vocabulary"
+    }
+  },
+  "model": {
+    "attn_implementation": "eager",
+    "dtype": "float32",
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "optimizer_steps": 100,
+  "original_dataset_counts": {
+    "test": 100,
+    "train": 200
+  },
+  "run_dataset_counts": {
+    "test": 100,
+    "train": 200
+  },
+  "run_kind": "full",
+  "seed": 42,
+  "status": "complete",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+  "validation_status": "passed"
+}

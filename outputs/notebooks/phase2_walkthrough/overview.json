@@ -1,0 +1,80 @@
+{
+  "alignment_geometry": {
+    "dimensions": 768,
+    "final_norm": 0.9999999403953552,
+    "initial_norm": 1.0,
+    "max_reconstruction_error": 1.043081283569336e-07,
+    "rank": 1,
+    "sign_invariant_projector_overlap": 0.00034005086879257754,
+    "signed_direction_cosine": 0.01844046823680401
+  },
+  "artifact_checks_passed": true,
+  "figure_names": [
+    "01_dataset_pairings",
+    "02_original_prompt_lengths",
+    "03_selected_pair_token_positions",
+    "04_rank1_intervention_flow",
+    "05_training_trace",
+    "06_final_metrics",
+    "07_pairing_specific_iia",
+    "08_example_target_probabilities",
+    "09_test_failure_categories",
+    "10_length_and_joint_outcomes",
+    "11_alignment_direction",
+    "12_synthetic_unequal_positions"
+  ],
+  "language_model_loaded": false,
+  "metrics_recomputed_from_predictions": [
+    {
+      "correct": 190,
+      "metric": "Factual accuracy",
+      "ratio": 0.95,
+      "stage": "initial_train",
+      "total": 200
+    },
+    {
+      "correct": 94,
+      "metric": "IIA",
+      "ratio": 0.47,
+      "stage": "initial_train",
+      "total": 200
+    },
+    {
+      "correct": 190,
+      "metric": "Factual accuracy",
+      "ratio": 0.95,
+      "stage": "train",
+      "total": 200
+    },
+    {
+      "correct": 173,
+      "metric": "IIA",
+      "ratio": 0.865,
+      "stage": "train",
+      "total": 200
+    },
+    {
+      "correct": 98,
+      "metric": "Factual accuracy",
+      "ratio": 0.98,
+      "stage": "test",
+      "total": 100
+    },
+    {
+      "correct": 79,
+      "metric": "IIA",
+      "ratio": 0.79,
+      "stage": "test",
+      "total": 100
+    }
+  ],
+  "optimizer_updates_performed": 0,
+  "source_result_sha256": "3bc36362f47141738ea677ea6a74b99c98d1235a253e99885583e8c2451da619",
+  "source_run": "/home/ilingl/projects/ioi-das-relative/outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full",
+  "sweep_started": false,
+  "test_outcomes": {
+    "Base factual IO": 13,
+    "Counterfactual target": 79,
+    "Other vocabulary token": 8
+  }
+}

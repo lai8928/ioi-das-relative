@@ -1,0 +1,50 @@
+{
+  "component": "block_output",
+  "config_path": "/home/ilingl/projects/ioi-das-relative/configs/phase2.json",
+  "cpu_threads": 8,
+  "dataset_seed": 42,
+  "device": "cuda:0",
+  "evaluation_batch_size": 20,
+  "generated_dir": "/home/ilingl/projects/ioi-das-relative/data/generated",
+  "intervention_location": "N",
+  "layer": 8,
+  "model": {
+    "attn_implementation": "eager",
+    "dtype": "float32",
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "output_dir": "/home/ilingl/projects/ioi-das-relative/outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42",
+  "project_root": "/home/ilingl/projects/ioi-das-relative",
+  "rank": 1,
+  "readout_location": "N",
+  "run_kind": "full",
+  "seed": 42,
+  "target_variable": "position",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "training": {
+    "batch_size": 20,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "epochs": 10,
+    "eps": 1e-08,
+    "learning_rate": 0.01,
+    "optimizer": "Adam",
+    "scheduler": {
+      "end_factor": 0.1,
+      "name": "LinearLR",
+      "start_factor": 0.3333333333333333,
+      "step_interval": "batch",
+      "total_iters": 10
+    },
+    "weight_decay": 0.0
+  },
+  "upstream_dir": "/home/ilingl/projects/ioi-das-relative/vendor/pyvene_upstream"
+}
