@@ -2,7 +2,7 @@
 
 - Branch: `feat/config-pipeline`
 - Task: infrastructure for `layer-sweep`, `model-scale`, `data-scale`
-- Status: merged
+- Status: merged 2026-10-15 (`649d454`)
 - Written: 2026-10-15, from [meeting 2026-10-12](../meetings/2026-10-12.md)
 - Depends on: none
 

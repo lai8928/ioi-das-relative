@@ -46,8 +46,9 @@
 - [x] Restructure AGENTS and docs around meeting cycles and task IDs.
 - [x] Mirror meeting notes to Notion (Chinese and English).
 - [x] Write CONVENTIONS, CLAUDE.md, and briefs for Codex.
-- [ ] Codex implements the briefs in dependency order: config-pipeline →
-  layer-sweep → gpt2-family-loader and training-size-datasets.
+- [x] config-pipeline brief merged (`649d454`); parity verified.
+- [ ] Codex implements the remaining briefs: layer-sweep →
+  gpt2-family-loader and training-size-datasets.
 
 ## Deferred
 

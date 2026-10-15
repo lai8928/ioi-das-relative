@@ -116,6 +116,13 @@ outputs/<task-id>/smoke-<YYYYMMDD>-<name>/    smoke run
   imports them; they may be deleted at any time. Logic needed a second time
   moves into the package.
 
+### Legacy entry points
+
+When a generic replacement exists, remove the old command, script, or loader
+instead of keeping it working. Old results stay where they are and are
+reproduced by checking out the commit recorded in their `run.json` or
+`result.json`. Snapshots are kept; their entry points are not maintained.
+
 ## 6. Tests
 
 - Every new option or bug fix gets a focused test.

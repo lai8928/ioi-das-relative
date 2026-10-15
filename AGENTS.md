@@ -16,7 +16,9 @@
   syncs Notion (see `CLAUDE.md`).
 - Codex implements briefs: one brief, one branch, merged when its Acceptance
   passes. Stay inside the brief's Scope; if the brief is wrong or incomplete,
-  stop and report instead of widening it.
+  stop and report instead of widening it. Codex does not edit
+  `docs/STATUS.md`, `docs/PLAN.md`, or `docs/meetings/`; it puts evidence in
+  commit message bodies, and Claude Code updates those documents after review.
 
 `docs/archive/` holds superseded documents (the bootstrap brief, phase-era
 plans and status, milestone specs). Read it for history only; it never

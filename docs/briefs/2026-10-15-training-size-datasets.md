@@ -29,13 +29,17 @@ validation and test sets unchanged.
 
 - Make pairs per combination a parameter of the generator. The default must
   regenerate `legacy_v1` byte-identically (regression test on both files'
-  SHA-256 in `data/REGISTRY.md`).
+  SHA-256 in `data/registry.json`).
 - Dataset specs `configs/datasets/train_pool_v1.json` and nested subsets
   (`train_n200_v1`, `train_n1000_v1`, `train_n5000_v1`) built with the
-  layer-sweep brief's builder; register them.
+  layer-sweep brief's builder and registered in `data/registry.json`.
 - Training option for a fixed update budget (for example
   `training.max_updates`) alongside epochs; the schedule semantics stay
   explicit.
+- Allow `data.train` as a grid axis: `pipeline.expand_grid` currently rejects
+  every `data.*` axis. Keep rejecting `data.validation` and `data.test`, so
+  selection and evaluation sets cannot vary inside one experiment. Record the
+  train dataset hash per condition.
 - `configs/data-scale/gpt2-small-layer8.json` with
   `grid: {"data.train": [...], "seed": [42, 43, 44]}`.
 

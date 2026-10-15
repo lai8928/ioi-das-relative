@@ -12,6 +12,18 @@ Updated: 2026-10-15 · Cycle since: [2026-10-12](meetings/2026-10-12.md)
 | `model-scale` | Same protocol on a larger GPT-2 | active | 2026-10-12 | M4 / B |
 | `data-scale` | Larger training sets | active | 2026-10-12 | M5 / C |
 
+## Infrastructure
+
+- Generic config pipeline merged (`649d454`): `ioi-das run --config`,
+  `ioi-das report`, inherited schema-validated configs, grid expansion,
+  `run.json` provenance, and resume. Reviewed by Claude Code, including an
+  independent GPU rerun.
+- `single-condition-das` reproduced bit-for-bit by the new pipeline:
+  `outputs/single-condition-das/20261015-layer8-seed42/` (94/200 → 173/200,
+  test 79/100; identical alignment tensors and predictions).
+- Next: [layer-sweep brief](briefs/2026-10-15-layer-sweep.md), which also
+  replaces the legacy `audit` command and the Markdown dataset registry.
+
 ## layer-sweep
 
 - Goal: independent rank-1 DAS at block_output, last token N, every layer,
