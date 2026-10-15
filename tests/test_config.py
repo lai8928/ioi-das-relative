@@ -110,3 +110,18 @@ def test_schema_accepts_shared_defaults_and_rejects_nonfinite_values(tmp_path):
 def test_invalid_extends_is_rejected(tmp_path, extends):
     with pytest.raises(ConfigError, match="invalid extends"):
         load_config(write_experiment(tmp_path, extends=extends))
+
+
+def test_selection_requires_validation_and_separate_registered_locked_splits():
+    path = ROOT / "configs/layer-sweep/gpt2-small.json"
+    config = load_config(path)
+    assert config["selection"]["evaluate_after_lock"] == ("test",)
+    for override, message in [
+        ('data={"train":"legacy_v1/train","test":"legacy_v1/test"}', "requires data.validation"),
+        ('selection.evaluate_after_lock=["validation"]', "configured separately"),
+        ('selection.evaluate_after_lock=["missing"]', "configured separately"),
+        ('selection.unknown=true', "unknown"),
+        ('data.validation="val_indist_v1/test"', "matching split name"),
+    ]:
+        with pytest.raises(ConfigError, match=message):
+            load_config(path, [override])

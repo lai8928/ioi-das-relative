@@ -73,7 +73,7 @@ def runtime(tmp_path, monkeypatch):
     monkeypatch.setattr(pipeline, "_layer_count", lambda options: 12)
     monkeypatch.setattr(pipeline, "_implementation_hashes", lambda: {"pipeline.py": "b" * 64})
     monkeypatch.setattr(pipeline, "_dataset_inputs", lambda root, options:
-                        ({"train": [], "test": []}, {}, {}, tmp_path / "saved-data",
+                        ({"train": [], "test": []}, {}, {},
                          {"legacy_v1/train": "c" * 64, "legacy_v1/test": "d" * 64}))
 
     def runner(output, pairs, **options):
@@ -228,3 +228,148 @@ def test_report_failure_does_not_mask_original_training_failure(runtime, monkeyp
     saved = json.loads((output / "run.json").read_text())
     assert "original fixture training failure" in saved["error"]
     assert "fixture reporting failure" in capsys.readouterr().err
+
+
+@pytest.fixture
+def selection_runtime(runtime, monkeypatch):
+    config = replace(load_config(ROOT / "configs/layer-sweep/gpt2-small.json"),
+                     project_root=runtime["config"].project_root)
+    events = []
+    pairs = {"train": ["training sample"], "validation": ["selection sample"], "test": ["locked sample"]}
+    hashes = {"legacy_v1/train": "c" * 64, "val_indist_v1/validation": "e" * 64,
+              "legacy_v1/test": "d" * 64}
+    datasets = {split: {"reference": reference, "sha256": hashes[reference]}
+                for split, reference in config["data"].items()}
+    monkeypatch.setattr(pipeline, "_dataset_inputs", lambda root, options: (pairs, datasets, {}, hashes))
+    monkeypatch.setattr(report, "generate_report", lambda output: {})
+
+    def train_condition(output, visible_pairs, **options):
+        assert "test" not in visible_pairs
+        assert options["evaluation_splits"] == ("train", "validation")
+        events.append(("train", options["layer"], options["seed"]))
+        output.mkdir(parents=True)
+        checkpoint = output / "alignment.pt"
+        checkpoint.write_bytes(f"alignment {options['layer']} {options['seed']}".encode())
+        correct = 166 if options["layer"] == 8 else 0
+        result = {"status": "complete", "run_kind": "smoke" if options["smoke"] else "full",
+                  "seed": options["seed"], "condition": {"layer": options["layer"]},
+                  "metrics": {"validation": {"iia": correct / 200, "iia_correct": correct, "iia_total": 200}},
+                  "artifacts": {"alignment.pt": sha256_file(checkpoint)}}
+        _save(output / "result.json", result)
+        return result
+
+    def evaluate_locked(output, checkpoint, **options):
+        assert set(options["pairs"]) == {"test"}
+        selection_path = options["selection_path"]
+        assert selection_path.is_file()
+        assert sha256_file(selection_path) == options["selection_sha256"]
+        selected = json.loads(selection_path.read_text(encoding="utf-8"))
+        assert selected["selected_layer"] == 8
+        assert len(selected["values"]) == 36
+        assert sum(event[0] == "train" for event in events) == 36
+        assert sha256_file(checkpoint) == options["checkpoint_sha256"]
+        events.append(("test", options["layer"], options["seed"]))
+        output.mkdir(parents=True)
+        predictions = output / "test_predictions.jsonl"
+        predictions.write_text('{"sample_id":"locked sample"}\n', encoding="utf-8")
+        result = {"status": "complete", "seed": options["seed"], "condition": {"layer": options["layer"]},
+                  "metrics": {"test": {"iia": 0.79, "iia_correct": 79, "iia_total": 100}},
+                  "selection_sha256": options["selection_sha256"],
+                  "checkpoint_sha256": options["checkpoint_sha256"],
+                  "artifacts": {predictions.name: sha256_file(predictions)}}
+        _save(output / "result.json", result)
+        return result
+
+    monkeypatch.setattr(pipeline, "run_condition", train_condition)
+    monkeypatch.setattr(pipeline, "evaluate_checkpoint", evaluate_locked)
+    return {**runtime, "config": config, "events": events, "train": train_condition,
+            "evaluate": evaluate_locked}
+
+
+def test_all_conditions_finish_before_lock_and_every_checkpoint_is_evaluated(selection_runtime, monkeypatch):
+    primary_snapshots = {}
+    original = selection_runtime["evaluate"]
+
+    def evaluate(output, checkpoint, **options):
+        primary = output.parents[2] / "conditions"
+        if not primary_snapshots:
+            primary_snapshots.update(_snapshot(primary))
+        result = original(output, checkpoint, **options)
+        assert _snapshot(primary) == primary_snapshots
+        return result
+
+    monkeypatch.setattr(pipeline, "evaluate_checkpoint", evaluate)
+    result = pipeline.run_experiment(selection_runtime["config"])
+    assert result["status"] == "complete"
+    assert len(result["conditions"]) == len(result["post_lock"]) == 36
+    assert all(row["status"] == "complete" for row in result["conditions"] + result["post_lock"])
+    events = selection_runtime["events"]
+    assert [row[0] for row in events] == ["train"] * 36 + ["test"] * 36
+    expected = {(layer, seed) for layer in range(12) for seed in (42, 43, 44)}
+    assert {(layer, seed) for kind, layer, seed in events if kind == "test"} == expected
+    output = Path(result["experiment_dir"])
+    assert sha256_file(output / "selection.json") == result["selection_sha256"]
+    assert primary_snapshots
+
+
+def test_selection_smoke_never_evaluates_test_or_creates_a_lock(selection_runtime):
+    result = pipeline.run_experiment(selection_runtime["config"], smoke=True)
+    output = Path(result["experiment_dir"])
+    assert result["status"] == "complete"
+    assert len(result["conditions"]) == 36
+    assert not result.get("post_lock")
+    assert not (output / "selection.json").exists()
+    assert not (output / "post_lock").exists()
+    assert not result.get("selection_sha256")
+    assert [event[0] for event in selection_runtime["events"]] == ["train"] * 36
+
+
+def test_failed_primary_condition_prevents_lock_and_locked_evaluations(selection_runtime, monkeypatch):
+    original = selection_runtime["train"]
+
+    def fail(output, pairs, **options):
+        if options["layer"] == 2 and options["seed"] == 43:
+            raise RuntimeError("primary condition failed")
+        return original(output, pairs, **options)
+
+    monkeypatch.setattr(pipeline, "run_condition", fail)
+    with pytest.raises(RuntimeError, match="primary condition failed"):
+        pipeline.run_experiment(selection_runtime["config"])
+    parent = selection_runtime["config"].project_root / "outputs" / "layer-sweep"
+    output, = parent.iterdir()
+    metadata = json.loads((output / "run.json").read_text(encoding="utf-8"))
+    assert metadata["status"] == "failed"
+    assert any(condition["status"] == "failed" for condition in metadata["conditions"])
+    assert all(condition["status"] == "pending" for condition in metadata["post_lock"])
+    assert not (output / "selection.json").exists()
+    assert not (output / "post_lock").exists()
+    assert all(event[0] == "train" for event in selection_runtime["events"])
+
+
+@pytest.mark.parametrize("target", ["selection", "post_lock_result", "post_lock_artifact"])
+def test_selection_resume_rejects_changed_lock_or_locked_evidence(selection_runtime, target):
+    result = pipeline.run_experiment(selection_runtime["config"])
+    output = Path(result["experiment_dir"])
+    if target == "selection":
+        path = output / "selection.json"
+    elif target == "post_lock_result":
+        path = output / result["post_lock"][0]["path"] / "result.json"
+    else:
+        path = output / result["post_lock"][0]["path"] / "test_predictions.jsonl"
+    path.write_text("changed saved scientific evidence", encoding="utf-8")
+    before = _snapshot(output)
+    events = list(selection_runtime["events"])
+    with pytest.raises(ValueError, match="[Hh]ash mismatch"):
+        pipeline.run_experiment(selection_runtime["config"], resume=output)
+    assert _snapshot(output) == before
+    assert selection_runtime["events"] == events
+
+
+def test_completed_selection_resume_preserves_every_artifact(selection_runtime):
+    result = pipeline.run_experiment(selection_runtime["config"])
+    output = Path(result["experiment_dir"])
+    before = _snapshot(output)
+    events = list(selection_runtime["events"])
+    assert pipeline.run_experiment(selection_runtime["config"], resume=output) == result
+    assert _snapshot(output) == before
+    assert selection_runtime["events"] == events

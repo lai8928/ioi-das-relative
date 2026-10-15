@@ -86,7 +86,13 @@ CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/single-conditi
 # Continue missing conditions, verifying saved hashes first.
 CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/single-condition-das/layer8-seed42.json --resume outputs/single-condition-das/YYYYMMDD-layer8-seed42
 
-# Rebuild conditions.csv, summary.md, and figures/iia.svg from saved JSON only.
+# All-layer sweep: validation selects the layer before any test evaluation.
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/layer-sweep/gpt2-small.json --smoke --override 'grid={"intervention.layer":[8],"seed":[42]}'
+# Run long GPU jobs in tmux; commit source/config/data before the full run.
+tmux new-session -s ioi-layer-sweep
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/layer-sweep/gpt2-small.json
+
+# Rebuild CSVs, summary.md, and SVG figures from saved JSON only.
 # Reporting imports no torch, transformers, or pyvene and needs no GPU.
 $PY -B -m ioi_das.cli report --experiment-dir outputs/single-condition-das/YYYYMMDD-layer8-seed42
 ```
@@ -96,7 +102,17 @@ Experiment directories are derived from the config task/name and start date:
 runs. Repeated starts on the same date add `-2`, `-3`, and so on. Resume uses
 the original resolved config; repeat any overrides or `--smoke` used for that
 run. It preserves completed conditions and adds missing ones after checking
-their artifact hashes.
+their artifact hashes. Failed partial conditions remain preserved; a new
+experiment is needed to retry them.
+
+For configs with `selection`, every primary condition evaluates train and
+validation only. After all conditions complete, `selection.json` locks the
+highest mean validation IIA over seeds (ties choose the lowest layer).
+Every checkpoint is then evaluated on the configured locked splits in
+separate hashed `post_lock/` records. Smoke runs never evaluate test or lock
+a selection. Reports include `conditions.csv`, `layer_summary.csv`, and
+validation, train/validation, and descriptive test curves. Seed SD is seed
+variation, not a confidence interval.
 
 Dataset references resolve through `data/registry.json`. Loading verifies both
 split and manifest hashes; generator source hashes record provenance. Builders

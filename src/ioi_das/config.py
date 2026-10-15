@@ -164,6 +164,15 @@ def validate_config(values: Mapping[str, Any], project_root: Path | None = None)
     if plain["model"]["name"] != plain["tokenizer"]["name"] or \
             plain["model"]["revision"] != plain["tokenizer"]["revision"]:
         raise ConfigError("Model and tokenizer names and revisions differ; use the same pinned revision.")
+    for split, reference in plain["data"].items():
+        if reference.split("/")[-1] != split:
+            raise ConfigError(f"Data split {split!r} references {reference!r}; use a matching split name.")
+    if "selection" in plain:
+        if "validation" not in plain["data"]:
+            raise ConfigError("Selection requires data.validation; configure a registered validation split.")
+        for split in plain["selection"]["evaluate_after_lock"]:
+            if split in {"train", "validation"} or split not in plain["data"]:
+                raise ConfigError(f"Locked split {split!r} must be configured separately from train and validation.")
     _validate_grid(plain, validator)
 
 

@@ -34,11 +34,9 @@
       }
     },
     "data": {
-      "type": "object", "additionalProperties": false, "required": ["train", "test"],
-      "properties": {
-        "train": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*/train$"},
-        "test": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*/test$"}
-      }
+      "type": "object", "required": ["train"],
+      "propertyNames": {"pattern": "^[a-z][a-z0-9_]*$"},
+      "additionalProperties": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*/[a-z][a-z0-9_]*$"}
     },
     "intervention": {
       "type": "object", "additionalProperties": false,
@@ -74,6 +72,17 @@
             "step_interval": {"const": "batch"}
           }
         }
+      }
+    },
+    "selection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["metric", "aggregate", "tie_break", "evaluate_after_lock"],
+      "properties": {
+        "metric": {"const": "validation_iia"},
+        "aggregate": {"const": "mean_over_seeds"},
+        "tie_break": {"const": "lowest_layer"},
+        "evaluate_after_lock": {"type": "array", "minItems": 1, "uniqueItems": true,
+                                "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}}
       }
     },
     "grid": {

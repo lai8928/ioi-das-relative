@@ -12,6 +12,7 @@ import jsonschema
 import pytest
 
 from ioi_das.config import load_config, validate_config
+from ioi_das.datasets import load_dataset_spec
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -48,7 +49,9 @@ def test_every_experiment_config_validates_and_matches_its_path():
         if path.parent == CONFIGS and path.name in LEGACY_CONFIGS | {"base.json", "schema.json"}:
             continue
         if path.parent.name == "datasets":
-            continue  # Dataset-builder recipes have a separate, future schema.
+            if path.name != "schema.json":
+                load_dataset_spec(path)
+            continue
         config = load_config(path)
         assert config["task"] == path.parent.name, path
         assert config["name"] == path.stem, path

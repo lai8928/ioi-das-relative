@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo
 
 from .config import ResolvedConfig, config_sha256, set_path, validate_config
 from .data import sha256_file
-from .experiment import run_condition
+from .experiment import evaluate_checkpoint, run_condition
 
 
 def _write_json(path: Path, value: Any) -> None:
@@ -80,17 +80,22 @@ def _git_state(root: Path) -> dict:
                                                 "--", "src", "configs", "data"))}
 
 
-def _dataset_inputs(root: Path, data_options: dict) -> tuple[dict, dict, dict, Path, dict]:
+def _dataset_inputs(root: Path, data_options: dict) -> tuple[dict, dict, dict, dict]:
     from .audit import verify_upstream
     from .datasets import load_dataset
 
-    loaded = {split: load_dataset(reference, root) for split, reference in data_options.items()}
-    pairs = {split: saved.pairs for split, saved in loaded.items()}
-    hashes = {saved.reference: saved.sha256 for saved in loaded.values()}
-    hashes.update({f"{saved.name}/manifest": saved.manifest_sha256 for saved in loaded.values()})
+    pairs, datasets, hashes = {}, {}, {}
+    for split, reference in data_options.items():
+        saved = load_dataset(reference, root)
+        pairs[split] = saved.pairs
+        datasets[split] = {"reference": reference, "path": str(saved.path),
+                           "sha256": saved.sha256, "manifest_path": str(saved.manifest_path),
+                           "manifest_sha256": saved.manifest_sha256,
+                           "generation": saved.manifest.get("generation", {})}
+        hashes[reference] = saved.sha256
+        hashes[f"{saved.name}/manifest"] = saved.manifest_sha256
     provenance = verify_upstream(root / "vendor/pyvene_upstream")
-    train = loaded["train"]
-    return pairs, train.manifest, provenance, train.directory, hashes
+    return pairs, datasets, provenance, hashes
 
 
 def _layer_count(model_options: dict) -> int:
@@ -164,6 +169,16 @@ def _resume_metadata(output: Path, config: ResolvedConfig, smoke: bool, hashes: 
         elif (output / condition["path"]).exists() and any((output / condition["path"]).iterdir()):
             condition["status"] = "failed"
             condition.setdefault("error", "Partial condition retained; start a new experiment to retry it.")
+    if metadata.get("selection_sha256"):
+        path = output / "selection.json"
+        if not path.is_file() or sha256_file(path) != metadata["selection_sha256"]:
+            raise ValueError(f"Selection hash mismatch at {path}; restore the immutable lock.")
+    for record in metadata.get("post_lock", []):
+        if record["status"] == "complete":
+            _verify_complete(output, record)
+        elif (output / record["path"]).exists() and any((output / record["path"]).iterdir()):
+            record["status"] = "failed"
+            record.setdefault("error", "Partial locked evaluation retained; start a new run to retry it.")
     return metadata
 
 
@@ -171,13 +186,18 @@ def _implementation_hashes() -> dict:
     return {path.name: sha256_file(path) for path in sorted(Path(__file__).parent.glob("*.py"))}
 
 
-def _execute(output: Path, metadata: dict, pairs: dict, manifest: dict, provenance: dict,
-             dataset_directory: Path, smoke: bool) -> dict:
+def _execute(output: Path, metadata: dict, pairs: dict, datasets: dict, provenance: dict,
+             smoke: bool) -> dict:
     from .report import generate_report
 
     metadata["status"] = "running"
     metadata.pop("error", None)
     _write_json(output / "run.json", metadata)
+    locked_splits = tuple(metadata["resolved_config"].get("selection", {}).get("evaluate_after_lock", []))
+    evaluation_splits = tuple(split for split in pairs if split not in locked_splits)
+    if smoke:
+        evaluation_splits = tuple(split for split in evaluation_splits if split != "test")
+    visible_pairs = {split: pairs[split] for split in evaluation_splits}
     try:
         for condition in metadata["conditions"]:
             if condition["status"] == "complete":
@@ -191,13 +211,14 @@ def _execute(output: Path, metadata: dict, pairs: dict, manifest: dict, provenan
             _write_json(output / "run.json", metadata)
             try:
                 run_condition(
-                    output / condition["path"], pairs, model_options=values["model"],
+                    output / condition["path"], visible_pairs, model_options=values["model"],
                     tokenizer_options=values["tokenizer"], training_options=values["training"],
                     layer=intervention["layer"], rank=intervention["rank"], component=intervention["component"],
                     target_variable=intervention["target_variable"], location=intervention["location"],
                     seed=values["seed"], device_name=values["device"], cpu_threads=values["cpu_threads"],
-                    evaluation_batch_size=values["evaluation_batch_size"], dataset_directory=dataset_directory,
-                    manifest=manifest, provenance=provenance, config_sha256=config_sha256(values), smoke=smoke)
+                    evaluation_batch_size=values["evaluation_batch_size"], dataset_metadata=datasets,
+                    provenance=provenance, config_sha256=config_sha256(values),
+                    evaluation_splits=evaluation_splits, smoke=smoke)
                 condition["status"] = "complete"
                 condition["result_sha256"] = sha256_file(output / condition["path"] / "result.json")
             except BaseException as error:
@@ -206,10 +227,12 @@ def _execute(output: Path, metadata: dict, pairs: dict, manifest: dict, provenan
                 raise
             finally:
                 _write_json(output / "run.json", metadata)
+        if all(condition["status"] == "complete" for condition in metadata["conditions"]) and locked_splits and not smoke:
+            _evaluate_locked(output, metadata, pairs, datasets)
         if _implementation_hashes() != metadata["implementation_sha256"]:
             raise RuntimeError("Source files changed during this run; preserve its evidence and rerun committed source.")
-        metadata["status"] = ("complete" if all(condition["status"] == "complete"
-                                               for condition in metadata["conditions"]) else "failed")
+        records = metadata["conditions"] + metadata.get("post_lock", [])
+        metadata["status"] = "complete" if all(record["status"] == "complete" for record in records) else "failed"
     except BaseException as error:
         metadata["status"] = "failed"
         metadata["error"] = f"{type(error).__name__}: {error}"
@@ -227,13 +250,56 @@ def _execute(output: Path, metadata: dict, pairs: dict, manifest: dict, provenan
     return metadata
 
 
+def _evaluate_locked(output: Path, metadata: dict, pairs: dict, datasets: dict) -> None:
+    from .selection import lock_selection
+
+    if _implementation_hashes() != metadata["implementation_sha256"]:
+        raise RuntimeError("Source files changed before selection; preserve this run and restore its source.")
+    lock_selection(output, metadata)
+    selection_path = output / "selection.json"
+    metadata["selection_sha256"] = sha256_file(selection_path)
+    _write_json(output / "run.json", metadata)
+    conditions = {condition["path"]: condition for condition in metadata["conditions"]}
+    locked_splits = metadata["resolved_config"]["selection"]["evaluate_after_lock"]
+    for record in metadata["post_lock"]:
+        if record["status"] == "complete":
+            continue
+        directory = output / record["path"]
+        if directory.exists() and any(directory.iterdir()):
+            continue
+        condition = conditions[record["condition_path"]]
+        _verify_complete(output, condition)
+        values = condition["resolved_config"]
+        intervention = values["intervention"]
+        checkpoint = output / condition["path"] / "alignment.pt"
+        record["status"] = "running"
+        _write_json(output / "run.json", metadata)
+        try:
+            evaluate_checkpoint(
+                directory, checkpoint, pairs={split: pairs[split] for split in locked_splits},
+                model_options=values["model"], tokenizer_options=values["tokenizer"],
+                layer=intervention["layer"], rank=intervention["rank"], location=intervention["location"],
+                seed=values["seed"], device_name=values["device"], cpu_threads=values["cpu_threads"],
+                evaluation_batch_size=values["evaluation_batch_size"], selection_path=selection_path,
+                selection_sha256=metadata["selection_sha256"], checkpoint_sha256=sha256_file(checkpoint),
+                dataset_metadata={split: datasets[split] for split in locked_splits})
+            record["status"] = "complete"
+            record["result_sha256"] = sha256_file(directory / "result.json")
+        except BaseException as error:
+            record["status"] = "failed"
+            record["error"] = f"{type(error).__name__}: {error}"
+            raise
+        finally:
+            _write_json(output / "run.json", metadata)
+
+
 def run_experiment(config: ResolvedConfig, smoke: bool = False,
                    resume: bool | Path = False, command: list[str] | None = None) -> dict:
     """Run a config on a clean source tree or verify and continue missing saved conditions."""
     state = _git_state(config.project_root)
     if not smoke and not state["protected_tree_clean"]:
         raise ValueError("Full runs require committed src/, configs/, and data/ changes; commit them before running.")
-    pairs, manifest, provenance, directory, hashes = _dataset_inputs(config.project_root, config["data"])
+    pairs, datasets, provenance, hashes = _dataset_inputs(config.project_root, config["data"])
     conditions = expand_grid(config, _layer_count(config["model"]))
     if resume:
         output = _resume_output(config, smoke, resume)
@@ -253,6 +319,11 @@ def run_experiment(config: ResolvedConfig, smoke: bool = False,
                             "CUDA_VISIBLE_DEVICES": os.environ.get("CUDA_VISIBLE_DEVICES")},
             "conditions": conditions,
         }
+        if config.get("selection") and not smoke:
+            metadata["post_lock"] = [
+                {"path": str(Path("post_lock") / Path(condition["path"]).relative_to("conditions")),
+                 "condition_path": condition["path"], "status": "pending"}
+                for condition in conditions]
         _write_json(output / "run.json", metadata)
         _write_json(output / "resolved_config.json", config.to_dict())
-    return _execute(output, metadata, pairs, manifest, provenance, directory, smoke)
+    return _execute(output, metadata, pairs, datasets, provenance, smoke)

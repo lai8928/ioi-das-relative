@@ -1,0 +1,13 @@
+{
+  "extends": "../base.json",
+  "task": "layer-sweep",
+  "name": "gpt2-small",
+  "data": {"validation": "val_indist_v1/validation"},
+  "grid": {"intervention.layer": "all", "seed": [42, 43, 44]},
+  "selection": {
+    "metric": "validation_iia",
+    "aggregate": "mean_over_seeds",
+    "tie_break": "lowest_layer",
+    "evaluate_after_lock": ["test"]
+  }
+}

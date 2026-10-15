@@ -1,6 +1,7 @@
 """Verify saved-result reporting without a machine-learning runtime."""
 
 import csv
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -71,7 +72,9 @@ def test_report_preserves_exact_saved_metrics_and_incomplete_conditions(saved_ex
     assert all(path.read_bytes() == content for path, content in originals.items())
 
 
-def test_report_regeneration_is_byte_identical(saved_experiment):
+@pytest.mark.parametrize("experiment_fixture", ["saved_experiment", "locked_experiment"])
+def test_report_regeneration_is_byte_identical(request, experiment_fixture):
+    saved_experiment = request.getfixturevalue(experiment_fixture)
     first = generate_report(saved_experiment)
     artifacts = [saved_experiment / name for name in first["artifacts"]]
     before = {path: path.read_bytes() for path in artifacts}
@@ -79,7 +82,9 @@ def test_report_regeneration_is_byte_identical(saved_experiment):
     assert all(path.read_bytes() == content for path, content in before.items())
 
 
-def test_report_cli_does_not_import_torch_or_model_libraries(saved_experiment):
+@pytest.mark.parametrize("experiment_fixture", ["saved_experiment", "locked_experiment"])
+def test_report_cli_does_not_import_torch_or_model_libraries(request, experiment_fixture):
+    saved_experiment = request.getfixturevalue(experiment_fixture)
     program = """
 import importlib.abc
 import sys
@@ -117,3 +122,138 @@ def test_report_rejects_condition_paths_outside_saved_conditions(saved_experimen
     _write_json(run_path, run)
     with pytest.raises(ValueError, match="Condition path must be inside"):
         generate_report(saved_experiment)
+
+
+@pytest.fixture
+def locked_experiment(tmp_path):
+    run = {"status": "complete", "run_kind": "full", "resolved_config": {
+        "task": "layer-sweep", "name": "saved-fixture", "data": {"test": "legacy_v1/test"},
+        "selection": {"evaluate_after_lock": ["test"]}}, "conditions": [], "post_lock": []}
+    _write_json(tmp_path / "selection.json", {"selected_layer": 8, "metric": "validation_iia"})
+    for layer in (7, 8):
+        for seed in (42, 43, 44):
+            condition_path = f"conditions/intervention.layer={layer}/seed={seed}"
+            status = "complete" if layer == 8 else {42: "complete", 43: "failed", 44: "pending"}[seed]
+            run["conditions"].append({"path": condition_path, "status": status,
+                                      "axes": {"intervention.layer": layer, "seed": seed}})
+            if status != "complete":
+                continue
+            validation = {42: 0.8, 43: 0.82, 44: 0.84}[seed] if layer == 8 else 0.17
+            result = {"status": status, "seed": seed, "condition": {"layer": layer},
+                      "metrics": {"train": {"iia": 0.865}, "validation": {"iia": validation}}}
+            _write_json(tmp_path / condition_path / "result.json", result)
+            post_lock_path = f"post_lock/intervention.layer={layer}/seed={seed}"
+            result_path = tmp_path / post_lock_path / "result.json"
+            _write_json(result_path, {"status": "complete", "metrics": {"test": {"iia": 0.79}},
+                                      "selection_sha256": hashlib.sha256((tmp_path / "selection.json").read_bytes()).hexdigest()})
+            run["post_lock"].append({"path": post_lock_path, "condition_path": condition_path,
+                                     "status": "complete", "result_sha256": hashlib.sha256(result_path.read_bytes()).hexdigest()})
+    _write_json(tmp_path / "run.json", run)
+    return tmp_path
+
+
+def test_report_joins_hashed_post_lock_metrics_and_marks_incomplete_layers(locked_experiment):
+    originals = {path: path.read_bytes() for path in locked_experiment.glob("**/*.json")}
+    report = generate_report(locked_experiment)
+    with (locked_experiment / "conditions.csv").open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 6
+    assert [row["status"] for row in rows[:3]] == ["complete", "failed", "pending"]
+    assert rows[0]["post_lock_status"] == "complete"
+    assert rows[0]["test_iia"] == "0.79"
+    assert rows[1]["post_lock_status"] == "pending"
+    assert rows[1]["test_iia"] == ""
+    with (locked_experiment / "layer_summary.csv").open(newline="", encoding="utf-8") as handle:
+        layers = {(row["layer"], row["split"]): row for row in csv.DictReader(handle)}
+    validation = layers["8", "validation"]
+    assert float(validation["mean_iia"]) == pytest.approx(0.82)
+    assert float(validation["seed_sample_sd"]) == pytest.approx(0.02)
+    assert validation["completed_seeds"] == validation["expected_seeds"] == "3"
+    assert validation["flag"] == "complete"
+    incomplete = layers["7", "validation"]
+    assert incomplete["completed_seeds"] == "1"
+    assert incomplete["expected_seeds"] == "3"
+    assert incomplete["flag"] == "incomplete"
+    assert incomplete["seed_sample_sd"] == ""
+    assert float(layers["8", "test"]["mean_iia"]) == pytest.approx(0.79)
+    for name in report["artifacts"]:
+        if name.endswith(".svg"):
+            ET.parse(locked_experiment / name)
+    validation_plot = (locked_experiment / "figures/validation_by_layer.svg").read_text()
+    assert all(f"Seed {seed}" in validation_plot for seed in (42, 43, 44))
+    assert "seed SD" in validation_plot
+    assert "Selected layer: **8**" in (locked_experiment / "summary.md").read_text()
+    assert all(path.read_bytes() == content for path, content in originals.items())
+
+
+def test_report_rejects_post_lock_hash_mismatch(locked_experiment):
+    result_path = locked_experiment / "post_lock/intervention.layer=8/seed=42/result.json"
+    result_path.write_text(result_path.read_text() + "\n")
+    with pytest.raises(ValueError, match="Post-lock result SHA-256 mismatch"):
+        generate_report(locked_experiment)
+
+
+def test_report_rejects_post_lock_results_without_selection_lock(locked_experiment):
+    (locked_experiment / "selection.json").unlink()
+    with pytest.raises(ValueError, match="Post-lock records require selection.json"):
+        generate_report(locked_experiment)
+
+
+def test_report_rejects_post_lock_results_from_another_selection_lock(locked_experiment):
+    selection_path = locked_experiment / "selection.json"
+    selection_path.write_text(selection_path.read_text() + "\n")
+    with pytest.raises(ValueError, match="Post-lock selection SHA-256 mismatch"):
+        generate_report(locked_experiment)
+
+
+@pytest.mark.parametrize("status", ["pending", "failed", "running", "complete"])
+def test_report_handles_preallocated_post_lock_cells_before_selection(locked_experiment, status):
+    (locked_experiment / "selection.json").unlink()
+    run_path = locked_experiment / "run.json"
+    run = json.loads(run_path.read_text())
+    run["status"] = "failed"
+    for record in run["post_lock"]:
+        (locked_experiment / record["path"] / "result.json").unlink()
+        record["status"] = "pending"
+        record.pop("result_sha256")
+    run["post_lock"][0].update(status=status, error="saved failure" if status == "failed" else "")
+    _write_json(run_path, run)
+    if status in {"running", "complete"}:
+        with pytest.raises(ValueError, match="Post-lock records require selection.json"):
+            generate_report(locked_experiment)
+        return
+    report = generate_report(locked_experiment)
+    assert report["conditions"] == 6
+    with (locked_experiment / "conditions.csv").open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 6
+    assert rows[0]["post_lock_status"] == status
+    assert all(row["test_iia"] == "" for row in rows)
+    assert {row["status"] for row in rows} == {"complete", "failed", "pending"}
+    assert not (locked_experiment / "selection.json").exists()
+
+
+def test_report_tracks_missing_and_failed_post_lock_results(locked_experiment):
+    run_path = locked_experiment / "run.json"
+    run = json.loads(run_path.read_text())
+    record = run["post_lock"][1]
+    (locked_experiment / record["path"] / "result.json").unlink()
+    record = run["post_lock"][2]
+    (locked_experiment / record["path"] / "result.json").unlink()
+    record.update(status="failed", error="saved evaluation failure")
+    _write_json(run_path, run)
+    generate_report(locked_experiment)
+    with (locked_experiment / "conditions.csv").open(newline="", encoding="utf-8") as handle:
+        rows = {row["condition"]: row for row in csv.DictReader(handle)}
+    assert rows[run["post_lock"][1]["condition_path"]]["post_lock_status"] == "missing_result"
+    assert rows[run["post_lock"][2]["condition_path"]]["post_lock_status"] == "failed"
+    assert "saved evaluation failure" in (locked_experiment / "summary.md").read_text()
+
+
+def test_report_rejects_post_lock_paths_outside_saved_records(locked_experiment):
+    run_path = locked_experiment / "run.json"
+    run = json.loads(run_path.read_text())
+    run["post_lock"][0]["path"] = "conditions/intervention.layer=8/seed=42"
+    _write_json(run_path, run)
+    with pytest.raises(ValueError, match="Post-lock path must be inside"):
+        generate_report(locked_experiment)
