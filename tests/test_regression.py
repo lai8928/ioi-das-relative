@@ -25,6 +25,18 @@ def _read_rows(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
 
 
+def _assert_reference_fields(expected: dict, actual: dict, context: tuple) -> None:
+    """Require every saved reference field exactly while allowing added evidence."""
+    for key, value in expected.items():
+        location = (*context, key)
+        assert key in actual, location
+        if isinstance(value, dict):
+            assert isinstance(actual[key], dict), location
+            _assert_reference_fields(value, actual[key], location)
+        else:
+            assert actual[key] == value, location
+
+
 def assert_reference_parity(reference: Path, actual: Path) -> None:
     """Assert exact counts, raw tensors, predictions, and optimizer history."""
     torch = pytest.importorskip("torch", reason="Alignment parity requires torch")
@@ -35,7 +47,8 @@ def assert_reference_parity(reference: Path, actual: Path) -> None:
         for result in (expected_result, actual_result):
             metric = result["metrics"][split]
             assert (metric["iia_correct"], metric["iia_total"]) == (correct, total), split
-        assert actual_result["metrics"][split] == expected_result["metrics"][split], split
+        _assert_reference_fields(expected_result["metrics"][split],
+                                 actual_result["metrics"][split], ("metrics", split))
 
     for filename, pinned_hash in ALIGNMENT_SHA256.items():
         expected_path = reference / filename
@@ -59,7 +72,7 @@ def assert_reference_parity(reference: Path, actual: Path) -> None:
         observed = _read_rows(actual / filename)
         assert len(expected) == len(observed) == count, filename
         for index, (expected_row, observed_row) in enumerate(zip(expected, observed)):
-            assert observed_row == expected_row, (filename, index)
+            _assert_reference_fields(expected_row, observed_row, (filename, index))
 
     expected_steps = _read_rows(reference / "training_steps.jsonl")
     observed_steps = _read_rows(actual / "training_steps.jsonl")
@@ -104,9 +117,30 @@ def test_reference_parity_accepts_saved_evidence():
     assert_reference_parity(REFERENCE, REFERENCE)
 
 
+def test_reference_parity_accepts_additional_baseline_evidence(tmp_path):
+    """Keep legacy values exact when metrics and predictions add baseline fields."""
+    actual = tmp_path / "condition"
+    shutil.copytree(REFERENCE, actual)
+    path = actual / "result.json"
+    result = _read_json(path)
+    for metrics in result["metrics"].values():
+        metrics["no_intervention_iia"] = 0.47
+        metrics["groups"] = {"unchanged_target": {"iia_correct": 94, "iia_total": 100}}
+    path.write_text(json.dumps(result), encoding="utf-8")
+    for filename in ("initial_train_predictions.jsonl", "train_predictions.jsonl",
+                     "test_predictions.jsonl"):
+        path = actual / filename
+        rows = _read_rows(path)
+        for row in rows:
+            row["no_intervention_correct"] = False
+            row["factual_prediction"]["baseline_evidence"] = True
+        path.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+    assert_reference_parity(REFERENCE, actual)
+
+
 @pytest.mark.parametrize("artifact", ["alignment.pt", "initial_alignment.pt",
                                      "test_predictions.jsonl", "training_steps.jsonl",
-                                     "training.json"])
+                                     "training.json", "result.json"])
 def test_reference_parity_detects_scientific_drift(tmp_path, artifact):
     """Detect tensor, prediction, per-update, and training-summary changes."""
     torch = pytest.importorskip("torch", reason="Alignment parity requires torch")
@@ -125,7 +159,10 @@ def test_reference_parity_detects_scientific_drift(tmp_path, artifact):
         path.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
     else:
         value = _read_json(path)
-        value["first_step_loss"] += 0.125
+        if artifact == "result.json":
+            value["metrics"]["train"]["mean_counterfactual_loss"] += 0.125
+        else:
+            value["first_step_loss"] += 0.125
         path.write_text(json.dumps(value), encoding="utf-8")
     with pytest.raises(AssertionError):
         assert_reference_parity(REFERENCE, actual)

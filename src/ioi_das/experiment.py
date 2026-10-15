@@ -1,9 +1,11 @@
 """Train and evaluate an independent DAS condition with explicit runtime inputs."""
 
 from collections import defaultdict
+from contextlib import contextmanager, nullcontext
+from dataclasses import dataclass
 from datetime import datetime, timezone
 import gc
-from typing import Any
+from typing import Any, Iterator
 import json
 from pathlib import Path
 import time
@@ -105,9 +107,12 @@ def run_condition(
             model, intervenable, pairs["train"], tokenizer, reference, device, location)
         write_json(output / "validation.json", validation)
         print("Preflight passed: identity, frozen weights, alignment gradients, and variable-length batching.", flush=True)
-        initial = evaluate_condition(model, intervenable, pairs["train"], tokenizer, reference,
-                                     device, evaluation_batch_size, location, "train")
-        _write_predictions(output / "initial_train_predictions.jsonl", initial["predictions"])
+        initial = {}
+        for split in evaluation_splits:
+            evaluated = evaluate_condition(model, intervenable, pairs[split], tokenizer, reference,
+                                            device, evaluation_batch_size, location, split)
+            initial[f"initial_{split}"] = evaluated["metrics"]
+            _write_predictions(output / f"initial_{split}_predictions.jsonl", evaluated["predictions"])
         scheduler = training_options["scheduler"]
         training = train_alignment(
             model, intervenable, pairs["train"], tokenizer, reference, device,
@@ -161,7 +166,7 @@ def run_condition(
                                  "hooks_after": hook_snapshot(model),
                                  "cached_activation_count": len(intervenable.activations)}
         write_json(output / "validation.json", validation)
-        metrics = {"initial_train": initial["metrics"], **final}
+        metrics = {**initial, **final}
         write_json(output / "metrics.json", metrics)
         result = {
             "status": "complete", "run_kind": kind,
@@ -196,12 +201,46 @@ def run_condition(
         torch.cuda.empty_cache()
 
 
+@dataclass(frozen=True)
+class EvaluationRuntime:
+    """Hold the frozen model and tokenizers shared by locked evaluations."""
+
+    model: Any
+    tokenizer: Any
+    reference: Any
+    device: Any
+
+
+@contextmanager
+def evaluation_runtime(*, model_options: dict, tokenizer_options: dict,
+                       device_name: str, cpu_threads: int) -> Iterator[EvaluationRuntime]:
+    """Load one frozen model for a batch of checkpoint evaluations and release it."""
+    import torch
+
+    from .intervention import load_model
+
+    torch.set_num_threads(cpu_threads)
+    torch.set_float32_matmul_precision("highest")
+    device = torch.device(device_name)
+    model = None
+    try:
+        tokenizer, reference = load_tokenizers(tokenizer_options)
+        model = load_model(model_options["name"], model_options["revision"], device,
+                           local_files_only=model_options["local_files_only"],
+                           dtype=model_options["dtype"], attn_implementation=model_options["attn_implementation"])
+        yield EvaluationRuntime(model, tokenizer, reference, device)
+    finally:
+        del model
+        gc.collect()
+        torch.cuda.empty_cache()
+
+
 def evaluate_checkpoint(
     output: Path, checkpoint_path: Path, *, pairs: dict, model_options: dict,
     tokenizer_options: dict, layer: int, rank: int, location: str, seed: int,
     device_name: str, cpu_threads: int, evaluation_batch_size: int,
     selection_path: Path, selection_sha256: str, checkpoint_sha256: str,
-    dataset_metadata: dict,
+    dataset_metadata: dict, runtime: EvaluationRuntime | None = None,
 ) -> dict[str, Any]:
     """Evaluate a saved alignment only after verifying its immutable selection lock."""
     if not selection_path.is_file() or sha256_file(selection_path) != selection_sha256:
@@ -213,49 +252,47 @@ def evaluate_checkpoint(
     import torch
 
     from .evaluate import evaluate_condition
-    from .intervention import build_intervention, cleanup_intervention, load_model
+    from .intervention import build_intervention, cleanup_intervention
     from .validation import fingerprint_model, hook_snapshot
 
-    torch.set_num_threads(cpu_threads)
-    torch.set_float32_matmul_precision("highest")
-    device = torch.device(device_name)
     output.mkdir(parents=True, exist_ok=True)
-    model, intervenable = None, None
-    try:
-        tokenizer, reference = load_tokenizers(tokenizer_options)
-        model = load_model(model_options["name"], model_options["revision"], device,
-                           local_files_only=model_options["local_files_only"],
-                           dtype=model_options["dtype"], attn_implementation=model_options["attn_implementation"])
+    context = nullcontext(runtime) if runtime is not None else evaluation_runtime(
+        model_options=model_options, tokenizer_options=tokenizer_options,
+        device_name=device_name, cpu_threads=cpu_threads)
+    with context as active:
+        model, tokenizer, reference, device = active.model, active.tokenizer, active.reference, active.device
         original_hooks = hook_snapshot(model)
         model_hash = fingerprint_model(model)
-        intervenable = build_intervention(model, layer, rank)
-        checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=True)
-        for key, intervention in intervenable.interventions.items():
-            intervention.load_state_dict(checkpoint["interventions"][key])
-        metrics = {}
-        for split, records in pairs.items():
-            evaluated = evaluate_condition(model, intervenable, records, tokenizer, reference,
-                                            device, evaluation_batch_size, location, split)
-            metrics[split] = evaluated["metrics"]
-            _write_predictions(output / f"{split}_predictions.jsonl", evaluated["predictions"])
-        cleanup_intervention(intervenable)
-        if hook_snapshot(model) != original_hooks or fingerprint_model(model) != model_hash:
-            raise RuntimeError("Locked evaluation changed model weights or left condition-owned hooks.")
-        result = {"status": "complete", "run_kind": "full", "seed": seed,
-                  "condition": checkpoint["condition"], "metrics": metrics,
-                  "selection_sha256": selection_sha256, "checkpoint_sha256": checkpoint_sha256,
-                  "datasets": dataset_metadata, "model_sha256": model_hash,
-                  "completed_at_utc": datetime.now(timezone.utc).isoformat(),
-                  "artifacts": {path.name: sha256_file(path) for path in sorted(output.iterdir()) if path.is_file()}}
-        write_json(output / "result.json", result)
-        print(f"Locked evaluation complete: layer={layer}, seed={seed}; evidence={output}.", flush=True)
-        return result
-    except BaseException as error:
-        write_json(output / "failure.json", {"status": "failed", "error": f"{type(error).__name__}: {error}"})
-        raise
-    finally:
-        if intervenable is not None:
-            cleanup_intervention(intervenable)
-        del intervenable, model
-        gc.collect()
-        torch.cuda.empty_cache()
+        intervenable = None
+        try:
+            try:
+                intervenable = build_intervention(model, layer, rank)
+                checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=True)
+                for key, intervention in intervenable.interventions.items():
+                    intervention.load_state_dict(checkpoint["interventions"][key])
+                metrics = {}
+                for split, records in pairs.items():
+                    evaluated = evaluate_condition(model, intervenable, records, tokenizer, reference,
+                                                    device, evaluation_batch_size, location, split)
+                    metrics[split] = evaluated["metrics"]
+                    _write_predictions(output / f"{split}_predictions.jsonl", evaluated["predictions"])
+            finally:
+                if intervenable is not None:
+                    cleanup_intervention(intervenable)
+                    if intervenable.activations or intervenable.full_intervention_outputs:
+                        raise RuntimeError("Locked evaluation activation/output caches remained after cleanup.")
+                if hook_snapshot(model) != original_hooks or fingerprint_model(model) != model_hash:
+                    raise RuntimeError("Locked evaluation changed model weights or left condition-owned hooks.")
+            result = {"status": "complete", "run_kind": "full", "seed": seed,
+                      "condition": checkpoint["condition"], "metrics": metrics,
+                      "selection_sha256": selection_sha256, "checkpoint_sha256": checkpoint_sha256,
+                      "datasets": dataset_metadata, "model_sha256": model_hash,
+                      "validation": {"cleanup": "passed", "frozen_weights": "passed"},
+                      "completed_at_utc": datetime.now(timezone.utc).isoformat(),
+                      "artifacts": {path.name: sha256_file(path) for path in sorted(output.iterdir()) if path.is_file()}}
+            write_json(output / "result.json", result)
+            print(f"Locked evaluation complete: layer={layer}, seed={seed}; evidence={output}.", flush=True)
+            return result
+        except BaseException as error:
+            write_json(output / "failure.json", {"status": "failed", "error": f"{type(error).__name__}: {error}"})
+            raise

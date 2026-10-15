@@ -1,6 +1,7 @@
 """Check orchestration with temporary saved artifacts and a lightweight runner."""
 
 from dataclasses import replace
+from contextlib import contextmanager
 import json
 from pathlib import Path
 
@@ -235,6 +236,16 @@ def selection_runtime(runtime, monkeypatch):
     config = replace(load_config(ROOT / "configs/layer-sweep/gpt2-small.json"),
                      project_root=runtime["config"].project_root)
     events = []
+    shared_runtime = object()
+    runtime_loads = []
+
+    @contextmanager
+    def load_runtime(**options):
+        assert sum(event[0] == "train" for event in events) == 36
+        runtime_loads.append(options)
+        yield shared_runtime
+
+    monkeypatch.setattr(pipeline, "evaluation_runtime", load_runtime)
     pairs = {"train": ["training sample"], "validation": ["selection sample"], "test": ["locked sample"]}
     hashes = {"legacy_v1/train": "c" * 64, "val_indist_v1/validation": "e" * 64,
               "legacy_v1/test": "d" * 64}
@@ -259,6 +270,7 @@ def selection_runtime(runtime, monkeypatch):
         return result
 
     def evaluate_locked(output, checkpoint, **options):
+        assert options["runtime"] is shared_runtime
         assert set(options["pairs"]) == {"test"}
         selection_path = options["selection_path"]
         assert selection_path.is_file()
@@ -283,7 +295,7 @@ def selection_runtime(runtime, monkeypatch):
     monkeypatch.setattr(pipeline, "run_condition", train_condition)
     monkeypatch.setattr(pipeline, "evaluate_checkpoint", evaluate_locked)
     return {**runtime, "config": config, "events": events, "train": train_condition,
-            "evaluate": evaluate_locked}
+            "evaluate": evaluate_locked, "runtime_loads": runtime_loads}
 
 
 def test_all_conditions_finish_before_lock_and_every_checkpoint_is_evaluated(selection_runtime, monkeypatch):
@@ -310,6 +322,7 @@ def test_all_conditions_finish_before_lock_and_every_checkpoint_is_evaluated(sel
     output = Path(result["experiment_dir"])
     assert sha256_file(output / "selection.json") == result["selection_sha256"]
     assert primary_snapshots
+    assert len(selection_runtime["runtime_loads"]) == 1
 
 
 def test_selection_smoke_never_evaluates_test_or_creates_a_lock(selection_runtime):
@@ -322,6 +335,7 @@ def test_selection_smoke_never_evaluates_test_or_creates_a_lock(selection_runtim
     assert not (output / "post_lock").exists()
     assert not result.get("selection_sha256")
     assert [event[0] for event in selection_runtime["events"]] == ["train"] * 36
+    assert selection_runtime["runtime_loads"] == []
 
 
 def test_failed_primary_condition_prevents_lock_and_locked_evaluations(selection_runtime, monkeypatch):

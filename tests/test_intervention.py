@@ -182,6 +182,15 @@ def test_evaluation_full_vocabulary_argmax_counts_and_sample_weighted_losses(
     assert (metrics["factual_correct"], metrics["factual_total"]) == (2, 3)
     assert (metrics["iia_correct"], metrics["iia_total"]) == (2, 3)
     assert metrics["factual_accuracy"] == metrics["iia"] == 2 / 3
+    assert (metrics["no_intervention_iia_correct"], metrics["no_intervention_iia_total"]) == (2, 3)
+    assert metrics["no_intervention_iia"] == 2 / 3
+    assert metrics["groups"]["ABB->ABB"]["iia_total"] == 3
+    for name in ("ABB->BAB", "BAB->ABB", "BAB->BAB", "switch_required"):
+        assert metrics["groups"][name] == {
+            "iia_correct": 0, "iia_total": 0, "iia": None,
+            "no_intervention_iia_correct": 0, "no_intervention_iia_total": 0,
+            "no_intervention_iia": None,
+        }
     assert predictions[0]["counterfactual_prediction"] == {
         "token_id": 0, "token": tokenizer.convert_ids_to_tokens(0),
         "continuation": tokenizer.decode([0]),
@@ -192,3 +201,59 @@ def test_evaluation_full_vocabulary_argmax_counts_and_sample_weighted_losses(
     assert [row["sample_id"] for row in predictions] == [pair.sample_id for pair in pairs]
     assert all(row["base_readout_position"] == row["base_valid_length"] - 1
                for row in predictions)
+
+
+def test_evaluation_groups_score_factual_predictions_against_counterfactual_targets(
+        intervention_inputs, monkeypatch):
+    from ioi_das import evaluate
+
+    tokenizer, reference, all_pairs = intervention_inputs
+    pairs = tuple(all_pairs[index] for index in (0, 50, 100, 150))
+    sample_index = {pair.sample_id: index for index, pair in enumerate(pairs)}
+
+    class EvaluationOnlyModel:
+        def eval(self):
+            return self
+
+    def factual_logits(batch):
+        logits = torch.zeros((len(batch.pairs), tokenizer.vocab_size))
+        for row, pair in enumerate(batch.pairs):
+            index = sample_index[pair.sample_id]
+            # A factual error can still be correct against a changed target.
+            target = batch.counterfactual_labels[row] if index == 1 else batch.factual_labels[row]
+            prediction = 0 if index == 3 else int(target)
+            logits[row, prediction] = 5
+        return logits
+
+    def intervention_logits(batch):
+        logits = torch.zeros((len(batch.pairs), tokenizer.vocab_size))
+        for row, pair in enumerate(batch.pairs):
+            index = sample_index[pair.sample_id]
+            prediction = int(batch.counterfactual_labels[row]) if index in (1, 3) else 0
+            logits[row, prediction] = 5
+        return logits
+
+    monkeypatch.setattr(evaluate, "factual_forward", lambda model, batch: factual_logits(batch))
+    monkeypatch.setattr(evaluate, "intervention_forward", lambda model, batch: intervention_logits(batch))
+    model = EvaluationOnlyModel()
+    rng_before = torch.random.get_rng_state()
+    result = evaluate.evaluate_condition(model, model, pairs, tokenizer, reference,
+                                         "cpu", batch_size=3, split="train")
+    assert torch.equal(rng_before, torch.random.get_rng_state())
+    metrics = result["metrics"]
+    assert metrics["factual_correct"] == metrics["iia_correct"] == 2
+    assert metrics["no_intervention_iia_correct"] == 2
+    assert metrics["no_intervention_iia_total"] == 4
+    assert metrics["no_intervention_iia"] == 0.5
+    assert [row["no_intervention_correct"] for row in result["predictions"]] == [True, True, False, False]
+    assert [row["switch_required"] for row in result["predictions"]] == [False, True, True, False]
+    expected = {"ABB->ABB": (0, 1, 1), "ABB->BAB": (1, 1, 1),
+                "BAB->ABB": (0, 0, 1), "BAB->BAB": (1, 0, 1),
+                "switch_required": (1, 1, 2), "unchanged_target": (1, 1, 2)}
+    for name, (correct, no_intervention_correct, total) in expected.items():
+        assert metrics["groups"][name] == {
+            "iia_correct": correct, "iia_total": total, "iia": correct / total,
+            "no_intervention_iia_correct": no_intervention_correct,
+            "no_intervention_iia_total": total,
+            "no_intervention_iia": no_intervention_correct / total,
+        }

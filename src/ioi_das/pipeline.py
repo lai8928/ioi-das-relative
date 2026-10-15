@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from contextlib import ExitStack
 from datetime import datetime, timezone
 from itertools import product
 import json
@@ -17,7 +18,7 @@ from zoneinfo import ZoneInfo
 
 from .config import ResolvedConfig, config_sha256, set_path, validate_config
 from .data import sha256_file
-from .experiment import evaluate_checkpoint, run_condition
+from .experiment import evaluate_checkpoint, evaluation_runtime, run_condition
 
 
 def _write_json(path: Path, value: Any) -> None:
@@ -251,6 +252,12 @@ def _execute(output: Path, metadata: dict, pairs: dict, datasets: dict, provenan
 
 
 def _evaluate_locked(output: Path, metadata: dict, pairs: dict, datasets: dict) -> None:
+    with ExitStack() as resources:
+        _evaluate_locked_records(output, metadata, pairs, datasets, resources)
+
+
+def _evaluate_locked_records(output: Path, metadata: dict, pairs: dict,
+                             datasets: dict, resources: ExitStack) -> None:
     from .selection import lock_selection
 
     if _implementation_hashes() != metadata["implementation_sha256"]:
@@ -261,6 +268,7 @@ def _evaluate_locked(output: Path, metadata: dict, pairs: dict, datasets: dict) 
     _write_json(output / "run.json", metadata)
     conditions = {condition["path"]: condition for condition in metadata["conditions"]}
     locked_splits = metadata["resolved_config"]["selection"]["evaluate_after_lock"]
+    runtime, runtime_options = None, None
     for record in metadata["post_lock"]:
         if record["status"] == "complete":
             continue
@@ -275,6 +283,13 @@ def _evaluate_locked(output: Path, metadata: dict, pairs: dict, datasets: dict) 
         record["status"] = "running"
         _write_json(output / "run.json", metadata)
         try:
+            options = {"model_options": values["model"], "tokenizer_options": values["tokenizer"],
+                       "device_name": values["device"], "cpu_threads": values["cpu_threads"]}
+            if runtime is None:
+                runtime = resources.enter_context(evaluation_runtime(**options))
+                runtime_options = options
+            elif options != runtime_options:
+                raise ValueError("Locked checkpoints require identical model, tokenizer, device, and CPU settings.")
             evaluate_checkpoint(
                 directory, checkpoint, pairs={split: pairs[split] for split in locked_splits},
                 model_options=values["model"], tokenizer_options=values["tokenizer"],
@@ -282,7 +297,7 @@ def _evaluate_locked(output: Path, metadata: dict, pairs: dict, datasets: dict) 
                 seed=values["seed"], device_name=values["device"], cpu_threads=values["cpu_threads"],
                 evaluation_batch_size=values["evaluation_batch_size"], selection_path=selection_path,
                 selection_sha256=metadata["selection_sha256"], checkpoint_sha256=sha256_file(checkpoint),
-                dataset_metadata={split: datasets[split] for split in locked_splits})
+                dataset_metadata={split: datasets[split] for split in locked_splits}, runtime=runtime)
             record["status"] = "complete"
             record["result_sha256"] = sha256_file(directory / "result.json")
         except BaseException as error:

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="510" viewBox="0 0 960 510" role="img" aria-labelledby="title description">
+<title id="title">Validation IIA by layer (smoke run)</title>
+<desc id="description">IIA by layer. Error bars show sample SD across seeds, not a confidence interval. Missing results have no points; means with missing seeds are incomplete.</desc>
+<rect width="100%" height="100%" fill="white"/>
+<g font-family="sans-serif" font-size="12" fill="#0f172a">
+<text x="30" y="28" font-size="18">Validation IIA by layer — smoke run</text>
+<text x="30" y="53" fill="#2563eb">Seed 42</text>
+<circle cx="80" cy="440" r="2.5" fill="#2563eb"><title>IIA 0</title></circle>
+<text x="410" y="53" fill="#0f172a">Validation IIA mean ± seed SD</text>
+<circle cx="80" cy="440" r="4" fill="#0f172a"><title>IIA 0</title></circle>
+<text x="30" y="73" fill="#d97706">Initial validation IIA mean ± seed SD</text>
+<circle cx="80" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<text x="410" y="73" fill="#059669">No intervention validation IIA mean ± seed SD</text>
+<circle cx="80" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<line x1="70" y1="440" x2="830" y2="440" stroke="#e2e8f0"/>
+<text x="60" y="444" text-anchor="end">0</text>
+<line x1="70" y1="376" x2="830" y2="376" stroke="#e2e8f0"/>
+<text x="60" y="380" text-anchor="end">0.2</text>
+<line x1="70" y1="312" x2="830" y2="312" stroke="#e2e8f0"/>
+<text x="60" y="316" text-anchor="end">0.4</text>
+<line x1="70" y1="248" x2="830" y2="248" stroke="#e2e8f0"/>
+<text x="60" y="252" text-anchor="end">0.6</text>
+<line x1="70" y1="184" x2="830" y2="184" stroke="#e2e8f0"/>
+<text x="60" y="188" text-anchor="end">0.8</text>
+<line x1="70" y1="120" x2="830" y2="120" stroke="#e2e8f0"/>
+<text x="60" y="124" text-anchor="end">1</text>
+<text x="80" y="462" text-anchor="middle">8</text>
+<text x="450" y="487" text-anchor="middle">Layer</text>
+<text x="15" y="280" transform="rotate(-90 15 280)" text-anchor="middle">IIA</text>
+</g>
+</svg>

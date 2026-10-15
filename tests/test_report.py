@@ -21,6 +21,20 @@ def _write_json(path, value):
     path.write_text(json.dumps(value), encoding="utf-8")
 
 
+def _metrics(correct, totals, no_intervention):
+    def counts(indices):
+        count = sum(correct[index] for index in indices)
+        total = sum(totals[index] for index in indices)
+        baseline = sum(no_intervention[index] for index in indices)
+        return {"iia_correct": count, "iia_total": total, "iia": count / total if total else None,
+                "no_intervention_iia_correct": baseline, "no_intervention_iia_total": total,
+                "no_intervention_iia": baseline / total if total else None}
+
+    groups = {name: counts([index]) for index, name in enumerate(("ABB->ABB", "ABB->BAB", "BAB->ABB", "BAB->BAB"))}
+    groups.update(switch_required=counts([1, 2]), unchanged_target=counts([0, 3]))
+    return {**counts(range(4)), "groups": groups}
+
+
 @pytest.fixture
 def saved_experiment(tmp_path):
     condition_path = "conditions/intervention.layer=8/seed=42"
@@ -56,18 +70,23 @@ def test_report_preserves_exact_saved_metrics_and_incomplete_conditions(saved_ex
     assert rows[0]["initial_train_iia_correct"] == "94"
     assert rows[0]["initial_train_iia_total"] == "200"
     assert rows[0]["train_iia"] == "0.865"
-    assert rows[0]["test_iia_correct"] == "79"
+    assert not any(field.startswith("test_") for field in rows[0])
     assert rows[1]["train_iia"] == ""
     assert rows[1]["seed"] == "43"
     assert rows[1]["error"] == "fixture failure"
     summary = (saved_experiment / "summary.md").read_text()
     assert "**smoke**" in summary
     assert "not a full experimental result" in summary
-    assert "Test IIA (descriptive)" in summary
-    assert "previously inspected" in summary
+    assert "Test IIA" not in summary
+    assert "previously inspected" not in summary
     assert "94/200 = 0.47" in summary
     assert "173/200 = 0.865" in summary
-    assert "79/100 = 0.79" in summary
+    assert "79/100 = 0.79" not in summary
+    assert not (saved_experiment / "figures/test_by_layer.svg").exists()
+    assert "test_by_layer.svg" not in " ".join(report["artifacts"])
+    assert "Test" not in (saved_experiment / "figures/iia.svg").read_text()
+    with (saved_experiment / "layer_summary.csv").open(newline="", encoding="utf-8") as handle:
+        assert all(not row["split"].endswith("test") for row in csv.DictReader(handle))
     ET.parse(saved_experiment / "figures/iia.svg")
     assert all(path.read_bytes() == content for path, content in originals.items())
 
@@ -139,12 +158,18 @@ def locked_experiment(tmp_path):
             if status != "complete":
                 continue
             validation = {42: 0.8, 43: 0.82, 44: 0.84}[seed] if layer == 8 else 0.17
+            validation_correct = round(validation * 200)
             result = {"status": status, "seed": seed, "condition": {"layer": layer},
-                      "metrics": {"train": {"iia": 0.865}, "validation": {"iia": validation}}}
+                      "metrics": {"initial_train": _metrics((47, 0, 0, 47), (50, 50, 50, 50), (47, 0, 0, 47)),
+                                  "train": _metrics((47, 39, 40, 47), (50, 50, 50, 50), (47, 0, 0, 47)),
+                                  "initial_validation": _metrics((0, 0, 0, 0), (0, 100, 100, 0), (0, 0, 0, 0)),
+                                  "validation": _metrics((0, validation_correct // 2, validation_correct - validation_correct // 2, 0),
+                                                         (0, 100, 100, 0), (0, 0, 0, 0))}}
             _write_json(tmp_path / condition_path / "result.json", result)
             post_lock_path = f"post_lock/intervention.layer={layer}/seed={seed}"
             result_path = tmp_path / post_lock_path / "result.json"
-            _write_json(result_path, {"status": "complete", "metrics": {"test": {"iia": 0.79}},
+            _write_json(result_path, {"status": "complete", "metrics": {
+                "test": _metrics((0, 39, 40, 0), (0, 50, 50, 0), (0, 0, 0, 0))},
                                       "selection_sha256": hashlib.sha256((tmp_path / "selection.json").read_bytes()).hexdigest()})
             run["post_lock"].append({"path": post_lock_path, "condition_path": condition_path,
                                      "status": "complete", "result_sha256": hashlib.sha256(result_path.read_bytes()).hexdigest()})
@@ -184,6 +209,49 @@ def test_report_joins_hashed_post_lock_metrics_and_marks_incomplete_layers(locke
     assert "seed SD" in validation_plot
     assert "Selected layer: **8**" in (locked_experiment / "summary.md").read_text()
     assert all(path.read_bytes() == content for path, content in originals.items())
+
+
+def test_report_preserves_baseline_and_group_counts_in_tables_and_figures(locked_experiment):
+    generate_report(locked_experiment)
+    with (locked_experiment / "conditions.csv").open(newline="", encoding="utf-8") as handle:
+        conditions = {(row["layer"], row["seed"]): row for row in csv.DictReader(handle)}
+    condition = conditions["8", "42"]
+    assert condition["initial_validation_iia_correct"] == "0"
+    assert condition["initial_validation_iia_total"] == "200"
+    assert condition["train_no_intervention_iia_correct"] == "94"
+    assert condition["train_no_intervention_iia_total"] == "200"
+    assert condition["train_switch_required_iia_correct"] == "79"
+    assert condition["train_switch_required_iia_total"] == "100"
+    assert condition["train_switch_required_no_intervention_iia_correct"] == "0"
+    assert condition["train_unchanged_target_no_intervention_iia_correct"] == "94"
+    assert condition["test_switch_required_iia_correct"] == "79"
+    assert condition["test_switch_required_no_intervention_iia_correct"] == "0"
+    assert condition["validation_ABB->ABB_iia"] == ""
+    assert condition["validation_ABB->ABB_iia_total"] == "0"
+    with (locked_experiment / "layer_summary.csv").open(newline="", encoding="utf-8") as handle:
+        layers = {(row["layer"], row["split"]): row for row in csv.DictReader(handle)}
+    assert layers["8", "initial_validation"]["mean_iia"] == "0.0"
+    assert layers["8", "no_intervention_train"]["mean_iia"] == "0.47"
+    assert layers["8", "no_intervention_train"]["iia_correct_sum"] == "282"
+    assert layers["8", "no_intervention_train"]["iia_total_sum"] == "600"
+    assert layers["8", "train"]["switch_required_iia_correct_sum"] == "237"
+    assert layers["8", "train"]["switch_required_iia_total_sum"] == "300"
+    assert layers["8", "no_intervention_test"]["mean_iia"] == "0.0"
+    assert layers["8", "validation"]["ABB->ABB_mean_iia"] == ""
+    assert layers["8", "validation"]["ABB->ABB_iia_total_sum"] == "0"
+    assert layers["8", "validation"]["ABB->ABB_flag"] == "complete"
+    summary = (locked_experiment / "summary.md").read_text()
+    assert "Initial validation IIA" in summary
+    assert "No intervention validation IIA" in summary
+    assert "Test IIA (descriptive)" in summary
+    assert "counts summed across seeds" in summary
+    assert "| 8 | train | switch_required | 237/300; mean 0.79 | 0/300; mean 0.0 |" in summary
+    assert "ABB->BAB" in summary and "BAB->ABB" in summary
+    for name in ("validation_by_layer.svg", "train_validation_by_layer.svg", "test_by_layer.svg"):
+        text = (locked_experiment / "figures" / name).read_text()
+        assert "No intervention" in text
+        if name != "test_by_layer.svg":
+            assert "Initial validation" in text
 
 
 def test_report_rejects_post_lock_hash_mismatch(locked_experiment):
