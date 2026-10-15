@@ -4,40 +4,17 @@ import argparse
 import json
 from pathlib import Path
 import sys
-import tempfile
-
-
-def load_config(path: Path, output_override: str | None = None) -> dict:
-    """Resolve the frozen audit configuration and check its original position contract."""
-    path = path.expanduser().resolve()
-    config = json.loads(path.read_text(encoding="utf-8"))
-    root = (path.parent / config["project_root"]).resolve()
-    for key in ("upstream_dir", "generated_dir", "output_dir"):
-        value = output_override if key == "output_dir" and output_override else config[key]
-        config[key] = (root / value).resolve()
-    config["project_root"] = root
-    config["config_path"] = path
-    if config.get("target_variable") != "position" or config.get("readout_location") != "N":
-        raise ValueError("Audit requires target_variable='position' and readout_location='N'.")
-    if config.get("intervention_locations") != ["GOAL_NAME", "N", "N-1", "N-2"]:
-        raise ValueError("Audit requires locations GOAL_NAME, N, N-1, and N-2 in that order.")
-    if isinstance(config.get("batch_size"), bool) or not isinstance(config.get("batch_size"), int) or config["batch_size"] <= 0:
-        raise ValueError("batch_size must be a positive integer.")
-    if isinstance(config.get("seed"), bool) or not isinstance(config.get("seed"), int):
-        raise ValueError("seed must be an integer.")
-    if (config["output_dir"] / "summary.json").exists():
-        if output_override:
-            raise ValueError(f"Completed audit exists at {config['output_dir']}; choose a fresh --output-dir.")
-        config["output_dir"] = Path(tempfile.mkdtemp(prefix="ioi-das-audit-"))
-    return config
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run IOI audits, diagnostics, and configured DAS experiments.")
     commands = parser.add_subparsers(dest="command", required=True)
-    audit = commands.add_parser("audit", help="Reuse original samples and audit per-example positions.")
-    audit.add_argument("--config", required=True, type=Path)
-    audit.add_argument("--output-dir", help="Fresh audit evidence directory.")
+    dataset = commands.add_parser("data", help="Build or audit registered datasets.")
+    data_commands = dataset.add_subparsers(dest="data_command", required=True)
+    build = data_commands.add_parser("build", help="Build and register a dataset without overwriting files.")
+    build.add_argument("--config", required=True, type=Path)
+    audit = data_commands.add_parser("audit", help="Audit every saved split of a registered dataset.")
+    audit.add_argument("--dataset", required=True)
     doctor = commands.add_parser("doctor", help="Inspect dependencies and optionally verify CUDA.")
     doctor.add_argument("--require-gpu", action="store_true")
     doctor.add_argument("--device", default="cuda:0")
@@ -56,6 +33,7 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     """Dispatch one CLI command and return its process exit status."""
     args = _parser().parse_args(argv)
+    command = [sys.executable, "-m", "ioi_das.cli", *(sys.argv[1:] if argv is None else argv)]
     try:
         if args.command == "report":
             from .report import generate_report
@@ -70,24 +48,28 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(report, indent=2, sort_keys=True))
             return 0 if report["status"] == "passed" else 2
         elif args.command == "run":
-            from .config import load_config as load_experiment_config
+            from .config import load_config
             from .pipeline import run_experiment
-            config = load_experiment_config(args.config, args.override)
-            result = run_experiment(config, args.smoke, args.resume,
-                                    command=[sys.executable, "-m", "ioi_das.cli", *(sys.argv[1:] if argv is None else argv)])
+            result = run_experiment(load_config(args.config, args.override), args.smoke, args.resume,
+                                    command=command)
             print(f"Experiment {result['status']}: {result['experiment_dir']}")
             if result["status"] != "complete":
                 return 2
+        elif args.data_command == "build":
+            from .datasets import build_dataset
+            result = build_dataset(args.config)
+            print(json.dumps(result, indent=2))
         else:
             from .audit import run_audit
-            config = load_config(args.config, args.output_dir)
-            summary = run_audit(config)
-            print(f"Audit passed: {summary['counts']['train']} train / {summary['counts']['test']} test pairs; "
+            summary = run_audit(args.dataset, command=command)
+            print(f"Audit {summary['status']}: {summary['counts']}; "
                   f"{len(summary['unsupported_answer_checks'])} unsupported answer checks.")
-            print(f"Dataset {'reused' if summary['dataset_reused'] else 'created'}: {config['generated_dir']}")
-            print(f"Evidence: {config['output_dir'] / 'summary.md'}")
+            print(f"Evidence: {Path(summary['output_dir']) / 'summary.md'}")
+            if summary["status"] != "passed":
+                return 2
     except (OSError, ValueError, KeyError, ImportError, RuntimeError, AssertionError) as error:
-        print(f"{args.command.capitalize()} failed: {error}", file=sys.stderr)
+        label = "Data " + args.data_command if args.command == "data" else args.command.capitalize()
+        print(f"{label} failed: {error}", file=sys.stderr)
         return 2
     return 0
 

@@ -32,7 +32,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture(scope="module")
 def intervention_inputs():
-    config = json.loads((PROJECT_ROOT / "configs/audit.json").read_text())
+    config = json.loads((PROJECT_ROOT / "configs/base.json").read_text())
     tokenizer, reference = load_tokenizers(config["tokenizer"])
     pairs = load_pairs(PROJECT_ROOT / "data/generated/train.jsonl")
     return tokenizer, reference, pairs

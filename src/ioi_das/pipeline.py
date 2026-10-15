@@ -81,39 +81,16 @@ def _git_state(root: Path) -> dict:
 
 
 def _dataset_inputs(root: Path, data_options: dict) -> tuple[dict, dict, dict, Path, dict]:
-    from .audit import ensure_saved_pairs, verify_upstream
+    from .audit import verify_upstream
+    from .datasets import load_dataset
 
-    registry = {}
-    for line in (root / "data/REGISTRY.md").read_text(encoding="utf-8").splitlines():
-        columns = [column.strip().strip("`") for column in line.strip().strip("|").split("|")]
-        if len(columns) == 6 and len(columns[4]) == 64:
-            registry[f"{columns[0]}/{columns[1]}"] = (columns[3], columns[4])
-    hashes = {}
-    directories = set()
-    for split, reference in data_options.items():
-        if reference not in registry:
-            raise ValueError(f"Dataset reference {reference!r} is not registered; fix data.{split}.")
-        relative, expected = registry[reference]
-        path = root / relative
-        if not path.is_file() or sha256_file(path) != expected:
-            raise ValueError(f"Dataset {reference!r} hash mismatch or missing file: {path}; restore registered bytes.")
-        if reference != f"legacy_v1/{split}":
-            raise ValueError(f"Dataset {reference!r} is unsupported by this pipeline; use the registered legacy splits.")
-        directories.add(path.parent)
-        hashes[reference] = expected
-    if set(data_options) != {"train", "test"} or len(directories) != 1:
-        raise ValueError("Configure exactly the registered train and test splits from one saved dataset.")
-    directory = directories.pop()
-    manifest_path = directory / "manifest.json"
-    if not manifest_path.is_file():
-        raise FileNotFoundError(f"Missing saved manifest {manifest_path}; restore it before running.")
+    loaded = {split: load_dataset(reference, root) for split, reference in data_options.items()}
+    pairs = {split: saved.pairs for split, saved in loaded.items()}
+    hashes = {saved.reference: saved.sha256 for saved in loaded.values()}
+    hashes.update({f"{saved.name}/manifest": saved.manifest_sha256 for saved in loaded.values()})
     provenance = verify_upstream(root / "vendor/pyvene_upstream")
-    pairs, manifest, reused = ensure_saved_pairs(
-        {"generated_dir": directory, "seed": 42}, provenance)
-    if not reused:
-        raise RuntimeError(f"Saved dataset at {directory} was not reused; restore registered data.")
-    hashes["manifest"] = sha256_file(manifest_path)
-    return pairs, manifest, provenance, directory, hashes
+    train = loaded["train"]
+    return pairs, train.manifest, provenance, train.directory, hashes
 
 
 def _layer_count(model_options: dict) -> int:

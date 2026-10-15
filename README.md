@@ -61,8 +61,12 @@ export PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 MPLCONFIGDIR=/tmp/
 # Tests
 $PY -B -m pytest -q
 
-# Dataset and position audit (CPU, tokenizer only)
-$PY -B -m ioi_das.cli audit --config configs/audit.json
+# Dataset and position audits (CPU, tokenizer only; saved files are verified).
+$PY -B -m ioi_das.cli data audit --dataset legacy_v1
+$PY -B -m ioi_das.cli data audit --dataset val_indist_v1
+
+# Create the validation dataset once in a project where it is not yet registered.
+$PY -B -m ioi_das.cli data build --config configs/datasets/val_indist_v1.json
 
 # Environment and GPU diagnostics
 CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli doctor --require-gpu
@@ -94,10 +98,11 @@ the original resolved config; repeat any overrides or `--smoke` used for that
 run. It preserves completed conditions and adds missing ones after checking
 their artifact hashes.
 
-The audit reuses the registered saved dataset. When its configured output
-already contains the completed audit, the command writes its verification
-to a new `/tmp/ioi-das-audit-*` directory and reports that path. It preserves
-the completed evidence under `outputs/audit/`.
+Dataset references resolve through `data/registry.json`. Loading verifies both
+split and manifest hashes; generator source hashes record provenance. Builders
+refuse existing dataset versions and enforce prompt and semantic-group
+deduplication. Each `data audit` writes a new directory under
+`outputs/data-audit/<date>-<dataset>/`, preserving previous audit evidence.
 
 Re-render the walkthrough notebook from saved outputs (no model load):
 
