@@ -1,0 +1,93 @@
+{
+  "epoch_results": [
+    {
+      "accuracy": 0.405,
+      "correct": 81,
+      "epoch": 1,
+      "mean_loss": 2.703573989868164,
+      "total": 200
+    },
+    {
+      "accuracy": 0.405,
+      "correct": 81,
+      "epoch": 2,
+      "mean_loss": 2.4686997890472413,
+      "total": 200
+    },
+    {
+      "accuracy": 0.41,
+      "correct": 82,
+      "epoch": 3,
+      "mean_loss": 2.3820559859275816,
+      "total": 200
+    },
+    {
+      "accuracy": 0.415,
+      "correct": 83,
+      "epoch": 4,
+      "mean_loss": 2.3466117858886717,
+      "total": 200
+    },
+    {
+      "accuracy": 0.415,
+      "correct": 83,
+      "epoch": 5,
+      "mean_loss": 2.3272010922431945,
+      "total": 200
+    },
+    {
+      "accuracy": 0.42,
+      "correct": 84,
+      "epoch": 6,
+      "mean_loss": 2.31847984790802,
+      "total": 200
+    },
+    {
+      "accuracy": 0.42,
+      "correct": 84,
+      "epoch": 7,
+      "mean_loss": 2.315009129047394,
+      "total": 200
+    },
+    {
+      "accuracy": 0.42,
+      "correct": 84,
+      "epoch": 8,
+      "mean_loss": 2.3117161870002745,
+      "total": 200
+    },
+    {
+      "accuracy": 0.42,
+      "correct": 84,
+      "epoch": 9,
+      "mean_loss": 2.310850167274475,
+      "total": 200
+    },
+    {
+      "accuracy": 0.42,
+      "correct": 84,
+      "epoch": 10,
+      "mean_loss": 2.309031844139099,
+      "total": 200
+    }
+  ],
+  "epochs": 10,
+  "final_learning_rate": 0.0010000000000000002,
+  "first_step_loss": 2.580134868621826,
+  "initial_effective_learning_rate": 0.003333333333333333,
+  "last_step_loss": 2.1969499588012695,
+  "model_training_mode": false,
+  "optimizer": "Adam",
+  "optimizer_steps": 100,
+  "presentations": 2000,
+  "run_kind": "full",
+  "scheduler": {
+    "end_factor": 0.1,
+    "name": "LinearLR",
+    "start_factor": 0.3333333333333333,
+    "step_interval": "batch",
+    "total_iters": 10
+  },
+  "shuffle": "NumPy RandomState(seed), MT19937; same permutation algorithm as upstream",
+  "training_pair_count": 200
+}
