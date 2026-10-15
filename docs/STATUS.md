@@ -22,24 +22,65 @@ Updated: 2026-10-15 · Cycle since: [2026-10-12](meetings/2026-10-12.md)
   command is removed), validation-only selection lock, post-lock evaluation,
   and baselines in every condition.
 - Both merges were reviewed by Claude Code with independent GPU reruns.
+- GPT-2 family loader and portable runs (`bf94a3e`, from
+  [gpt2-family-loader](briefs/2026-10-15-gpt2-family-loader.md)): pinned
+  `gpt2`/`gpt2-medium`/`-large`/`-xl`, early failure with the download
+  command when weights are missing, `ioi-das status`,
+  `environment/requirements-lock.txt` checked by `doctor`, README section
+  "Run on another machine".
+- Training-size datasets and budgets (`c578921`, from
+  [training-size-datasets](briefs/2026-10-15-training-size-datasets.md)):
+  `train_pool_v1` and nested `train_n200_v1` / `train_n1000_v1` /
+  `train_n5000_v1`, built and audited (0 unsupported, balanced, nested, no
+  overlap with validation or test); `training.max_updates` as an alternative
+  to `epochs`; `data.train` as a grid axis.
+- The loader and training-size merges were approved by the user; evidence
+  is in the merge commit bodies.
+- Second machine: UCI HPC3 (Slurm, partition `free-gpu`, NVIDIA A30, driver
+  580). Environment matches the lock file (`doctor` passed with no
+  differences); full test suite, all dataset audits, `doctor --require-gpu`,
+  and a Medium smoke passed there on `c578921`.
 
 ## model-scale
 
 - Goal: rerun the layer-sweep protocol on GPT-2 Medium (24 layers).
-- State: [gpt2-family-loader brief](briefs/2026-10-15-gpt2-family-loader.md)
-  open; code and smoke only, full run later (possibly on a faster machine).
-- Blockers: loader and schema accept only `gpt2`; GPT-2 Medium weights are
-  not cached (download approval goes in the message that hands over the
-  brief).
-- Estimate: 72 conditions; about 1.5–2.5 h on one RTX 2080 Ti.
+- State: full run complete (`f833245`), 72/72 conditions plus 72/72
+  post-lock, on HPC3 (one A30, Slurm job 58157400, 46 min, mean 33 s per
+  condition). Source `c578921`, `protected_tree_clean=true` (`clean_tree`
+  false only because of untracked check outputs). Config
+  `configs/model-scale/gpt2-medium.json`, SHA-256 `76a6dd7f…8334de`.
+- Result: layer 14 selected on validation (`val_indist_v1`) before test.
+
+  | Layer | 0–11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20–23 |
+  | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+  | Validation (mean of 3 seeds) | 0.00 | 0.10 | 0.18 | **0.28** | 0.17 | 0.15 | 0.04 | 0.01 | 0.01 | 0.00 |
+  | Test (descriptive) | 0.00 | 0.07 | 0.29 | **0.47** | 0.19 | 0.20 | 0.10 | 0.06 | 0.03 | 0.00–0.01 |
+  | Train | 0.41 | 0.44 | 0.49 | 0.53 | 0.47 | 0.47 | 0.44 | 0.41 | 0.42 | 0.41 |
+
+  Seed SD ≤ 0.03 everywhere. Baselines: untrained-alignment and
+  no-intervention validation IIA are 0 at every layer; train IIA has a 0.41
+  floor from same-pattern pairs (81/200). Same shape as GPT-2 Small (one
+  mid-depth peak; relative depth 14/24 = 0.58 vs 8/12 = 0.67), but a much
+  lower peak (0.28 vs 0.83), and train IIA at the peak is only 0.53: the
+  alignment barely fits its own training data. Rank, learning rate, and
+  budget were kept from GPT-2 Small and have not been varied.
+- Evidence: `outputs/model-scale/20261015-gpt2-medium/` (`summary.md`,
+  `selection.json`, `layer_summary.csv`, `figures/`).
+- Cross-GPU check (not in the repository): on HPC3, the opt-in GPU
+  regression (`layer8-seed42`, GPT-2 Small, Slurm job 58156709) reproduced
+  every per-epoch and final IIA count of the RTX 2080 Ti reference (train
+  173/200, test 79/100) but failed the exact-float check: losses differ at
+  about 1e-6 (initial counterfactual loss 2.4105420 vs 2.4105425).
+  Output kept on HPC3 under `~/hpc3-checks/`.
 
 ## data-scale
 
 - Goal: IIA versus training size (200 / 1000 / 5000 pairs) at layer 8.
-- State: [training-size-datasets brief](briefs/2026-10-15-training-size-datasets.md)
-  open; code, dataset builds and audits, and smoke only.
-- Open decision: equal updates or equal epochs across sizes (both will be
-  supported; the config chooses).
+- State: code, datasets, audits, and smoke runs of both budgets merged
+  (`c578921`). No full run yet.
+- Blocker: equal updates or equal epochs across sizes is an advisor
+  decision. The configs in `configs/data-scale/` carry `placeholder` in their
+  names until it is made.
 
 ## Closed tasks
 
@@ -84,5 +125,5 @@ legacy_v1` in `outputs/data-audit/20261015-legacy_v1/`.
 env PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 /home/ilingl/.conda/envs/ioi-das-v2/bin/python -B -m pytest -q
 ```
 
-Last result on `main` (2026-10-15): 145 passed, 1 skipped (opt-in GPU
-regression), 305 subtests.
+Last result on `main` (2026-10-15, `f833245`): 282 passed, 1 skipped (opt-in
+GPU regression), 305 subtests.

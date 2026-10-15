@@ -2,7 +2,7 @@
 
 - Branch: `feat/gpt2-family-loader`
 - Task: `model-scale`
-- Status: open
+- Status: merged 2026-10-15 (`bf94a3e`)
 - Written: 2026-10-15, from [meeting 2026-10-12](../meetings/2026-10-12.md)
 - Depends on: [layer-sweep](2026-10-15-layer-sweep.md) (merged first)
 

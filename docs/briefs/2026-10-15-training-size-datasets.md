@@ -2,7 +2,7 @@
 
 - Branch: `feat/training-size-datasets` (branch from `feat/gpt2-family-loader`)
 - Task: `data-scale`
-- Status: open
+- Status: merged 2026-10-15 (`c578921`)
 - Written: 2026-10-15, from [meeting 2026-10-12](../meetings/2026-10-12.md)
 - Depends on: [layer-sweep](2026-10-15-layer-sweep.md),
   [gpt2-family-loader](2026-10-15-gpt2-family-loader.md)
