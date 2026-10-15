@@ -1,0 +1,38 @@
+{
+  "initial_train": {
+    "factual_accuracy": 0.95,
+    "factual_correct": 190,
+    "factual_total": 200,
+    "iia": 0.47,
+    "iia_correct": 94,
+    "iia_total": 200,
+    "mean_counterfactual_loss": 2.4105425281450152,
+    "mean_factual_loss": 0.7140088380873203,
+    "mean_target_logit": -72.61557306289673,
+    "prediction_rule": "argmax_full_vocabulary"
+  },
+  "test": {
+    "factual_accuracy": 0.98,
+    "factual_correct": 98,
+    "factual_total": 100,
+    "iia": 0.79,
+    "iia_correct": 79,
+    "iia_total": 100,
+    "mean_counterfactual_loss": 1.1641854558885099,
+    "mean_factual_loss": 0.7255913273245096,
+    "mean_target_logit": -77.98089218139648,
+    "prediction_rule": "argmax_full_vocabulary"
+  },
+  "train": {
+    "factual_accuracy": 0.95,
+    "factual_correct": 190,
+    "factual_total": 200,
+    "iia": 0.865,
+    "iia_correct": 173,
+    "iia_total": 200,
+    "mean_counterfactual_loss": 0.9297437125071883,
+    "mean_factual_loss": 0.7140088380873203,
+    "mean_target_logit": -72.21829441070557,
+    "prediction_rule": "argmax_full_vocabulary"
+  }
+}
