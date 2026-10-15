@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import dataclass, replace
 import json
+from math import comb
 from pathlib import Path
 import re
 from typing import Iterable
@@ -131,10 +132,18 @@ def _sample_splits(spec: dict, upstream_dir: Path, excluded: list[PairRecord]) -
     rejected = Counter()
     candidate_seeds = []
     generator = spec["generator"]
+    capacity = generation_capacity(upstream_dir, generator["source_split"], excluded)
+    capacity["requested_pairs"] = sum(sum(quotas.values()) for quotas in spec["splits"].values())
+    if capacity["requested_pairs"] > capacity["available_semantic_groups"]:
+        raise ValueError(f"Requested {capacity['requested_pairs']} pairs exceeds the available "
+                         f"semantic-group capacity {capacity['available_semantic_groups']}; "
+                         "preserve deduplication and reduce the dataset size.")
     for offset in range(generator["max_batches"]):
         candidate_seed = generator["seed"] + offset
         candidate_seeds.append(candidate_seed)
-        candidates = generate_pairs(upstream_dir, candidate_seed)[generator["source_split"]]
+        candidates = generate_pairs(
+            upstream_dir, candidate_seed,
+            pairs_per_combination=generator.get("pairs_per_combination", 50))[generator["source_split"]]
         for pair in candidates:
             direction = f"{pair.base.pattern}->{pair.source.pattern}"
             split = next((key for key, quotas in spec["splits"].items()
@@ -154,11 +163,103 @@ def _sample_splits(spec: dict, upstream_dir: Path, excluded: list[PairRecord]) -
             blocked_groups.update(groups)
         if all(dict(counts[split]) == quotas for split, quotas in spec["splits"].items()):
             return selected, {"candidate_seeds": candidate_seeds, "batches_used": offset + 1,
-                              "rejections": dict(rejected), "pairing_counts": {s: dict(c) for s, c in counts.items()}}
+                              "rejections": dict(rejected), "pairing_counts": {s: dict(c) for s, c in counts.items()},
+                              "capacity": capacity}
     accepted = {split: len(pairs) for split, pairs in selected.items()}
     raise ValueError(f"Dataset generation exhausted max_batches={generator['max_batches']}; "
                      f"accepted={accepted}, pairing_counts={counts}, rejections={dict(rejected)}. "
                      "Preserve deduplication rules; choose an explicit new recipe bound.")
+
+
+def generation_capacity(upstream_dir: Path, source_split: str,
+                        excluded: Iterable[PairRecord] = ()) -> dict:
+    """Count distinct semantic contexts in the original resource half before sampling."""
+    if source_split not in {"train", "test"}:
+        raise ValueError("Capacity requires source_split 'train' or 'test'.")
+    resource_dir = Path(upstream_dir) / "tutorials/advanced_tutorials/tutorial_data"
+    resources = {key: json.loads((resource_dir / f"{key}.json").read_text(encoding="utf-8"))
+                 for key in ("names", "objects", "places", "templates")}
+    pools = {}
+    for key in ("names", "objects", "places"):
+        midpoint = len(resources[key]) // 2
+        pools[key] = set(resources[key][:midpoint] if source_split == "train" else resources[key][midpoint:])
+    templates = set(resources["templates"][:2] if source_split == "train" else resources["templates"][2:])
+    _, blocked_groups = split_inventory(excluded)
+    excluded_count = sum(template in templates and len(names) == 2 and set(names) <= pools["names"]
+                         and obj in pools["objects"] and place in pools["places"]
+                         for template, names, obj, place in blocked_groups)
+    capacity = len(templates) * comb(len(pools["names"]), 2) * len(pools["objects"]) * len(pools["places"])
+    return {"source_split": source_split,
+            "resource_counts": {**{key: len(values) for key, values in pools.items()}, "templates": len(templates)},
+            "semantic_group_capacity": capacity, "excluded_semantic_groups": excluded_count,
+            "available_semantic_groups": capacity - excluded_count}
+
+
+def _subset_splits(spec: dict, project_root: Path) -> tuple[dict, dict]:
+    generator = spec["generator"]
+    source = load_dataset(generator["source"], project_root)
+    if set(spec["splits"]) != {source.split}:
+        raise ValueError("Subset recipes must preserve the registered source split.")
+    quotas = spec["splits"][source.split]
+    counts, records = Counter(), []
+    for pair in source.pairs:
+        direction = f"{pair.base.pattern}->{pair.source.pattern}"
+        if counts[direction] < quotas.get(direction, 0):
+            records.append(pair)
+            counts[direction] += 1
+    if dict(counts) != quotas:
+        raise ValueError(f"Registered source {source.reference} cannot satisfy subset quotas {quotas}; "
+                         f"accepted pairing_counts={dict(counts)}.")
+    selected = set(records)
+    nested = {}
+    for reference in generator["nested_against"]:
+        smaller = load_dataset(reference, project_root)
+        missing = set(smaller.pairs) - selected
+        if missing:
+            raise ValueError(f"Subset {spec['name']} does not contain all {len(smaller.pairs)} pairs "
+                             f"from {reference}; {len(missing)} records are missing.")
+        nested[reference] = {"sha256": smaller.sha256, "manifest_sha256": smaller.manifest_sha256,
+                             "count": len(smaller.pairs), "missing_pairs": 0}
+    return {source.split: records}, {
+        "pairing_counts": {source.split: dict(counts)},
+        "selection": {"strategy": "first pairs per pairing in saved source order; preserve sample IDs",
+                      "source": {"reference": source.reference, "sha256": source.sha256,
+                                 "manifest_sha256": source.manifest_sha256, "count": len(source.pairs)},
+                      "nested_against": nested, "all_records_in_source": True}}
+
+
+def _verify_splits(pairs: dict[str, list[PairRecord]], spec: dict,
+                   project_root: Path) -> dict:
+    """Verify accepted rows independently before publishing their dataset or registry entry."""
+    seen_texts, seen_groups, identifiers = set(), set(), set()
+    verified = {}
+    for split, records in pairs.items():
+        counts = Counter(f"{pair.base.pattern}->{pair.source.pattern}" for pair in records)
+        if dict(counts) != spec["splits"][split]:
+            raise ValueError(f"Built pairing counts disagree with recipe for {split}.")
+        for pair in records:
+            texts, groups = split_inventory([pair])
+            if pair.sample_id in identifiers or texts & seen_texts or groups & seen_groups:
+                raise ValueError("Built dataset repeats sample IDs, prompt text, or semantic groups across pairs.")
+            identifiers.add(pair.sample_id)
+            seen_texts.update(texts)
+            seen_groups.update(groups)
+        texts, groups = split_inventory(records)
+        verified[split] = {"pair_count": len(records), "unique_sample_ids": len({p.sample_id for p in records}),
+                           "unique_prompt_texts": len(texts), "unique_semantic_groups": len(groups),
+                           "cross_pair_prompt_duplicates": 0, "cross_pair_semantic_group_duplicates": 0}
+    _, sources = _dedup_sources(spec["deduplicate_against"], project_root)
+    overlaps = {}
+    for reference, hashes in sources.items():
+        dataset = load_dataset(reference, project_root)
+        texts, groups = split_inventory(dataset.pairs)
+        text_overlap, group_overlap = len(texts & seen_texts), len(groups & seen_groups)
+        if text_overlap or group_overlap:
+            raise ValueError(f"Built dataset overlaps {reference}: {text_overlap} prompt texts, "
+                             f"{group_overlap} semantic groups.")
+        overlaps[reference] = {**hashes, "prompt_text_overlap": text_overlap,
+                               "semantic_group_overlap": group_overlap}
+    return {"status": "passed", "splits": verified, "external_overlap": overlaps}
 
 
 def _write_json(path: Path, value: dict) -> None:
@@ -178,7 +279,11 @@ def build_dataset(config_path: Path, project_root: Path | None = None) -> dict:
     from .audit import verify_upstream
 
     provenance = verify_upstream(upstream_dir)
-    pairs, evidence = _sample_splits(spec, upstream_dir, excluded)
+    if spec["generator"]["name"] == "registered_subset":
+        pairs, evidence = _subset_splits(spec, project_root)
+    else:
+        pairs, evidence = _sample_splits(spec, upstream_dir, excluded)
+    evidence["verification"] = _verify_splits(pairs, spec, project_root)
     directory.mkdir(parents=True, exist_ok=False)
     files = {}
     for split, records in pairs.items():

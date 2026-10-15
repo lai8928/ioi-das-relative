@@ -91,7 +91,7 @@ def test_report_preserves_exact_saved_metrics_and_incomplete_conditions(saved_ex
     assert all(path.read_bytes() == content for path, content in originals.items())
 
 
-@pytest.mark.parametrize("experiment_fixture", ["saved_experiment", "locked_experiment"])
+@pytest.mark.parametrize("experiment_fixture", ["saved_experiment", "locked_experiment", "dataset_grid_experiment"])
 def test_report_regeneration_is_byte_identical(request, experiment_fixture):
     saved_experiment = request.getfixturevalue(experiment_fixture)
     first = generate_report(saved_experiment)
@@ -101,7 +101,7 @@ def test_report_regeneration_is_byte_identical(request, experiment_fixture):
     assert all(path.read_bytes() == content for path, content in before.items())
 
 
-@pytest.mark.parametrize("experiment_fixture", ["saved_experiment", "locked_experiment"])
+@pytest.mark.parametrize("experiment_fixture", ["saved_experiment", "locked_experiment", "dataset_grid_experiment"])
 def test_report_cli_does_not_import_torch_or_model_libraries(request, experiment_fixture):
     saved_experiment = request.getfixturevalue(experiment_fixture)
     program = """
@@ -325,3 +325,99 @@ def test_report_rejects_post_lock_paths_outside_saved_records(locked_experiment)
     _write_json(run_path, run)
     with pytest.raises(ValueError, match="Post-lock path must be inside"):
         generate_report(locked_experiment)
+
+
+@pytest.fixture
+def dataset_grid_experiment(tmp_path):
+    references = [f"train_n{size}_v1/train" for size in (200, 1000, 5000)]
+    run = {"status": "complete", "run_kind": "smoke", "resolved_config": {
+        "task": "data-scale", "name": "saved-grid", "data": {"test": "legacy_v1/test"},
+        "grid": {"data.train": references, "seed": [42, 43, 44]}}, "conditions": []}
+    for index, reference in enumerate(references):
+        dataset = {"reference": reference, "sha256": str(index + 1) * 64}
+        for seed in (42, 43, 44):
+            path = f"conditions/data.train=train_n{(200, 1000, 5000)[index]}_v1%2Ftrain/seed={seed}"
+            run["conditions"].append({"path": path, "status": "complete", "train_dataset": dataset,
+                                      "resolved_config": {"data": {"train": reference}, "seed": seed,
+                                                          "intervention": {"layer": 8}},
+                                      "axes": {"data.train": reference, "seed": seed}})
+            correct = (40, 100, 160)[index] + 2 * (seed - 42)
+            metric = _metrics((0, correct // 2, correct - correct // 2, 0),
+                              (0, 100, 100, 0), (0, 0, 0, 0))
+            _write_json(tmp_path / path / "result.json", {"status": "complete", "run_kind": "smoke",
+                        "seed": seed, "condition": {"layer": 8}, "datasets": {"train": dataset},
+                        "metrics": {"train": metric, "validation": metric}})
+    _write_json(tmp_path / "run.json", run)
+    return tmp_path
+
+
+def test_train_grid_groups_seed_statistics_and_curves_by_dataset(dataset_grid_experiment):
+    report = generate_report(dataset_grid_experiment)
+    with (dataset_grid_experiment / "conditions.csv").open(newline="", encoding="utf-8") as handle:
+        conditions = list(csv.DictReader(handle))
+    assert len(conditions) == 9
+    assert {row["train_dataset"] for row in conditions} == {f"train_n{size}_v1/train" for size in (200, 1000, 5000)}
+    assert {row["train_dataset_sha256"] for row in conditions} == {str(index) * 64 for index in (1, 2, 3)}
+    with (dataset_grid_experiment / "layer_summary.csv").open(newline="", encoding="utf-8") as handle:
+        rows = [row for row in csv.DictReader(handle) if row["split"] == "validation"]
+    assert len(rows) == 3
+    assert [float(row["mean_iia"]) for row in rows] == pytest.approx([0.21, 0.51, 0.81])
+    assert [float(row["seed_sample_sd"]) for row in rows] == pytest.approx([0.01] * 3)
+    assert all(row["completed_seeds"] == row["expected_seeds"] == "3" for row in rows)
+    summary = (dataset_grid_experiment / "summary.md").read_text()
+    assert "grouped by train dataset" in summary
+    assert "counts summed across seeds within each train dataset" in summary
+    for reference in {row["train_dataset"] for row in conditions}:
+        assert reference in summary
+    plot = ET.parse(dataset_grid_experiment / "figures/validation_by_layer.svg").getroot()
+    namespace = {"svg": "http://www.w3.org/2000/svg"}
+    panels = plot.findall("svg:svg", namespace)
+    assert len(panels) == 3
+    for panel, expected_mean in zip(panels, (0.21, 0.51, 0.81)):
+        labels = [element.text for element in panel.findall("svg:title", namespace)]
+        assert any(reference in " ".join(labels) for reference in {row["train_dataset"] for row in conditions})
+        assert any(f"IIA {expected_mean}" == element.text for element in panel.findall(".//svg:circle/svg:title", namespace))
+        assert all(f"Seed {seed}" in ET.tostring(panel, encoding="unicode") for seed in (42, 43, 44))
+    assert not (dataset_grid_experiment / "figures/test_by_layer.svg").exists()
+    assert "test_by_layer.svg" not in " ".join(report["artifacts"])
+
+
+def test_train_grid_keeps_pending_dataset_provenance(dataset_grid_experiment):
+    run_path = dataset_grid_experiment / "run.json"
+    run = json.loads(run_path.read_text())
+    condition = run["conditions"][2]
+    condition["status"] = "pending"
+    (dataset_grid_experiment / condition["path"] / "result.json").unlink()
+    _write_json(run_path, run)
+    generate_report(dataset_grid_experiment)
+    with (dataset_grid_experiment / "conditions.csv").open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    assert rows[2]["train_dataset"] == "train_n200_v1/train"
+    assert rows[2]["train_dataset_sha256"] == "1" * 64
+    assert rows[2]["status"] == "pending"
+    with (dataset_grid_experiment / "layer_summary.csv").open(newline="", encoding="utf-8") as handle:
+        validation = [row for row in csv.DictReader(handle) if row["split"] == "validation"]
+    assert validation[0]["completed_seeds"] == "2"
+    assert validation[0]["expected_seeds"] == "3"
+    assert validation[0]["flag"] == "incomplete"
+    assert all(row["flag"] == "complete" for row in validation[1:])
+
+
+def test_train_grid_rejects_conflicting_dataset_provenance(dataset_grid_experiment):
+    run_path = dataset_grid_experiment / "run.json"
+    run = json.loads(run_path.read_text())
+    run["conditions"][0]["train_dataset"]["sha256"] = "f" * 64
+    _write_json(run_path, run)
+    with pytest.raises(ValueError, match="Conflicting train dataset metadata"):
+        generate_report(dataset_grid_experiment)
+
+
+def test_existing_layer_sweep_reports_remain_byte_identical(tmp_path):
+    reference = PROJECT_ROOT / "outputs/layer-sweep/20261015-gpt2-small"
+    for source in reference.glob("**/*.json"):
+        destination = tmp_path / source.relative_to(reference)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(source.read_bytes())
+    report = generate_report(tmp_path)
+    for name in report["artifacts"]:
+        assert (tmp_path / name).read_bytes() == (reference / name).read_bytes(), name

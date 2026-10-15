@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "name": "train_pool_v1",
+  "purpose": "Training pool for nested size comparisons at a fixed layer; four balanced pattern combinations, disjoint from fixed validation and legacy test.",
+  "generator": {
+    "name": "original_position",
+    "source_split": "train",
+    "seed": 271828,
+    "max_batches": 10,
+    "pairs_per_combination": 1250
+  },
+  "splits": {"train": {"ABB->ABB": 1250, "ABB->BAB": 1250, "BAB->ABB": 1250, "BAB->BAB": 1250}},
+  "deduplicate_against": ["legacy_v1/test", "val_indist_v1/validation"]
+}

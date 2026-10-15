@@ -167,3 +167,40 @@ def test_schema_requires_exact_40_hex_revisions(section, revision):
 def test_schema_rejects_other_model_architectures(section):
     with pytest.raises(ConfigError):
         load_config(REFERENCE, [f'{section}.name="bert-base-uncased"'])
+
+
+def test_update_budget_removes_inherited_epochs_explicitly(tmp_path):
+    path = write_experiment(tmp_path, training={"epochs": None, "max_updates": 7})
+    config = load_config(path)
+    assert "epochs" not in config["training"]
+    assert config["training"]["max_updates"] == 7
+    assert config["training"]["scheduler"]["total_iters"] == 10
+    switched = load_config(path, ["training.max_updates=null", "training.epochs=3"])
+    assert "max_updates" not in switched["training"]
+    assert switched["training"]["epochs"] == 3
+
+
+@pytest.mark.parametrize("training", [{"max_updates": 1}, {"epochs": None},
+                                       {"epochs": None, "max_updates": 0},
+                                       {"epochs": None, "max_updates": True}])
+def test_schema_rejects_conflicting_missing_or_invalid_budgets(tmp_path, training):
+    with pytest.raises(ConfigError):
+        load_config(write_experiment(tmp_path, training=training))
+
+
+def test_inheritance_removal_rejects_unknown_names(tmp_path):
+    with pytest.raises(ConfigError, match="absent inherited setting"):
+        load_config(write_experiment(tmp_path, training={"typo": None}))
+    with pytest.raises(ConfigError, match="absent setting"):
+        load_config(REFERENCE, ["training.typo=null"])
+
+
+def test_original_condition_config_hash_is_unchanged():
+    metadata = json.loads((ROOT / "outputs/single-condition-das/20261015-layer8-seed42-3/run.json").read_text())
+    assert load_config(REFERENCE).sha256 == metadata["config_sha256"]
+
+
+def test_training_grid_does_not_reselect_the_layer():
+    with pytest.raises(ConfigError, match="cannot mix training datasets"):
+        load_config(ROOT / "configs/layer-sweep/gpt2-small.json",
+                    ['grid={"data.train":["legacy_v1/train"]}'])

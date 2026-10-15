@@ -183,13 +183,17 @@ def _read_distribution(path: Path) -> list[str]:
     return values
 
 
-def generate_pairs(upstream_dir: Path, seed: int = 42) -> dict[str, list[PairRecord]]:
-    """Sample the original 200 training and 100 test POSITION pairs.
+def generate_pairs(upstream_dir: Path, seed: int = 42, *,
+                   pairs_per_combination: int = 50) -> dict[str, list[PairRecord]]:
+    """Sample POSITION pairs, preserving the original bytes at the default size.
 
     One local Python RNG covers training then test, matching upstream random
     draw order. Sources remap their base's A/B names without any random draws;
     their template, object, and place remain those of their base.
     """
+    if isinstance(pairs_per_combination, bool) or not isinstance(pairs_per_combination, int) \
+            or pairs_per_combination < 1:
+        raise ValueError("pairs_per_combination must be a positive integer.")
     upstream_dir = Path(upstream_dir)
     resource_dir = upstream_dir / "tutorials" / "advanced_tutorials" / "tutorial_data"
     resources = {
@@ -217,9 +221,9 @@ def generate_pairs(upstream_dir: Path, seed: int = 42) -> dict[str, list[PairRec
             if split == "train" else [("ABB", "BAB"), ("BAB", "ABB")]
         )
         for base_pattern, source_pattern in combinations:
-            # Upstream samples each 50-base block before deriving its sources.
+            # Sample a complete base block before deriving its sources.
             bases = []
-            for _ in range(50):
+            for _ in range(pairs_per_combination):
                 template_id = rng.choice(template_ids)
                 symbols = list(dict.fromkeys(base_pattern))
                 sampled_names = rng.sample(distributions["names"], len(symbols))

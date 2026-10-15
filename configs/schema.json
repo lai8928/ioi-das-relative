@@ -51,9 +51,14 @@
     },
     "training": {
       "type": "object", "additionalProperties": false,
-      "required": ["epochs", "batch_size", "optimizer", "learning_rate", "betas", "eps", "weight_decay", "schedule", "scheduler"],
+      "required": ["batch_size", "optimizer", "learning_rate", "betas", "eps", "weight_decay", "schedule", "scheduler"],
+      "oneOf": [
+        {"required": ["epochs"], "not": {"required": ["max_updates"]}},
+        {"required": ["max_updates"], "not": {"required": ["epochs"]}}
+      ],
       "properties": {
         "epochs": {"type": "integer", "minimum": 1},
+        "max_updates": {"type": "integer", "minimum": 1},
         "batch_size": {"type": "integer", "minimum": 1},
         "optimizer": {"const": "Adam"},
         "learning_rate": {"type": "number", "exclusiveMinimum": 0},

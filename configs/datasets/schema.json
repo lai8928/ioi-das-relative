@@ -9,14 +9,31 @@
     "name": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*$"},
     "purpose": {"type": "string", "minLength": 1},
     "generator": {
-      "type": "object", "additionalProperties": false,
-      "required": ["name", "source_split", "seed", "max_batches"],
-      "properties": {
-        "name": {"const": "original_position"},
-        "source_split": {"enum": ["train", "test"]},
-        "seed": {"type": "integer", "minimum": 0},
-        "max_batches": {"type": "integer", "minimum": 1}
-      }
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["name", "source_split", "seed", "max_batches"],
+          "properties": {
+            "name": {"const": "original_position"},
+            "source_split": {"enum": ["train", "test"]},
+            "seed": {"type": "integer", "minimum": 0},
+            "max_batches": {"type": "integer", "minimum": 1},
+            "pairs_per_combination": {"type": "integer", "minimum": 1}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["name", "source", "nested_against"],
+          "properties": {
+            "name": {"const": "registered_subset"},
+            "source": {"$ref": "#/$defs/reference"},
+            "nested_against": {
+              "type": "array", "uniqueItems": true,
+              "items": {"$ref": "#/$defs/reference"}
+            }
+          }
+        }
+      ]
     },
     "splits": {
       "type": "object", "minProperties": 1, "additionalProperties": false,
@@ -32,6 +49,7 @@
     }
   },
   "$defs": {
+    "reference": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*/(?:train|validation|test)$"},
     "pairing_counts": {
       "type": "object", "minProperties": 1,
       "propertyNames": {"pattern": "^(?:ABB|BAB)->(?:ABB|BAB)$"},
