@@ -12,6 +12,53 @@ Updated: 2026-10-15 · Cycle since: [2026-10-12](meetings/2026-10-12.md)
 | `model-scale` | Same protocol on a larger GPT-2 | active | 2026-10-12 | M4 / B |
 | `data-scale` | Larger training sets | active | 2026-10-12 | M5 / C |
 
+## Config/pipeline implementation
+
+- Branch: `feat/config-pipeline`; implementation commit `748cb37`. Not merged.
+- Brief: `docs/briefs/2026-10-15-config-pipeline.md`.
+- Implemented inherited, immutable schema-validated configs, ordered grids,
+  per-condition runs, source/data/artifact hash verification on resume,
+  clean-source checks, and saved-file-only CSV/Markdown/SVG reports.
+- Resolved reference config SHA-256 (canonical settings plus grid order):
+  `f9c74ce47dc4ac9a94c090a533d6628544e0cdf93fb5a5ae850f898243015f5b`.
+- Acceptance so far:
+  - Suite: 78 passed, 1 skipped (opt-in GPU regression), 305 subtests;
+    command below. Focused tests cover corruption rejection, preserved
+    completed/partial conditions, schedule/shuffle behavior, and reports with
+    torch/transformers/pyvene imports blocked.
+  - Audit: passed; reused 200 train / 100 test pairs, 0 unsupported answer
+    checks. New audit evidence: `/tmp/ioi-das-audit-czpw59ra/summary.md`.
+    Existing completed audit and registered dataset bytes remain unchanged.
+  - Final smoke from committed source: complete on physical GPU 6,
+    `outputs/single-condition-das/smoke-20261015-layer8-seed42-3/`;
+    `run.json`, one update, 20 train / 4 test pairs. This is execution
+    evidence, not a full scientific result.
+  - Retained earlier attempts:
+    `smoke-20261015-layer8-seed42/` failed because sandbox CUDA was unavailable;
+    `smoke-20261015-layer8-seed42-2/` completed during development and is
+    superseded by the final smoke because source files changed during it.
+    Both remain immutable, with their original run metadata.
+  - `git grep -nE "phase ?[0-9]|Phase ?[0-9]|m[0-9]_|milestone" -- src`:
+    no matches (expected exit status 1).
+  - `doctor`: passed without loading model weights or training.
+- Frozen notebook: its source-integrity cell still refers to commit
+  `e7477e4`; it was not changed or re-rendered. New source hashes naturally
+  differ from those saved in the historical notebook.
+- Full parity acceptance and actual-run report verification are pending.
+- Commands executed:
+
+```bash
+env PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 MPLCONFIGDIR=/tmp/ioi-das-relative-matplotlib /home/ilingl/.conda/envs/ioi-das-v2/bin/python -B -m pytest -q
+env PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 /home/ilingl/.conda/envs/ioi-das-v2/bin/python -B -m ioi_das.cli audit --config configs/audit.json
+env CUDA_VISIBLE_DEVICES=6 PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 MPLCONFIGDIR=/tmp/ioi-das-relative-matplotlib /home/ilingl/.conda/envs/ioi-das-v2/bin/python -B -m ioi_das.cli run --config configs/single-condition-das/layer8-seed42.json --smoke
+```
+
+Exact next command, after committing this evidence to make the tree clean:
+
+```bash
+env CUDA_VISIBLE_DEVICES=6 PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 MPLCONFIGDIR=/tmp/ioi-das-relative-matplotlib /home/ilingl/.conda/envs/ioi-das-v2/bin/python -B -m ioi_das.cli run --config configs/single-condition-das/layer8-seed42.json
+```
+
 ## layer-sweep
 
 - Goal: independent rank-1 DAS at block_output, last token N, every layer,

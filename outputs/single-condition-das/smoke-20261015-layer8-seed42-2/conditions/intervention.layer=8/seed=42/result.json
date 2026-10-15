@@ -1,0 +1,122 @@
+{
+  "artifacts": {
+    "alignment.pt": "ff984cea70b08bdc3454533a2edd1a7a7343deca1f9fb5e2ca518c054fae6ed1",
+    "environment.json": "13f23c58d5ed9ab78619cc98b1d9d575c3dcec3f0e998129350232265352764e",
+    "initial_alignment.pt": "250b53cce7164a4a346287d620ebf36ffad40944cb39d6fe41c84aff1915e5c0",
+    "initial_train_predictions.jsonl": "38b3c90b6a32e826bd5bfe5787811f150f3f3d8ea4f1a815460b64345fe1ccc6",
+    "metrics.json": "14358c224ac99281cde91745ae94fc03e96edeb02247d675a1521b618543c39a",
+    "test_predictions.jsonl": "0884e2938d4ec0208b9ed0606e695e6deb260f826d089666efedba1c412ba607",
+    "train_predictions.jsonl": "9a3ce9cca12e71ae49c36e13dbf4f6d4401cbfbd005467877f5b2759aec4d4ee",
+    "training.json": "17202d2767a40201160173042766ad8707aa99f9726efde1d28a4f8d105ab6e9",
+    "training_steps.jsonl": "45884f3447f742a16c8a9dd0983335455b8705ff424256447c434dff873d70ba",
+    "validation.json": "e3e0a1831dfbe00161f5ad8f30aabbf116ea2cecb2bfcd08298bcfc8dda16199"
+  },
+  "completed_at_utc": "2026-10-15T10:01:19.353709+00:00",
+  "condition": {
+    "component": "block_output",
+    "intervention_location": "N",
+    "layer": 8,
+    "rank": 1,
+    "target_variable": "position"
+  },
+  "config_source_sha256": "ea40d51fd3bebd597c9ae579343fa47ce214b99816f78559ae3cfaf78e9240c8",
+  "dataset_files": {
+    "test": {
+      "count": 100,
+      "path": "test.jsonl",
+      "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+    },
+    "train": {
+      "count": 200,
+      "path": "train.jsonl",
+      "sha256": "3867b316d469df4b4c2d80136324c8cda4e001c617c584c30703283ad75db346"
+    }
+  },
+  "dataset_manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+  "dataset_reused": true,
+  "elapsed_seconds": 18.16352865844965,
+  "gpu_peak_allocated_bytes": 705601024,
+  "implementation_sha256": {
+    "__init__.py": "6b2cac83b6926f48e4fe131a7d60f0bce7544fe4be30aaf27fa16f9de2203c41",
+    "audit.py": "6958b3f6a6402e3f520548e2dce076e85d5aac4ee55ca61985ae2840d0d42528",
+    "checks.py": "8c685dc8e6effeee57deb1512bc39a81e75c58f680df4c8f8a3b631dc47de7f1",
+    "cli.py": "aa93b294f926f2526716c9bb6ca3a9d2bfc1aeea7830d745417ad238a97fc92b",
+    "config.py": "8c16605e4651ad6beab5ef785d2af9d98d0c24f4b54be2b12ef341b9c5530e28",
+    "data.py": "15d6ca5050c614722b38a39aad5d75ff24aeaa40d2f1cd0541e4c025c680f776",
+    "environment.py": "dbd96cfbbdc60b01a28d5561b6e8f8ca820d56646274b8b12cdba0742b80c14a",
+    "evaluate.py": "b534d8da8c4c0c5dbe36146e89b79678e1c1130d535a8c4030afb577d473450d",
+    "experiment.py": "bbd8a8fa1bcb9c0a8febfa64cef34f12ad690d0ac114a11b95225cea3bc34bf1",
+    "intervention.py": "9d83fab09e9a1926740a33e96047164187cc6af800515390f0c1ab72b52c2c3e",
+    "pipeline.py": "4660e3701ec1353521132e4c9c4239d2c6fe356cbdce36450863066881ad67ed",
+    "positions.py": "b38c1d90ed96f77d9229d66f68d64a272681363d60657b10dc7e0f2136bc3078",
+    "report.py": "c880764e67b980414715633858d0a3069713df2ce25a800891410bd28d07b4af",
+    "tokenization.py": "65ed374f80c9f76f7f33b44281dce188655629d0be760fadffc2921c2bc8bb4d",
+    "train.py": "ae70d878f5ec51a50ce66c3979403c1d76e4ee83b56af6d2bb79fc10c42b5b55",
+    "validation.py": "a544b5145d600551c454ebdd045a7e84c664cf8364f6714125c1e8ca2eedf512"
+  },
+  "language_model_weights_changed": false,
+  "metrics": {
+    "initial_train": {
+      "factual_accuracy": 1.0,
+      "factual_correct": 20,
+      "factual_total": 20,
+      "iia": 0.5,
+      "iia_correct": 10,
+      "iia_total": 20,
+      "mean_counterfactual_loss": 2.550490892678499,
+      "mean_factual_loss": 0.492325921356678,
+      "mean_target_logit": -71.66568374633789,
+      "prediction_rule": "argmax_full_vocabulary"
+    },
+    "test": {
+      "factual_accuracy": 1.0,
+      "factual_correct": 4,
+      "factual_total": 4,
+      "iia": 0.0,
+      "iia_correct": 0,
+      "iia_total": 4,
+      "mean_counterfactual_loss": 3.8863090872764587,
+      "mean_factual_loss": 0.6802412867546082,
+      "mean_target_logit": -77.88375091552734,
+      "prediction_rule": "argmax_full_vocabulary"
+    },
+    "train": {
+      "factual_accuracy": 1.0,
+      "factual_correct": 20,
+      "factual_total": 20,
+      "iia": 0.5,
+      "iia_correct": 10,
+      "iia_total": 20,
+      "mean_counterfactual_loss": 2.4647483475506307,
+      "mean_factual_loss": 0.492325921356678,
+      "mean_target_logit": -71.75981273651124,
+      "prediction_rule": "argmax_full_vocabulary"
+    }
+  },
+  "model": {
+    "attn_implementation": "eager",
+    "dtype": "float32",
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "optimizer_steps": 1,
+  "original_dataset_counts": {
+    "test": 100,
+    "train": 200
+  },
+  "run_dataset_counts": {
+    "test": 4,
+    "train": 20
+  },
+  "run_kind": "smoke",
+  "seed": 42,
+  "status": "complete",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+  "validation_status": "passed"
+}
