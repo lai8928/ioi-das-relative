@@ -99,11 +99,11 @@ def _dataset_inputs(root: Path, data_options: dict) -> tuple[dict, dict, dict, d
     return pairs, datasets, provenance, hashes
 
 
-def _layer_count(model_options: dict) -> int:
-    from transformers.utils.hub import cached_file
+def _model_metadata(model_options: dict, tokenizer_options: dict) -> dict:
+    from .models import cached_model_metadata, require_cached_model
 
-    path = cached_file(model_options["name"], "config.json", revision=model_options["revision"], local_files_only=True)
-    return int(_read_json(Path(path))["n_layer"])
+    require_cached_model(model_options["name"], model_options["revision"], tokenizer_options["name"])
+    return cached_model_metadata(model_options["name"], model_options["revision"])
 
 
 def _allocate_output(root: Path, task: str, name: str, smoke: bool) -> Path:
@@ -211,7 +211,7 @@ def _execute(output: Path, metadata: dict, pairs: dict, datasets: dict, provenan
             condition["status"] = "running"
             _write_json(output / "run.json", metadata)
             try:
-                run_condition(
+                result = run_condition(
                     output / condition["path"], visible_pairs, model_options=values["model"],
                     tokenizer_options=values["tokenizer"], training_options=values["training"],
                     layer=intervention["layer"], rank=intervention["rank"], component=intervention["component"],
@@ -221,6 +221,8 @@ def _execute(output: Path, metadata: dict, pairs: dict, datasets: dict, provenan
                     provenance=provenance, config_sha256=config_sha256(values),
                     evaluation_splits=evaluation_splits, smoke=smoke)
                 condition["status"] = "complete"
+                if "elapsed_seconds" in result:
+                    condition["elapsed_seconds"] = result["elapsed_seconds"]
                 condition["result_sha256"] = sha256_file(output / condition["path"] / "result.json")
             except BaseException as error:
                 condition["status"] = "failed"
@@ -290,7 +292,7 @@ def _evaluate_locked_records(output: Path, metadata: dict, pairs: dict,
                 runtime_options = options
             elif options != runtime_options:
                 raise ValueError("Locked checkpoints require identical model, tokenizer, device, and CPU settings.")
-            evaluate_checkpoint(
+            result = evaluate_checkpoint(
                 directory, checkpoint, pairs={split: pairs[split] for split in locked_splits},
                 model_options=values["model"], tokenizer_options=values["tokenizer"],
                 layer=intervention["layer"], rank=intervention["rank"], location=intervention["location"],
@@ -299,6 +301,8 @@ def _evaluate_locked_records(output: Path, metadata: dict, pairs: dict,
                 selection_sha256=metadata["selection_sha256"], checkpoint_sha256=sha256_file(checkpoint),
                 dataset_metadata={split: datasets[split] for split in locked_splits}, runtime=runtime)
             record["status"] = "complete"
+            if "elapsed_seconds" in result:
+                record["elapsed_seconds"] = result["elapsed_seconds"]
             record["result_sha256"] = sha256_file(directory / "result.json")
         except BaseException as error:
             record["status"] = "failed"
@@ -314,8 +318,9 @@ def run_experiment(config: ResolvedConfig, smoke: bool = False,
     state = _git_state(config.project_root)
     if not smoke and not state["protected_tree_clean"]:
         raise ValueError("Full runs require committed src/, configs/, and data/ changes; commit them before running.")
+    descriptor = _model_metadata(config["model"], config["tokenizer"])
     pairs, datasets, provenance, hashes = _dataset_inputs(config.project_root, config["data"])
-    conditions = expand_grid(config, _layer_count(config["model"]))
+    conditions = expand_grid(config, descriptor["layer_count"])
     if resume:
         output = _resume_output(config, smoke, resume)
         metadata = _resume_metadata(output, config, smoke, hashes, conditions)
@@ -330,6 +335,7 @@ def run_experiment(config: ResolvedConfig, smoke: bool = False,
             "config_source_sha256": sha256_file(config.source_path),
             "resolved_config": config.to_dict(), "config_sha256": config.sha256,
             "dataset_hashes": hashes, "implementation_sha256": _implementation_hashes(),
+            "model": descriptor,
             "environment": {"executable": sys.executable, "python": platform.python_version(),
                             "CUDA_VISIBLE_DEVICES": os.environ.get("CUDA_VISIBLE_DEVICES")},
             "conditions": conditions,

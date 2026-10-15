@@ -1,0 +1,13 @@
+{
+  "extends": "../layer-sweep/gpt2-small.json",
+  "task": "model-scale",
+  "name": "gpt2-medium",
+  "model": {
+    "name": "gpt2-medium",
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da"
+  },
+  "tokenizer": {
+    "name": "gpt2-medium",
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da"
+  }
+}

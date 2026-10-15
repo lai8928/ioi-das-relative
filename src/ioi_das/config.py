@@ -11,6 +11,8 @@ from typing import Any
 
 from jsonschema import Draft202012Validator
 
+from .models import validate_model
+
 
 class ConfigError(ValueError):
     """An invalid experiment configuration or override."""
@@ -161,9 +163,10 @@ def validate_config(values: Mapping[str, Any], project_root: Path | None = None)
     if error:
         location = ".".join(str(key) for key in error.absolute_path) or "<root>"
         raise ConfigError(f"Invalid configuration at {location}: {error.message}; fix the setting.")
-    if plain["model"]["name"] != plain["tokenizer"]["name"] or \
+    if validate_model(plain["model"]["name"], plain["model"]["revision"]) != \
+            validate_model(plain["tokenizer"]["name"], plain["tokenizer"]["revision"]) or \
             plain["model"]["revision"] != plain["tokenizer"]["revision"]:
-        raise ConfigError("Model and tokenizer names and revisions differ; use the same pinned revision.")
+        raise ConfigError("Model and tokenizer families or revisions differ; use the same pinned revision.")
     for split, reference in plain["data"].items():
         if reference.split("/")[-1] != split:
             raise ConfigError(f"Data split {split!r} references {reference!r}; use a matching split name.")

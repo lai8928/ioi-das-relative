@@ -2,30 +2,63 @@
 
 from importlib import metadata
 import os
+from pathlib import Path
 import platform
 import sys
 
 
-def inspect_environment(require_gpu: bool = False, device: str = "cuda:0") -> dict:
+def read_version_pins(path: str | Path) -> dict[str, str]:
+    """Return exact package and interpreter versions from the requirements lock."""
+    pins = {}
+    for raw_line in Path(path).read_text().splitlines():
+        line = raw_line.strip()
+        if line.startswith("# Python=="):
+            line = line[2:]
+        elif not line or line.startswith(("#", "--")):
+            continue
+        name, separator, version = line.partition("==")
+        if not separator or not name or not version or name in pins:
+            raise ValueError(f"Invalid exact version pin {raw_line!r} in {path}.")
+        pins[name] = version
+    if "Python" not in pins:
+        raise ValueError(f"Missing '# Python==<version>' interpreter pin in {path}.")
+    return pins
+
+
+def inspect_environment(require_gpu: bool = False, device: str = "cuda:0",
+                        lock_file: str | Path | None = None) -> dict:
     """Check dependencies and verify CUDA with a small matrix multiplication.
 
     This diagnostic loads no language model and performs no DAS training.
     GPU verification fails explicitly instead of falling back to CPU.
     """
+    lock_file = Path(lock_file) if lock_file else Path(__file__).resolve().parents[2] / "environment/requirements-lock.txt"
+    pins = read_version_pins(lock_file)
+    python_version = platform.python_version()
     packages = {}
-    for name in ("torch", "transformers", "tokenizers", "pyvene", "numpy", "pytest", "packaging", "pip"):
+    for name in dict.fromkeys([*(name for name in pins if name != "Python"), "pip"]):
         try:
             packages[name] = metadata.version(name)
         except metadata.PackageNotFoundError:
             packages[name] = None
     missing = [name for name in ("transformers", "tokenizers", "pytest") if packages[name] is None]
+    missing_dependencies = [name for name in pins if name != "Python" and packages[name] is None]
+    differences = [{"package": name, "expected": expected,
+                    "installed": python_version if name == "Python" else packages[name]}
+                   for name, expected in pins.items()
+                   if (python_version if name == "Python" else packages[name]) != expected]
     report = {
         "executable": sys.executable,
         "prefix": sys.prefix,
-        "python": platform.python_version(),
+        "python": python_version,
         "packages": packages,
         "missing_test_dependencies": missing,
-        "dependency_status": "ready" if not missing else "missing_dependencies",
+        "missing_dependencies": missing_dependencies,
+        "dependency_status": ("missing_dependencies" if missing_dependencies else
+                              "version_mismatch" if differences else "ready"),
+        "requirements_lock": {"path": str(lock_file), "expected_versions": pins,
+                              "differences": differences,
+                              "status": "matched" if not differences else "different"},
         "environment_variables": {key: os.environ.get(key) for key in
                                   ("CONDA_PREFIX", "CONDA_DEFAULT_ENV", "CUDA_VISIBLE_DEVICES")},
         "gpu_required": require_gpu,
@@ -70,5 +103,5 @@ def inspect_environment(require_gpu: bool = False, device: str = "cuda:0") -> di
             gpu["status"] = "passed"
         except (ImportError, OSError, RuntimeError, ValueError, AssertionError) as error:
             gpu["error"] = f"{type(error).__name__}: {error}"
-    report["status"] = "passed" if not missing and (not require_gpu or report["gpu"]["status"] == "passed") else "failed"
+    report["status"] = "passed" if not differences and (not require_gpu or report["gpu"]["status"] == "passed") else "failed"
     return report

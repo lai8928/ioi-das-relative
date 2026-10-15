@@ -105,7 +105,7 @@ def _source_state(root: Path) -> dict:
 
 
 def run_audit(dataset: str, project_root: Path | None = None,
-              command: list[str] | None = None) -> dict:
+              command: list[str] | None = None, tokenizer_config: Path | None = None) -> dict:
     """Audit every registered split and save a fresh, immutable evidence directory."""
     from .datasets import load_dataset, load_registry
 
@@ -116,7 +116,13 @@ def run_audit(dataset: str, project_root: Path | None = None,
     inputs = {split: load_dataset(f"{dataset}/{split}", root)
               for split in registry["datasets"][dataset]["splits"]}
     config_path = root / "configs" / "base.json"
-    tokenizer_options = json.loads(config_path.read_text(encoding="utf-8"))["tokenizer"]
+    if tokenizer_config is not None:
+        from .config import load_config
+        config_path = Path(tokenizer_config).resolve()
+        tokenizer_options = load_config(config_path)["tokenizer"]
+        tokenizer_options = dict(tokenizer_options)
+    else:
+        tokenizer_options = json.loads(config_path.read_text(encoding="utf-8"))["tokenizer"]
     config = {"dataset": dataset, "tokenizer": tokenizer_options, "batch_size": 20,
               "intervention_locations": ["GOAL_NAME", "N", "N-1", "N-2"],
               "readout_location": "N"}

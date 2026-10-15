@@ -12,6 +12,7 @@ from pyvene import (
 )
 
 from .data import PairRecord
+from .models import require_cached_model, validate_model
 from .positions import resolve_pair_positions
 from .tokenization import check_answer, encode_pair_batch
 
@@ -64,13 +65,13 @@ def load_model(name: str, revision: str, device: str | torch.device, *,
     """Load pinned cached safetensors in float32 with deterministic eager attention."""
     from transformers import GPT2LMHeadModel
 
-    if name != "gpt2" or not revision:
-        raise ValueError(f"Model {name!r} requires name 'gpt2' and a pinned revision.")
+    validate_model(name, revision)
     if not local_files_only:
         raise ValueError("Model weights must use the existing cache; set local_files_only=true.")
     if dtype != "float32" or attn_implementation != "eager":
         raise ValueError(f"Unsupported model dtype={dtype!r}, attn_implementation={attn_implementation!r}; "
                          "use float32 with eager attention for deterministic alignment training.")
+    require_cached_model(name, revision, include_tokenizer=False)
     model = GPT2LMHeadModel.from_pretrained(
         name, revision=revision,
         local_files_only=True, use_safetensors=True,

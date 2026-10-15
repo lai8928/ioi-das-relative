@@ -126,6 +126,65 @@ Re-render the walkthrough notebook from saved outputs (no model load):
 $PY -B scripts/render_phase2_notebook.py --project-root "$PWD"
 ```
 
+## Run on another machine
+
+Clone the repository, check out the commit containing the intended config,
+and create a separate environment from the recorded interpreter and package
+versions. The lock lists the project's runtime, test, and notebook imports;
+pip also installs their dependencies. A CUDA-compatible NVIDIA driver and
+`tmux` must already be available.
+
+```bash
+git clone https://github.com/lai8928/ioi-das-relative.git
+cd ioi-das-relative
+conda create -n ioi-das-v2 python=3.10.21 pip
+conda activate ioi-das-v2
+python -m pip install -r environment/requirements-lock.txt
+PY=$(command -v python)
+export PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+export OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 MPLCONFIGDIR=/tmp/ioi-das-relative-matplotlib
+$PY -B -m ioi_das.cli doctor
+```
+
+Download the pinned model and tokenizer assets explicitly before any run.
+Both commands use the cache names recorded in the configs. A run loads only
+cached files and reports the required download command if assets are missing.
+
+```bash
+HF_HUB_OFFLINE=0 hf download gpt2 config.json model.safetensors tokenizer.json tokenizer_config.json vocab.json merges.txt --revision 607a30d783dfa663caf39e06633721c8d4cfcd7e
+HF_HUB_OFFLINE=0 hf download gpt2-medium config.json model.safetensors tokenizer.json tokenizer_config.json vocab.json merges.txt --revision 6dcaa7a952f72f9298047fd5137cd6e4f05f41da
+nvidia-smi
+# Choose an available physical GPU, then verify CUDA and run a one-condition smoke.
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli doctor --require-gpu
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/model-scale/gpt2-medium.json --smoke --override 'grid={"intervention.layer":[12],"seed":[42]}'
+```
+
+Commit source, configs, and dataset changes before starting a full run. Launch
+it inside `tmux` so disconnecting the terminal leaves the process running;
+reactivate the environment and exports above inside the session if needed.
+
+```bash
+git status --short
+tmux new-session -s ioi-medium
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/model-scale/gpt2-medium.json
+# Detach with Ctrl-b, then d; reconnect with: tmux attach -t ioi-medium
+```
+
+From another terminal, activate the environment, set `PY` and `PYTHONPATH` as
+above, and pass the experiment directory printed by `run` to `status`. It
+reads the saved run record and reports completion counts and a duration-based
+ETA, so it can also inspect a completed run without loading model weights.
+
+```bash
+$PY -B -m ioi_das.cli status --experiment-dir outputs/model-scale/YYYYMMDD-gpt2-medium
+```
+
+Bring results back by committing `outputs/<task>/<experiment-id>/` on the
+other machine and transferring that commit, or copy the complete directory
+back into the same path here and commit it here. Preserve the saved config,
+run records, hashes, checkpoints, and report together. Keep partial or failed
+run directories as evidence; completed outputs remain unchanged.
+
 ## Credits
 
 Eight upstream files are preserved unchanged under `vendor/pyvene_upstream/`

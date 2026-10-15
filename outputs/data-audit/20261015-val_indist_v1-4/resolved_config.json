@@ -1,0 +1,16 @@
+{
+  "batch_size": 20,
+  "dataset": "val_indist_v1",
+  "intervention_locations": [
+    "GOAL_NAME",
+    "N",
+    "N-1",
+    "N-2"
+  ],
+  "readout_location": "N",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2-medium",
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da"
+  }
+}
