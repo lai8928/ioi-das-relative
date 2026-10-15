@@ -117,7 +117,8 @@ def run_condition(
         training = train_alignment(
             model, intervenable, pairs["train"], tokenizer, reference, device,
             seed=seed, location=location, output_path=output / "training_steps.jsonl",
-            epochs=training_options["epochs"], batch_size=training_options["batch_size"],
+            epochs=training_options.get("epochs"), max_updates=training_options.get("max_updates"),
+            batch_size=training_options["batch_size"],
             learning_rate=training_options["learning_rate"], betas=tuple(training_options["betas"]),
             eps=training_options["eps"], weight_decay=training_options["weight_decay"],
             schedule=training_options["schedule"], schedule_start_factor=scheduler["start_factor"],

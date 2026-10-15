@@ -50,10 +50,21 @@ def test_all_layers_requires_model_count_and_expands_in_order():
         pipeline.expand_grid(load_config(REFERENCE, ["intervention.layer=12"]), 12)
 
 
-def test_grid_cannot_change_dataset_identity():
-    config = load_config(REFERENCE, ['grid={"data.train":["legacy_v1/train"]}'])
+@pytest.mark.parametrize("split", ["validation", "test"])
+def test_grid_cannot_change_selection_or_test_datasets(split):
+    config = load_config(REFERENCE, ['data.validation="val_indist_v1/validation"',
+                                    'grid={"data.' + split + '":["legacy_v1/' + split + '"]}'])
     with pytest.raises(ValueError, match="identity or data"):
         pipeline.expand_grid(config, 12)
+
+
+def test_train_dataset_grid_preserves_reference_seed_order_and_safe_paths():
+    config = load_config(REFERENCE, ['grid={"data.train":["train_n200_v1/train","train_n1000_v1/train"],"seed":[42,43]}'])
+    conditions = pipeline.expand_grid(config, 12)
+    assert [(row["resolved_config"]["data"]["train"], row["resolved_config"]["seed"]) for row in conditions] == [
+        ("train_n200_v1/train", 42), ("train_n200_v1/train", 43),
+        ("train_n1000_v1/train", 42), ("train_n1000_v1/train", 43)]
+    assert conditions[0]["path"] == "conditions/data.train=train_n200_v1%2Ftrain/seed=42"
 
 
 def test_grid_validates_model_and_tokenizer_revision_together():
@@ -392,3 +403,63 @@ def test_completed_selection_resume_preserves_every_artifact(selection_runtime):
     assert pipeline.run_experiment(selection_runtime["config"], resume=output) == result
     assert _snapshot(output) == before
     assert selection_runtime["events"] == events
+
+
+def test_training_grid_loads_and_hashes_each_train_split_once(runtime, monkeypatch):
+    config = replace(load_config(REFERENCE, [
+        'data.train="train_n200_v1/train"', 'data.validation="val_indist_v1/validation"',
+        'grid={"data.train":["train_n200_v1/train","train_n1000_v1/train"],"seed":[42,43]}']),
+        project_root=runtime["config"].project_root)
+    loads, trained = [], []
+    references = {"train_n200_v1/train": ("a", ["small"]),
+                  "train_n1000_v1/train": ("b", ["larger", "train"]),
+                  "val_indist_v1/validation": ("c", ["validation"]),
+                  "legacy_v1/test": ("d", ["test"])}
+
+    def dataset_inputs(root, options):
+        loads.append(dict(options))
+        pairs, datasets, hashes = {}, {}, {}
+        for split, reference in options.items():
+            marker, records = references[reference]
+            pairs[split] = records
+            datasets[split] = {"reference": reference, "sha256": marker * 64,
+                               "manifest_sha256": "e" * 64}
+            hashes[reference] = marker * 64
+            hashes[reference.split("/")[0] + "/manifest"] = "e" * 64
+        return pairs, datasets, {}, hashes
+
+    def runner(output, pairs, **options):
+        assert set(pairs) == {"train", "validation"}
+        metadata = options["dataset_metadata"]["train"]
+        assert pairs["train"] == references[metadata["reference"]][1]
+        assert pairs["validation"] == ["validation"]
+        trained.append((metadata["reference"], options["seed"], metadata["sha256"]))
+        result = runtime["runner"](output, pairs, **options)
+        result["datasets"] = options["dataset_metadata"]
+        _save(output / "result.json", result)
+        return result
+
+    monkeypatch.setattr(pipeline, "_dataset_inputs", dataset_inputs)
+    monkeypatch.setattr(pipeline, "run_condition", runner)
+    monkeypatch.setattr(report, "generate_report", lambda output: {})
+    result = pipeline.run_experiment(config, smoke=True)
+    assert result["status"] == "complete"
+    assert len(loads) == 2
+    assert loads[1] == {"train": "train_n1000_v1/train"}
+    assert [(reference, seed) for reference, seed, _ in trained] == [
+        ("train_n200_v1/train", 42), ("train_n200_v1/train", 43),
+        ("train_n1000_v1/train", 42), ("train_n1000_v1/train", 43)]
+    assert result["dataset_hashes"]["train_n200_v1/train"] == "a" * 64
+    assert result["dataset_hashes"]["train_n1000_v1/train"] == "b" * 64
+    for condition in result["conditions"]:
+        reference = condition["resolved_config"]["data"]["train"]
+        assert condition["train_dataset"]["reference"] == reference
+        assert condition["train_dataset"]["sha256"] == references[reference][0] * 64
+    before = _snapshot(Path(result["experiment_dir"]))
+    assert pipeline.run_experiment(config, smoke=True, resume=Path(result["experiment_dir"])) == result
+    assert _snapshot(Path(result["experiment_dir"])) == before
+    assert len(trained) == 4
+    references["train_n1000_v1/train"] = ("f", ["larger", "train"])
+    with pytest.raises(ValueError, match="Dataset hashes"):
+        pipeline.run_experiment(config, smoke=True, resume=Path(result["experiment_dir"]))
+    assert _snapshot(Path(result["experiment_dir"])) == before

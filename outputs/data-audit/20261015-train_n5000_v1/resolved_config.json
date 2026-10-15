@@ -1,0 +1,16 @@
+{
+  "batch_size": 20,
+  "dataset": "train_n5000_v1",
+  "intervention_locations": [
+    "GOAL_NAME",
+    "N",
+    "N-1",
+    "N-2"
+  ],
+  "readout_location": "N",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  }
+}

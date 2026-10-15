@@ -81,7 +81,8 @@ def _saved_conditions(experiment_dir: Path, run: dict[str, Any]) -> list[dict[st
     return records
 
 
-def _condition_row(record: dict[str, Any], experiment_dir: Path, run_kind: str) -> dict[str, Any]:
+def _condition_row(record: dict[str, Any], experiment_dir: Path, run_kind: str,
+                   group_train: bool = False) -> dict[str, Any]:
     path = record["directory"]
     result_path = path / "result.json"
     result = _read_json(result_path) if result_path.is_file() else {}
@@ -100,6 +101,15 @@ def _condition_row(record: dict[str, Any], experiment_dir: Path, run_kind: str) 
            "rank": condition.get("rank", axes.get("intervention.rank", intervention.get("rank", ""))),
            "seed": result.get("seed", axes.get("seed", configured.get("seed", ""))),
            "error": result.get("error", record.get("error", ""))}
+    if group_train:
+        saved_train = result.get("datasets", {}).get("train", {})
+        registered_train = record.get("train_dataset", {})
+        references = {value for value in (saved_train.get("reference"), registered_train.get("reference"),
+                                          configured.get("data", {}).get("train"), axes.get("data.train")) if value}
+        hashes = {value for value in (saved_train.get("sha256"), registered_train.get("sha256")) if value}
+        if len(references) > 1 or len(hashes) > 1:
+            raise ValueError(f"Conflicting train dataset metadata: {row['condition']}.")
+        row.update(train_dataset=next(iter(references), ""), train_dataset_sha256=next(iter(hashes), ""))
     failure_path = path / "failure.json"
     if failure_path.is_file():
         row["error"] = _read_json(failure_path).get("error", row["error"])
@@ -154,9 +164,10 @@ def _add_post_lock_metrics(experiment_dir: Path, run: dict[str, Any], rows: list
             _add_split_metrics(row, split, metrics)
 
 
-def _csv_text(rows: list[dict[str, Any]], include_test: bool) -> str:
+def _csv_text(rows: list[dict[str, Any]], include_test: bool, group_train: bool = False) -> str:
     splits = tuple(split for split in SPLITS if split != "test" or include_test)
     fields = ("condition", "status", "run_kind", "layer", "component", "location", "rank", "seed",
+              *(("train_dataset", "train_dataset_sha256") if group_train else ()),
               *(f"{split}_{metric}" for split in splits for metric in METRICS),
               *(f"{split}_{group}_{metric}" for split in splits for group in GROUPS for metric in GROUP_METRICS),
               "post_lock_status", "error", "post_lock_error")
@@ -183,23 +194,35 @@ def _aggregate(cells: list[dict[str, Any]], series: str, group: str = "") -> dic
             "flag": "complete" if len(complete) == len(cells) else "incomplete"}
 
 
-def _layer_summaries(rows: list[dict[str, Any]], series: tuple[str, ...]) -> list[dict[str, Any]]:
+def _train_groups(rows: list[dict[str, Any]]) -> list[tuple[str, str]]:
+    return list(dict.fromkeys((row["train_dataset"], row["train_dataset_sha256"]) for row in rows))
+
+
+def _layer_summaries(rows: list[dict[str, Any]], series: tuple[str, ...],
+                     group_train: bool = False) -> list[dict[str, Any]]:
     summaries = []
     layers = sorted({row["layer"] for row in rows if row["layer"] != ""}, key=int)
     for split in series:
-        for layer in layers:
-            cells = [row for row in rows if row["layer"] == layer]
-            summary = {"layer": layer, "split": split, **_aggregate(cells, split)}
-            for group in GROUPS:
-                summary.update({f"{group}_{key}": value for key, value in _aggregate(cells, split, group).items()})
-            summaries.append(summary)
+        for reference, digest in _train_groups(rows) if group_train else [("", "")]:
+            for layer in layers:
+                cells = [row for row in rows if row["layer"] == layer and (not group_train or
+                         (row["train_dataset"], row["train_dataset_sha256"]) == (reference, digest))]
+                if not cells:
+                    continue
+                summary = {"layer": layer, "split": split, **_aggregate(cells, split)}
+                if group_train:
+                    summary.update(train_dataset=reference, train_dataset_sha256=digest)
+                for group in GROUPS:
+                    summary.update({f"{group}_{key}": value for key, value in _aggregate(cells, split, group).items()})
+                summaries.append(summary)
     return summaries
 
 
-def _layer_csv_text(summaries: list[dict[str, Any]]) -> str:
+def _layer_csv_text(summaries: list[dict[str, Any]], group_train: bool = False) -> str:
     output = io.StringIO(newline="")
     metrics = ("mean_iia", "iia_correct_sum", "iia_total_sum", "seed_sample_sd", "completed_seeds", "expected_seeds", "flag")
-    writer = csv.DictWriter(output, fieldnames=("layer", "split", *metrics,
+    writer = csv.DictWriter(output, fieldnames=(*(("train_dataset", "train_dataset_sha256") if group_train else ()),
+                                              "layer", "split", *metrics,
                                               *(f"{group}_{metric}" for group in GROUPS for metric in metrics)), lineterminator="\n")
     writer.writeheader()
     writer.writerows(summaries)
@@ -219,17 +242,22 @@ def _iia_text(row: dict[str, Any], split: str) -> str:
 
 
 def _group_summary_text(summaries: list[dict[str, Any]]) -> list[str]:
-    by_split_layer = {(row["split"], row["layer"]): row for row in summaries}
+    group_train = any("train_dataset" in row for row in summaries)
+    by_split_layer = {(row.get("train_dataset", ""), row.get("train_dataset_sha256", ""),
+                       row["split"], row["layer"]): row for row in summaries}
     records = []
     for row in summaries:
         if row["split"].startswith("no_intervention_"):
             continue
         baseline_split = "no_intervention_" + row["split"].removeprefix("initial_")
-        baseline = by_split_layer.get((baseline_split, row["layer"]), {})
+        baseline = by_split_layer.get((row.get("train_dataset", ""), row.get("train_dataset_sha256", ""),
+                                       baseline_split, row["layer"]), {})
         for group in GROUPS:
             if row[f"{group}_iia_total_sum"] == "":
                 continue
             cells = [str(row["layer"]), row["split"], group]
+            if group_train:
+                cells = [row["train_dataset"], row["train_dataset_sha256"], *cells]
             for metrics in (row, baseline):
                 total = metrics.get(f"{group}_iia_total_sum", "")
                 ratio = metrics.get(f"{group}_mean_iia", "")
@@ -238,6 +266,11 @@ def _group_summary_text(summaries: list[dict[str, Any]]) -> list[str]:
             records.append("| " + " | ".join(_markdown_value(cell) for cell in cells) + " |")
     if not records:
         return []
+    if group_train:
+        return ["Per-pairing and target-change groups (counts summed across seeds within each train dataset; "
+                "means give equal weight to each seed):", "",
+                "| Train dataset | Train SHA-256 | Layer | Split | Group | IIA | No-intervention IIA |",
+                "| --- | --- | --- | --- | --- | --- | --- |", *records, ""]
     return ["Per-pairing and target-change groups (counts summed across seeds; means give equal weight to each seed):", "",
             "| Layer | Split | Group | IIA | No-intervention IIA |", "| --- | --- | --- | --- | --- |", *records, ""]
 
@@ -247,6 +280,7 @@ def _summary_text(run: dict[str, Any], rows: list[dict[str, Any]], descriptive_t
                   selection: dict[str, Any] | None = None) -> str:
     kind = run.get("run_kind", "unknown")
     config = run.get("resolved_config", {})
+    group_train = "data.train" in config.get("grid", {})
     label = f"{config.get('task', 'experiment')} / {config.get('name', 'saved run')}"
     counts = Counter(row["status"] for row in rows)
     lines = [f"# {label}", "", f"Run kind: **{kind}**; run status: **{run.get('status', 'unknown')}**.",
@@ -262,17 +296,22 @@ def _summary_text(run: dict[str, Any], rows: list[dict[str, Any]], descriptive_t
         lines.extend([f"Selected layer: **{selection['selected_layer']}**; metric: `{selection.get('metric', 'validation_iia')}`.",
                       "The choice was locked in `selection.json` before post-lock evaluation.", ""])
     headings = ["Condition", "Status", *(_series_label(split, descriptive_test) for split in series)]
+    if group_train:
+        headings = ["Train dataset", "Train SHA-256", *headings]
     if include_test:
         headings.append("Post-lock status")
     lines.extend(["| " + " | ".join(headings) + " |", "| " + " | ".join("---" for _ in headings) + " |"])
     for row in rows:
         cells = [row["condition"], row["status"], *(_iia_text(row, split) for split in series)]
+        if group_train:
+            cells = [row["train_dataset"], row["train_dataset_sha256"], *cells]
         if include_test:
             cells.append(row["post_lock_status"])
         lines.append("| " + " | ".join(_markdown_value(cell) for cell in cells) + " |")
     lines.extend(["", "Full-precision metrics and exact counts are saved in `conditions.csv`.",
                   "Missing metrics are shown as —; failed and pending conditions remain in the table.", "",
-                  "Per-layer means and sample SD across seeds are saved in `layer_summary.csv`.",
+                  ("Per-layer means and sample SD across seeds are grouped by train dataset in `layer_summary.csv`."
+                   if group_train else "Per-layer means and sample SD across seeds are saved in `layer_summary.csv`."),
                   "Seed SD describes variation across seeds; it is not a confidence interval.",
                   "A single available seed has no sample SD. Incomplete layers are flagged in the CSV.", "",
                   *_group_summary_text(summaries),
@@ -404,26 +443,48 @@ def _layer_curve(title: str, rows: list[dict[str, Any]], summaries: list[dict[st
     return "\n".join(parts)
 
 
+def _faceted_layer_curve(title: str, rows: list[dict[str, Any]], summaries: list[dict[str, Any]],
+                         splits: tuple[str, ...], run_kind: str, show_seeds: bool) -> str:
+    """Keep each training dataset's seed curves and summary points in its own panel."""
+    groups = _train_groups(rows)
+    height = max(1, len(groups)) * 510
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="960" height="{height}" '
+             f'viewBox="0 0 960 {height}" role="img" aria-labelledby="title">',
+             f'<title id="title">{escape(title)} by train dataset ({escape(run_kind)} run)</title>']
+    for index, (reference, digest) in enumerate(groups):
+        cells = [row for row in rows if (row["train_dataset"], row["train_dataset_sha256"]) == (reference, digest)]
+        summaries_for_dataset = [row for row in summaries
+                                 if (row["train_dataset"], row["train_dataset_sha256"]) == (reference, digest)]
+        panel = _layer_curve(f"{title} — {reference}", cells, summaries_for_dataset, splits, run_kind, show_seeds)
+        panel = panel.replace('<svg ', f'<svg x="0" y="{index * 510}" ', 1)
+        panel = panel.replace('id="title"', f'id="title-{index}"').replace('id="description"', f'id="description-{index}"')
+        panel = panel.replace('aria-labelledby="title description"', f'aria-labelledby="title-{index} description-{index}"')
+        parts.append(panel.rstrip())
+    parts.extend(["</svg>", ""])
+    return "\n".join(parts)
+
+
 def generate_report(experiment_dir: Path) -> dict[str, Any]:
     """Write deterministic tables, a summary, and layer curves from saved metadata."""
     experiment_dir = Path(experiment_dir).expanduser().resolve()
     run = _read_json(experiment_dir / "run.json")
     run_kind = run.get("run_kind", "unknown")
-    rows = [_condition_row(record, experiment_dir, run_kind)
+    group_train = "data.train" in run.get("resolved_config", {}).get("grid", {})
+    rows = [_condition_row(record, experiment_dir, run_kind, group_train)
             for record in _saved_conditions(experiment_dir, run)]
     _add_post_lock_metrics(experiment_dir, run, rows)
     include_test = run_kind != "smoke" and ("test" in run.get("resolved_config", {}).get("data", {})
                                            or any(row["test_iia"] != "" for row in rows))
     series = _series(include_test)
-    summaries = _layer_summaries(rows, series)
+    summaries = _layer_summaries(rows, series, group_train)
     selection_path = experiment_dir / "selection.json"
     selection = _read_json(selection_path) if selection_path.is_file() else None
     test = run.get("resolved_config", {}).get("data", {}).get("test", "")
     descriptive_test = test == "legacy_v1/test"
     figures = experiment_dir / "figures"
     figures.mkdir(exist_ok=True)
-    (experiment_dir / "conditions.csv").write_text(_csv_text(rows, include_test), encoding="utf-8")
-    (experiment_dir / "layer_summary.csv").write_text(_layer_csv_text(summaries), encoding="utf-8")
+    (experiment_dir / "conditions.csv").write_text(_csv_text(rows, include_test, group_train), encoding="utf-8")
+    (experiment_dir / "layer_summary.csv").write_text(_layer_csv_text(summaries, group_train), encoding="utf-8")
     (experiment_dir / "summary.md").write_text(_summary_text(run, rows, descriptive_test, series, summaries,
                                                            include_test, selection), encoding="utf-8")
     (figures / "iia.svg").write_text(_figure_text(rows, run_kind, descriptive_test, series), encoding="utf-8")
@@ -435,7 +496,8 @@ def generate_report(experiment_dir: Path) -> dict[str, Any]:
         curves["test_by_layer.svg"] = ("Post-lock test IIA by layer (descriptive)" if descriptive_test else "Test IIA by layer",
                                        ("test", "no_intervention_test"), True)
     for name, (title, splits, show_seeds) in curves.items():
-        (figures / name).write_text(_layer_curve(title, rows, summaries, splits, run_kind, show_seeds), encoding="utf-8")
+        render = _faceted_layer_curve if group_train else _layer_curve
+        (figures / name).write_text(render(title, rows, summaries, splits, run_kind, show_seeds), encoding="utf-8")
     return {"experiment_dir": str(experiment_dir), "run_kind": run_kind,
             "conditions": len(rows), "statuses": dict(Counter(row["status"] for row in rows)),
             "artifacts": ["conditions.csv", "layer_summary.csv", "summary.md", "figures/iia.svg",

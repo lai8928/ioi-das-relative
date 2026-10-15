@@ -1,0 +1,100 @@
+{
+  "dataset": "train_n1000_v1",
+  "deduplication": {
+    "pairing_counts": {
+      "train": {
+        "ABB->ABB": 250,
+        "ABB->BAB": 250,
+        "BAB->ABB": 250,
+        "BAB->BAB": 250
+      }
+    },
+    "policy": "prompt text and template + unordered names + object + place",
+    "selection": {
+      "all_records_in_source": true,
+      "nested_against": {
+        "train_n200_v1/train": {
+          "count": 200,
+          "manifest_sha256": "c68c28a97f3b39a7597a9e6c92350a21625adca9255836a88259ed9876233be3",
+          "missing_pairs": 0,
+          "sha256": "da4ad541c74596a750eb547be5296b62cfcd47da11403d525a8469fdc2fa805e"
+        }
+      },
+      "source": {
+        "count": 5000,
+        "manifest_sha256": "10d3c49ae864b49c0a2b00b220fdcc444e0d1f70b10c7577aa8b7b5ce5751e0e",
+        "reference": "train_pool_v1/train",
+        "sha256": "5d4e2014c7e88a2e7cb761ff6f569bbb12dc7a2fccbb35e9d13947702076ceed"
+      },
+      "strategy": "first pairs per pairing in saved source order; preserve sample IDs"
+    },
+    "sources": {
+      "legacy_v1/test": {
+        "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+        "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+      },
+      "val_indist_v1/validation": {
+        "manifest_sha256": "2c75e461b717bd16f0c8b0f3d5e8c528d7469775444d2cb9429a6e9a44900054",
+        "sha256": "f62945c14803c2d9b8832b736bf5dd0d79226ea2e5fa7727b5aaa32aa54ba8e5"
+      }
+    },
+    "verification": {
+      "external_overlap": {
+        "legacy_v1/test": {
+          "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+          "prompt_text_overlap": 0,
+          "semantic_group_overlap": 0,
+          "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+        },
+        "val_indist_v1/validation": {
+          "manifest_sha256": "2c75e461b717bd16f0c8b0f3d5e8c528d7469775444d2cb9429a6e9a44900054",
+          "prompt_text_overlap": 0,
+          "semantic_group_overlap": 0,
+          "sha256": "f62945c14803c2d9b8832b736bf5dd0d79226ea2e5fa7727b5aaa32aa54ba8e5"
+        }
+      },
+      "splits": {
+        "train": {
+          "cross_pair_prompt_duplicates": 0,
+          "cross_pair_semantic_group_duplicates": 0,
+          "pair_count": 1000,
+          "unique_prompt_texts": 1500,
+          "unique_sample_ids": 1000,
+          "unique_semantic_groups": 1000
+        }
+      },
+      "status": "passed"
+    }
+  },
+  "files": {
+    "train": {
+      "count": 1000,
+      "path": "train.jsonl",
+      "sha256": "b45c8b66eb321dea0f2250585f7ee32cab9f4918a0366c9e431750acf964cd67"
+    }
+  },
+  "generation": {
+    "builder_sha256": "bd6049a3093708caa0b629cc0307ebb3e770edc688ada6c827c1667280ffe231",
+    "generator_revision": "ioi-position-v1-ordered-symbols",
+    "generator_sha256": "2ad8e9efb94ae202814e4ab9fbc58e870fd172fef7efaab55e07c135204361ab",
+    "name": "registered_subset",
+    "nested_against": [
+      "train_n200_v1/train"
+    ],
+    "source": "train_pool_v1/train",
+    "specification_sha256": "1985af40b2319250644dd7b612a7d08b4b4f184f81762e366a2b494abd215bb8",
+    "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+    "upstream_sha256": {
+      "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+      "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+      "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+      "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+      "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+      "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+      "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+    }
+  },
+  "purpose": "Balanced nested 1000-pair training subset of train_pool_v1 containing train_n200_v1; fixed validation and legacy test remain disjoint.",
+  "schema_version": 1
+}

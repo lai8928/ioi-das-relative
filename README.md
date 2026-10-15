@@ -192,3 +192,41 @@ from Stanford pyvene commit `9e333904dcf9e597ca76170010d17f4d4580de8d`
 (Apache 2.0). Dataset-generation code is adapted from
 [activation-patching-illusion](https://github.com/amakelov/activation-patching-illusion),
 as upstream credits. See [docs/UPSTREAM.md](docs/UPSTREAM.md).
+
+## Training-size datasets and budgets
+
+Build each version once, in this order, then audit all four with `data audit`:
+`train_pool_v1`, `train_n200_v1`, `train_n1000_v1`, `train_n5000_v1`.
+Each recipe is in `configs/datasets/<name>.json`; use
+`ioi-das data build --config configs/datasets/<name>.json`.
+The subsets preserve their pool records and are nested and balanced across
+the four pairings. Manifests record capacity, external overlap checks,
+source hashes, and subset nesting. Validation and descriptive test remain
+`val_indist_v1/validation` and `legacy_v1/test`.
+
+The two configs in `configs/data-scale/` fix layer 8 before the experiment,
+using the prior layer-sweep choice. They do not select a new layer per size.
+Their names contain `placeholder-equal-epochs` (10 epochs) or
+`placeholder-equal-updates` (100 optimizer updates); these are provisional
+budgets for later advisor review, not full-run results.
+Both configs compare the three train references and seeds 42/43/44. To check
+the complete configured grid with one bounded training pass per condition:
+
+```bash
+$PY -B -m ioi_das.cli run --config configs/data-scale/gpt2-small-layer8-placeholder-equal-epochs.json --smoke
+$PY -B -m ioi_das.cli run --config configs/data-scale/gpt2-small-layer8-placeholder-equal-updates.json --smoke
+```
+
+Resolved training configs require exactly one of `epochs` and `max_updates`.
+In an inherited JSON file, `null` explicitly removes an existing parent
+setting; the update-budget config uses `"epochs": null` before setting
+`"max_updates": 100`. CLI overrides also accept explicit removal, for example
+`--override training.max_updates=null --override training.epochs=10`.
+Removing an unknown setting is an error. Resolved configs never contain
+these removal markers. The legacy per-update LinearLR is unchanged for both
+budgets. `max_updates` stops at the exact requested optimizer step, including
+partway through a shuffled pass. Smoke limits either budget to its first pass.
+
+Only `data.train` may vary in a data grid. Every condition records the train
+reference and SHA-256, while validation/test references stay fixed. Reports
+keep each train dataset's seed means and SD separate.

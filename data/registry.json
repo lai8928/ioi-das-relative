@@ -17,6 +17,54 @@
         }
       }
     },
+    "train_n1000_v1": {
+      "directory": "data/generated/train_n1000_v1",
+      "manifest_sha256": "d12384cbe1d49325d177a0f3767eb2786135b1571ff3117a5bb55c8bacbeb8eb",
+      "purpose": "Balanced nested 1000-pair training subset of train_pool_v1 containing train_n200_v1; fixed validation and legacy test remain disjoint.",
+      "splits": {
+        "train": {
+          "count": 1000,
+          "file": "train.jsonl",
+          "sha256": "b45c8b66eb321dea0f2250585f7ee32cab9f4918a0366c9e431750acf964cd67"
+        }
+      }
+    },
+    "train_n200_v1": {
+      "directory": "data/generated/train_n200_v1",
+      "manifest_sha256": "c68c28a97f3b39a7597a9e6c92350a21625adca9255836a88259ed9876233be3",
+      "purpose": "Balanced nested 200-pair training subset of train_pool_v1; fixed validation and legacy test remain disjoint.",
+      "splits": {
+        "train": {
+          "count": 200,
+          "file": "train.jsonl",
+          "sha256": "da4ad541c74596a750eb547be5296b62cfcd47da11403d525a8469fdc2fa805e"
+        }
+      }
+    },
+    "train_n5000_v1": {
+      "directory": "data/generated/train_n5000_v1",
+      "manifest_sha256": "1b2ed95433494efa3c14ba2f7991699db4e9c65e4c4c1d44ddb10204d5ce7f07",
+      "purpose": "Balanced nested 5000-pair training subset of train_pool_v1 containing train_n200_v1 and train_n1000_v1; fixed validation and legacy test remain disjoint.",
+      "splits": {
+        "train": {
+          "count": 5000,
+          "file": "train.jsonl",
+          "sha256": "5d4e2014c7e88a2e7cb761ff6f569bbb12dc7a2fccbb35e9d13947702076ceed"
+        }
+      }
+    },
+    "train_pool_v1": {
+      "directory": "data/generated/train_pool_v1",
+      "manifest_sha256": "10d3c49ae864b49c0a2b00b220fdcc444e0d1f70b10c7577aa8b7b5ce5751e0e",
+      "purpose": "Training pool for nested size comparisons at a fixed layer; four balanced pattern combinations, disjoint from fixed validation and legacy test.",
+      "splits": {
+        "train": {
+          "count": 5000,
+          "file": "train.jsonl",
+          "sha256": "5d4e2014c7e88a2e7cb761ff6f569bbb12dc7a2fccbb35e9d13947702076ceed"
+        }
+      }
+    },
     "val_indist_v1": {
       "directory": "data/generated/val_indist_v1",
       "manifest_sha256": "2c75e461b717bd16f0c8b0f3d5e8c528d7469775444d2cb9429a6e9a44900054",

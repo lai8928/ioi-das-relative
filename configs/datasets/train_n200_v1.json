@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "name": "train_n200_v1",
+  "purpose": "Balanced nested 200-pair training subset of train_pool_v1; fixed validation and legacy test remain disjoint.",
+  "generator": {
+    "name": "registered_subset",
+    "source": "train_pool_v1/train",
+    "nested_against": []
+  },
+  "splits": {"train": {"ABB->ABB": 50, "ABB->BAB": 50, "BAB->ABB": 50, "BAB->BAB": 50}},
+  "deduplicate_against": ["legacy_v1/test", "val_indist_v1/validation"]
+}

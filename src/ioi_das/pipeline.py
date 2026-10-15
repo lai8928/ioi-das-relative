@@ -39,7 +39,8 @@ def expand_grid(config: ResolvedConfig, layer_count: int | None = None) -> list[
     axes = values.get("grid", {})
     choices = []
     for key, options in axes.items():
-        if key in {"task", "name", "schema_version", "grid"} or key.startswith(("data.", "grid.")):
+        if key in {"task", "name", "schema_version", "grid"} or (
+                key.startswith(("data.", "grid.")) and key != "data.train"):
             raise ValueError(f"Grid axis {key!r} changes experiment identity or data; use a separate config.")
         if options == "all":
             if key != "intervention.layer" or layer_count is None:
@@ -106,6 +107,22 @@ def _model_metadata(model_options: dict, tokenizer_options: dict) -> dict:
     return cached_model_metadata(model_options["name"], model_options["revision"])
 
 
+def _training_inputs(root: Path, conditions: list[dict], pairs: dict, datasets: dict,
+                     hashes: dict, reference: str) -> dict:
+    inputs = {reference: (pairs["train"], datasets.get("train", {}))}
+    for condition in conditions:
+        train_reference = condition["resolved_config"]["data"]["train"]
+        if train_reference not in inputs:
+            extra_pairs, extra_metadata, _, extra_hashes = _dataset_inputs(root, {"train": train_reference})
+            inputs[train_reference] = (extra_pairs["train"], extra_metadata["train"])
+            hashes.update(extra_hashes)
+        train_metadata = inputs[train_reference][1]
+        if "data.train" in condition["axes"]:
+            condition["train_dataset"] = {key: train_metadata[key] for key in
+                                          ("reference", "sha256", "manifest_sha256")}
+    return inputs
+
+
 def _allocate_output(root: Path, task: str, name: str, smoke: bool) -> Path:
     date = datetime.now(ZoneInfo("America/Los_Angeles")).strftime("%Y%m%d")
     identifier = f"{'smoke-' if smoke else ''}{date}-{name}"
@@ -160,8 +177,8 @@ def _resume_metadata(output: Path, config: ResolvedConfig, smoke: bool, hashes: 
         raise ValueError(f"Dataset hashes or run kind differ at {output}; restore the original inputs.")
     if metadata.get("implementation_sha256") != _implementation_hashes():
         raise ValueError(f"Implementation hashes differ at {output}; restore the original source before resuming.")
-    planned = [(condition["path"], condition["resolved_config"]) for condition in conditions]
-    saved = [(condition["path"], condition["resolved_config"]) for condition in metadata["conditions"]]
+    planned = [(condition["path"], condition["resolved_config"], condition.get("train_dataset")) for condition in conditions]
+    saved = [(condition["path"], condition["resolved_config"], condition.get("train_dataset")) for condition in metadata["conditions"]]
     if planned != saved:
         raise ValueError(f"Condition grid differs at {output}; use the original config.")
     for condition in metadata["conditions"]:
@@ -188,7 +205,7 @@ def _implementation_hashes() -> dict:
 
 
 def _execute(output: Path, metadata: dict, pairs: dict, datasets: dict, provenance: dict,
-             smoke: bool) -> dict:
+             smoke: bool, training_inputs: dict) -> dict:
     from .report import generate_report
 
     metadata["status"] = "running"
@@ -208,16 +225,19 @@ def _execute(output: Path, metadata: dict, pairs: dict, datasets: dict, provenan
                 continue
             values = condition["resolved_config"]
             intervention = values["intervention"]
+            train_pairs, train_metadata = training_inputs[values["data"]["train"]]
+            condition_pairs = {**visible_pairs, "train": train_pairs}
+            condition_datasets = {**datasets, "train": train_metadata}
             condition["status"] = "running"
             _write_json(output / "run.json", metadata)
             try:
                 result = run_condition(
-                    output / condition["path"], visible_pairs, model_options=values["model"],
+                    output / condition["path"], condition_pairs, model_options=values["model"],
                     tokenizer_options=values["tokenizer"], training_options=values["training"],
                     layer=intervention["layer"], rank=intervention["rank"], component=intervention["component"],
                     target_variable=intervention["target_variable"], location=intervention["location"],
                     seed=values["seed"], device_name=values["device"], cpu_threads=values["cpu_threads"],
-                    evaluation_batch_size=values["evaluation_batch_size"], dataset_metadata=datasets,
+                    evaluation_batch_size=values["evaluation_batch_size"], dataset_metadata=condition_datasets,
                     provenance=provenance, config_sha256=config_sha256(values),
                     evaluation_splits=evaluation_splits, smoke=smoke)
                 condition["status"] = "complete"
@@ -321,6 +341,8 @@ def run_experiment(config: ResolvedConfig, smoke: bool = False,
     descriptor = _model_metadata(config["model"], config["tokenizer"])
     pairs, datasets, provenance, hashes = _dataset_inputs(config.project_root, config["data"])
     conditions = expand_grid(config, descriptor["layer_count"])
+    training_inputs = _training_inputs(config.project_root, conditions, pairs, datasets,
+                                      hashes, config["data"]["train"])
     if resume:
         output = _resume_output(config, smoke, resume)
         metadata = _resume_metadata(output, config, smoke, hashes, conditions)
@@ -347,4 +369,4 @@ def run_experiment(config: ResolvedConfig, smoke: bool = False,
                 for condition in conditions]
         _write_json(output / "run.json", metadata)
         _write_json(output / "resolved_config.json", config.to_dict())
-    return _execute(output, metadata, pairs, datasets, provenance, smoke)
+    return _execute(output, metadata, pairs, datasets, provenance, smoke, training_inputs)

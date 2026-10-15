@@ -1,0 +1,27 @@
+{
+  "extends": "../base.json",
+  "task": "data-scale",
+  "name": "gpt2-small-layer8-placeholder-equal-epochs",
+  "data": {
+    "train": "train_n200_v1/train",
+    "validation": "val_indist_v1/validation"
+  },
+  "intervention": {
+    "layer": 8
+  },
+  "training": {
+    "epochs": 10
+  },
+  "grid": {
+    "data.train": [
+      "train_n200_v1/train",
+      "train_n1000_v1/train",
+      "train_n5000_v1/train"
+    ],
+    "seed": [
+      42,
+      43,
+      44
+    ]
+  }
+}

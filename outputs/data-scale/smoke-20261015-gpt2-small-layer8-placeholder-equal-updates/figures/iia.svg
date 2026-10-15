@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="1392" viewBox="0 0 1250 1392" role="img" aria-labelledby="title description">
+<title id="title">Saved IIA by condition (smoke run)</title>
+<desc id="description">IIA ratios range from zero to one. Missing results have no bars.</desc>
+<rect width="100%" height="100%" fill="white"/>
+<g font-family="sans-serif" font-size="12" fill="#0f172a">
+<text x="20" y="26" font-size="18">Saved IIA by condition — smoke run</text>
+<rect x="20" y="42" width="12" height="12" fill="#94a3b8"/>
+<text x="38" y="53">Initial train IIA</text>
+<rect x="420" y="42" width="12" height="12" fill="#2563eb"/>
+<text x="438" y="53">Train IIA</text>
+<rect x="820" y="42" width="12" height="12" fill="#64748b"/>
+<text x="838" y="53">No intervention train IIA</text>
+<rect x="20" y="64" width="12" height="12" fill="#c4b5fd"/>
+<text x="38" y="75">Initial validation IIA</text>
+<rect x="420" y="64" width="12" height="12" fill="#d97706"/>
+<text x="438" y="75">Validation IIA</text>
+<rect x="820" y="64" width="12" height="12" fill="#9333ea"/>
+<text x="838" y="75">No intervention validation IIA</text>
+<line x1="600" y1="130" x2="600" y2="1374" stroke="#e2e8f0"/>
+<text x="600" y="126" text-anchor="middle">0</text>
+<line x1="700" y1="130" x2="700" y2="1374" stroke="#e2e8f0"/>
+<text x="700" y="126" text-anchor="middle">0.2</text>
+<line x1="800" y1="130" x2="800" y2="1374" stroke="#e2e8f0"/>
+<text x="800" y="126" text-anchor="middle">0.4</text>
+<line x1="900" y1="130" x2="900" y2="1374" stroke="#e2e8f0"/>
+<text x="900" y="126" text-anchor="middle">0.6</text>
+<line x1="1000" y1="130" x2="1000" y2="1374" stroke="#e2e8f0"/>
+<text x="1000" y="126" text-anchor="middle">0.8</text>
+<line x1="1100" y1="130" x2="1100" y2="1374" stroke="#e2e8f0"/>
+<text x="1100" y="126" text-anchor="middle">1</text>
+<text x="20" y="158">conditions/data.train=train_n200_v1%2Ftrain/seed=42</text>
+<text x="20" y="176" fill="#64748b">complete</text>
+<rect x="600" y="140" width="250" height="14" fill="#94a3b8"/>
+<text x="855" y="152">0.5</text>
+<rect x="600" y="158" width="250" height="14" fill="#2563eb"/>
+<text x="855" y="170">0.5</text>
+<rect x="600" y="176" width="250" height="14" fill="#64748b"/>
+<text x="855" y="188">0.5</text>
+<rect x="600" y="194" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="206">0.0</text>
+<rect x="600" y="212" width="0" height="14" fill="#d97706"/>
+<text x="605" y="224">0.0</text>
+<rect x="600" y="230" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="242">0.0</text>
+<text x="20" y="296">conditions/data.train=train_n200_v1%2Ftrain/seed=43</text>
+<text x="20" y="314" fill="#64748b">complete</text>
+<rect x="600" y="278" width="250" height="14" fill="#94a3b8"/>
+<text x="855" y="290">0.5</text>
+<rect x="600" y="296" width="250" height="14" fill="#2563eb"/>
+<text x="855" y="308">0.5</text>
+<rect x="600" y="314" width="250" height="14" fill="#64748b"/>
+<text x="855" y="326">0.5</text>
+<rect x="600" y="332" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="344">0.0</text>
+<rect x="600" y="350" width="0" height="14" fill="#d97706"/>
+<text x="605" y="362">0.0</text>
+<rect x="600" y="368" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="380">0.0</text>
+<text x="20" y="434">conditions/data.train=train_n200_v1%2Ftrain/seed=44</text>
+<text x="20" y="452" fill="#64748b">complete</text>
+<rect x="600" y="416" width="250" height="14" fill="#94a3b8"/>
+<text x="855" y="428">0.5</text>
+<rect x="600" y="434" width="250" height="14" fill="#2563eb"/>
+<text x="855" y="446">0.5</text>
+<rect x="600" y="452" width="250" height="14" fill="#64748b"/>
+<text x="855" y="464">0.5</text>
+<rect x="600" y="470" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="482">0.0</text>
+<rect x="600" y="488" width="0" height="14" fill="#d97706"/>
+<text x="605" y="500">0.0</text>
+<rect x="600" y="506" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="518">0.0</text>
+<text x="20" y="572">conditions/data.train=train_n1000_v1%2Ftrain/seed=42</text>
+<text x="20" y="590" fill="#64748b">complete</text>
+<rect x="600" y="554" width="250" height="14" fill="#94a3b8"/>
+<text x="855" y="566">0.5</text>
+<rect x="600" y="572" width="250" height="14" fill="#2563eb"/>
+<text x="855" y="584">0.5</text>
+<rect x="600" y="590" width="250" height="14" fill="#64748b"/>
+<text x="855" y="602">0.5</text>
+<rect x="600" y="608" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="620">0.0</text>
+<rect x="600" y="626" width="0" height="14" fill="#d97706"/>
+<text x="605" y="638">0.0</text>
+<rect x="600" y="644" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="656">0.0</text>
+<text x="20" y="710">conditions/data.train=train_n1000_v1%2Ftrain/seed=43</text>
+<text x="20" y="728" fill="#64748b">complete</text>
+<rect x="600" y="692" width="250" height="14" fill="#94a3b8"/>
+<text x="855" y="704">0.5</text>
+<rect x="600" y="710" width="250" height="14" fill="#2563eb"/>
+<text x="855" y="722">0.5</text>
+<rect x="600" y="728" width="250" height="14" fill="#64748b"/>
+<text x="855" y="740">0.5</text>
+<rect x="600" y="746" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="758">0.0</text>
+<rect x="600" y="764" width="0" height="14" fill="#d97706"/>
+<text x="605" y="776">0.0</text>
+<rect x="600" y="782" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="794">0.0</text>
+<text x="20" y="848">conditions/data.train=train_n1000_v1%2Ftrain/seed=44</text>
+<text x="20" y="866" fill="#64748b">complete</text>
+<rect x="600" y="830" width="250" height="14" fill="#94a3b8"/>
+<text x="855" y="842">0.5</text>
+<rect x="600" y="848" width="250" height="14" fill="#2563eb"/>
+<text x="855" y="860">0.5</text>
+<rect x="600" y="866" width="250" height="14" fill="#64748b"/>
+<text x="855" y="878">0.5</text>
+<rect x="600" y="884" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="896">0.0</text>
+<rect x="600" y="902" width="0" height="14" fill="#d97706"/>
+<text x="605" y="914">0.0</text>
+<rect x="600" y="920" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="932">0.0</text>
+<text x="20" y="986">conditions/data.train=train_n5000_v1%2Ftrain/seed=42</text>
+<text x="20" y="1004" fill="#64748b">complete</text>
+<rect x="600" y="968" width="250" height="14" fill="#94a3b8"/>
+<text x="855" y="980">0.5</text>
+<rect x="600" y="986" width="250" height="14" fill="#2563eb"/>
+<text x="855" y="998">0.5</text>
+<rect x="600" y="1004" width="250" height="14" fill="#64748b"/>
+<text x="855" y="1016">0.5</text>
+<rect x="600" y="1022" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="1034">0.0</text>
+<rect x="600" y="1040" width="0" height="14" fill="#d97706"/>
+<text x="605" y="1052">0.0</text>
+<rect x="600" y="1058" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="1070">0.0</text>
+<text x="20" y="1124">conditions/data.train=train_n5000_v1%2Ftrain/seed=43</text>
+<text x="20" y="1142" fill="#64748b">complete</text>
+<rect x="600" y="1106" width="250" height="14" fill="#94a3b8"/>
+<text x="855" y="1118">0.5</text>
+<rect x="600" y="1124" width="250" height="14" fill="#2563eb"/>
+<text x="855" y="1136">0.5</text>
+<rect x="600" y="1142" width="250" height="14" fill="#64748b"/>
+<text x="855" y="1154">0.5</text>
+<rect x="600" y="1160" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="1172">0.0</text>
+<rect x="600" y="1178" width="0" height="14" fill="#d97706"/>
+<text x="605" y="1190">0.0</text>
+<rect x="600" y="1196" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="1208">0.0</text>
+<text x="20" y="1262">conditions/data.train=train_n5000_v1%2Ftrain/seed=44</text>
+<text x="20" y="1280" fill="#64748b">complete</text>
+<rect x="600" y="1244" width="250" height="14" fill="#94a3b8"/>
+<text x="855" y="1256">0.5</text>
+<rect x="600" y="1262" width="250" height="14" fill="#2563eb"/>
+<text x="855" y="1274">0.5</text>
+<rect x="600" y="1280" width="250" height="14" fill="#64748b"/>
+<text x="855" y="1292">0.5</text>
+<rect x="600" y="1298" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="1310">0.0</text>
+<rect x="600" y="1316" width="0" height="14" fill="#d97706"/>
+<text x="605" y="1328">0.0</text>
+<rect x="600" y="1334" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="1346">0.0</text>
+</g>
+</svg>

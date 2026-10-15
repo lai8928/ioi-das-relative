@@ -69,7 +69,11 @@ class ResolvedConfig(Mapping[str, Any]):
 def _merge(parent: dict[str, Any], child: dict[str, Any]) -> dict[str, Any]:
     merged = deepcopy(parent)
     for key, value in child.items():
-        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+        if value is None:
+            if key not in merged:
+                raise ConfigError(f"Cannot remove absent inherited setting {key!r}; check the setting name.")
+            del merged[key]
+        elif isinstance(value, dict) and isinstance(merged.get(key), dict):
             merged[key] = _merge(merged[key], value)
         else:
             merged[key] = deepcopy(value)
@@ -121,7 +125,18 @@ def _apply_override(values: dict[str, Any], override: str) -> None:
     except json.JSONDecodeError as error:
         raise ConfigError(f"Override {override!r} is not JSON; quote string values, for example "
                           "device=\"cuda:0\".") from error
-    set_path(values, path, value)
+    if value is None:
+        keys = path.split(".")
+        target = values
+        for key in keys[:-1]:
+            if key not in target or not isinstance(target[key], dict):
+                raise ConfigError(f"Setting path {path!r} has no object at {key!r}; use an existing object.")
+            target = target[key]
+        if keys[-1] not in target:
+            raise ConfigError(f"Cannot remove absent setting {path!r}; check the setting name.")
+        del target[keys[-1]]
+    else:
+        set_path(values, path, value)
 
 
 def _project_root(path: Path) -> Path:
@@ -171,6 +186,8 @@ def validate_config(values: Mapping[str, Any], project_root: Path | None = None)
         if reference.split("/")[-1] != split:
             raise ConfigError(f"Data split {split!r} references {reference!r}; use a matching split name.")
     if "selection" in plain:
+        if "data.train" in plain.get("grid", {}):
+            raise ConfigError("Layer selection cannot mix training datasets; use a fixed layer config without selection.")
         if "validation" not in plain["data"]:
             raise ConfigError("Selection requires data.validation; configure a registered validation split.")
         for split in plain["selection"]["evaluate_after_lock"]:

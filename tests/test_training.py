@@ -28,6 +28,121 @@ class TrainableAlignment(torch.nn.Module):
         return [self.weight]
 
 
+@pytest.fixture
+def train_cpu(monkeypatch, tmp_path):
+    """Run optimizer checks with five sample labels and no pretrained weights."""
+    monkeypatch.setattr(train, "prepare_batch", lambda chosen, *args: SimpleNamespace(
+        counterfactual_labels=torch.tensor([int(pair.sample_id.split("-")[-1]) % 2 for pair in chosen])))
+    monkeypatch.setattr(train, "intervention_forward", lambda wrapper, batch:
+                        wrapper.weight.expand(len(batch.counterfactual_labels), -1))
+    calls = []
+
+    def run(*, pair_count=5, batch_size=2, **budget):
+        model = torch.nn.Linear(1, 1)
+        model.requires_grad_(False)
+        wrapper = TrainableAlignment()
+        pairs = [SimpleNamespace(sample_id=f"sample-{index}") for index in range(pair_count)]
+        path = tmp_path / f"steps-{len(calls)}.jsonl"
+        calls.append(path)
+        result = train.train_alignment(
+            model, wrapper, pairs, None, None, "cpu", seed=42, location="N",
+            output_path=path, batch_size=batch_size, learning_rate=0.01, **budget)
+        return result, [json.loads(line) for line in path.read_text().splitlines()]
+
+    return run
+
+
+def test_epoch_budget_preserves_recorded_legacy_summary_and_shuffle(train_cpu):
+    result, rows = train_cpu(epochs=3)
+    assert result == {
+        "run_kind": "full", "epochs": 3, "optimizer_steps": 9, "training_pair_count": 5,
+        "presentations": 15, "optimizer": "Adam",
+        "scheduler": {"name": "LinearLR", "start_factor": 1 / 3, "end_factor": 0.1,
+                      "total_iters": 10, "step_interval": "batch"},
+        "initial_effective_learning_rate": 0.003333333333333333,
+        "final_learning_rate": 0.0012333333333333335,
+        "first_step_loss": 1.1269280910491943, "last_step_loss": 0.13020934164524078,
+        "epoch_results": [
+            {"epoch": 1, "mean_loss": 0.9256195485591888, "correct": 3, "total": 5, "accuracy": 0.6},
+            {"epoch": 2, "mean_loss": 0.9235813677310943, "correct": 3, "total": 5, "accuracy": 0.6},
+            {"epoch": 3, "mean_loss": 0.9202864915132523, "correct": 3, "total": 5, "accuracy": 0.6}],
+        "shuffle": "NumPy RandomState(seed), MT19937; same permutation algorithm as upstream",
+        "model_training_mode": False,
+    }
+    assert [row["sample_ids"] for row in rows] == [
+        ["sample-1", "sample-4"], ["sample-2", "sample-0"], ["sample-3"],
+        ["sample-3", "sample-1"], ["sample-2", "sample-0"], ["sample-4"],
+        ["sample-1", "sample-0"], ["sample-3", "sample-4"], ["sample-2"]]
+
+
+@pytest.mark.parametrize("updates, presentations, passes, last_pass_count", [
+    (1, 2, 1, 2), (3, 5, 1, 5), (4, 7, 2, 2), (7, 12, 3, 2), (9, 15, 3, 5),
+])
+def test_update_budget_matches_epoch_trace_through_its_exact_last_update(
+        train_cpu, updates, presentations, passes, last_pass_count):
+    reference, reference_rows = train_cpu(epochs=3)
+    result, rows = train_cpu(max_updates=updates)
+    strip_timing = lambda records: [{key: value for key, value in row.items() if key != "elapsed_seconds"}
+                                    for row in records]
+    assert strip_timing(rows) == strip_timing(reference_rows[:updates])
+    assert result["max_updates"] == result["optimizer_steps"] == updates
+    assert result["presentations"] == presentations
+    assert result["epochs"] == len(result["epoch_results"]) == passes
+    assert result["epoch_results"][-1]["total"] == last_pass_count
+    assert result["scheduler"] == reference["scheduler"]
+    assert result["final_learning_rate"] == rows[-1]["learning_rate_next"]
+
+
+@pytest.mark.parametrize("budget, expected_steps, expected_presentations", [
+    ({"epochs": 10}, 3, 5), ({"max_updates": 100}, 3, 5), ({"max_updates": 1}, 1, 2),
+])
+def test_smoke_budget_stops_in_the_first_shuffled_pass(
+        train_cpu, budget, expected_steps, expected_presentations):
+    result, rows = train_cpu(smoke=True, **budget)
+    assert result["run_kind"] == "smoke"
+    assert result["epochs"] == 1
+    assert result["optimizer_steps"] == expected_steps
+    assert result["presentations"] == expected_presentations
+    assert {row["epoch"] for row in rows} == {1}
+
+
+@pytest.mark.parametrize("budget", [{"epochs": 10}, {"max_updates": 1000}])
+def test_balanced_twenty_pair_smoke_performs_one_update(train_cpu, budget):
+    result, rows = train_cpu(pair_count=20, batch_size=20, smoke=True, **budget)
+    assert result["optimizer_steps"] == len(rows) == 1
+    assert result["presentations"] == 20
+
+
+@pytest.mark.parametrize("budget", [{}, {"epochs": 1, "max_updates": 2}])
+def test_training_requires_exactly_one_budget_before_any_model_work(tmp_path, budget):
+    with pytest.raises(ValueError, match="exactly one of epochs or max_updates"):
+        train.train_alignment(
+            None, None, [object()], None, None, "cpu", seed=42, location="N",
+            output_path=tmp_path / "steps.jsonl", batch_size=2, learning_rate=0.01, **budget)
+    assert not (tmp_path / "steps.jsonl").exists()
+
+
+@pytest.mark.parametrize("name", ["epochs", "max_updates", "batch_size"])
+@pytest.mark.parametrize("value", [True, False, 0, -1, 1.5, "2"])
+def test_training_rejects_nonpositive_or_noninteger_budget_options(tmp_path, name, value):
+    options = {"epochs": 1, "batch_size": 2}
+    if name == "max_updates":
+        options.pop("epochs")
+    options[name] = value
+    with pytest.raises(ValueError, match=f"{name} must be a positive integer"):
+        train.train_alignment(
+            None, None, [object()], None, None, "cpu", seed=42, location="N",
+            output_path=tmp_path / "steps.jsonl", learning_rate=0.01, **options)
+    assert not (tmp_path / "steps.jsonl").exists()
+
+
+def test_training_rejects_missing_batch_size_value(tmp_path):
+    with pytest.raises(ValueError, match="batch_size must be a positive integer"):
+        train.train_alignment(
+            None, None, [object()], None, None, "cpu", seed=42, location="N",
+            output_path=tmp_path / "steps.jsonl", epochs=1, batch_size=None, learning_rate=0.01)
+
+
 @pytest.mark.parametrize("factors, expected_rates", [
     ({}, [0.003333333333333333, 0.0031, 0.0028666666666666662, 0.002633333333333333]),
     ({"schedule_start_factor": 0.5, "schedule_end_factor": 0.2,
