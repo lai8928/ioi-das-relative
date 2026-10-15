@@ -97,7 +97,8 @@ def _read_inherited(path: Path, stack: tuple[Path, ...] = ()) -> dict[str, Any]:
     return _merge(_read_inherited(parent, (*stack, path)), values)
 
 
-def _set_path(values: dict[str, Any], path: str, value: Any) -> None:
+def set_path(values: dict[str, Any], path: str, value: Any) -> None:
+    """Set a dotted-path value within existing parent objects."""
     keys = path.split(".")
     if not all(keys):
         raise ConfigError(f"Invalid override path {path!r}; use dot-separated setting names.")
@@ -118,7 +119,7 @@ def _apply_override(values: dict[str, Any], override: str) -> None:
     except json.JSONDecodeError as error:
         raise ConfigError(f"Override {override!r} is not JSON; quote string values, for example "
                           "device=\"cuda:0\".") from error
-    _set_path(values, path, value)
+    set_path(values, path, value)
 
 
 def _project_root(path: Path) -> Path:
@@ -143,7 +144,7 @@ def _validate_grid(values: dict[str, Any], validator: Draft202012Validator) -> N
             continue
         for choice in choices:
             candidate = deepcopy(values)
-            _set_path(candidate, path, choice)
+            set_path(candidate, path, choice)
             error = next(validator.iter_errors(candidate), None)
             if error:
                 raise ConfigError(f"Grid axis {path!r} has invalid value {choice!r}: "

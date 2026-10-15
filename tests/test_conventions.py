@@ -23,10 +23,15 @@ HISTORICAL_NAME = re.compile(r"phase_?\d|milestone|(?:^|_)m\d+(?:_|$)", re.IGNOR
 DATED_NAME = re.compile(r"(?:^|[_-])\d{4}[-_]?\d{2}[-_]?\d{2}(?:[_-]|$)")
 
 
-def test_source_file_names_and_identifiers_describe_functions():
-    for path in sorted((PROJECT_ROOT / "src").rglob("*.py")):
+@pytest.mark.parametrize("directory", ["src", "tests"])
+def test_python_file_names_describe_functions(directory):
+    for path in sorted((PROJECT_ROOT / directory).rglob("*.py")):
         assert not HISTORICAL_NAME.search(path.stem), path
         assert not DATED_NAME.search(path.stem), path
+
+
+def test_source_identifiers_describe_functions():
+    for path in sorted((PROJECT_ROOT / "src").rglob("*.py")):
         source = path.read_text(encoding="utf-8")
         for token in tokenize.generate_tokens(io.StringIO(source).readline):
             if token.type == tokenize.NAME:
