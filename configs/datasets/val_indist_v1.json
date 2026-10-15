@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "name": "val_indist_v1",
+  "purpose": "Fixed in-distribution validation for selection: opposite-pattern directions, no prompt or semantic-group overlap with legacy_v1.",
+  "generator": {
+    "name": "original_position",
+    "source_split": "train",
+    "seed": 314159,
+    "max_batches": 1000
+  },
+  "splits": {"validation": {"ABB->BAB": 100, "BAB->ABB": 100}},
+  "deduplicate_against": ["legacy_v1"]
+}

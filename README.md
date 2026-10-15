@@ -17,7 +17,7 @@ lengths.
 | How are code, configs, scripts, and commits written? | [docs/CONVENTIONS.md](docs/CONVENTIONS.md) |
 | Which code changes are queued for implementation? | [docs/briefs/](docs/briefs/) |
 | What was discussed with the professor? | [docs/meetings/](docs/meetings/) |
-| Which datasets exist? | [data/REGISTRY.md](data/REGISTRY.md) |
+| Which datasets exist? | [data/registry.json](data/registry.json) |
 | Where did the upstream code come from? | [docs/UPSTREAM.md](docs/UPSTREAM.md) |
 | Rules for agents working here | [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md) |
 | Superseded plans, status, and specs | [docs/archive/](docs/archive/) |
@@ -26,7 +26,7 @@ lengths.
 
 ```
 configs/            experiment configs (legacy: audit.json, phase2.json)
-data/generated/     saved datasets, registered in data/REGISTRY.md
+data/generated/     saved datasets, registered in data/registry.json
 docs/               plan, status, protocol, conventions, meetings, briefs, archive
 notebooks/          saved-result walkthroughs (no training by default)
 outputs/            immutable experiment outputs

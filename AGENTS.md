@@ -56,7 +56,7 @@ authorizes work.
   | `docs/PROTOCOL.md` | Rules that hold for every experiment | Rare; each change cites a meeting decision in its change log |
   | `docs/CONVENTIONS.md` | How code, configs, scripts, outputs, and commits are written | Rare; changed by Claude Code, cited in the commit |
   | `docs/briefs/YYYY-MM-DD-<slug>.md` | One code change for Codex: goal, scope, acceptance | New file per change, from `docs/templates/brief.md`; update its Status line when merged or dropped |
-  | `data/REGISTRY.md` | Which datasets exist and what they are for | Append a row per new dataset |
+  | `data/registry.json` | Which datasets exist and what they are for | Append a row per new dataset |
 
 - Never create `PLAN_v2.md`, `STATUS_old.md`, `NEXT_*.md`, or other new
   document types. History lives in git, `docs/meetings/`, and `docs/archive/`.
@@ -104,7 +104,7 @@ Full rules are in `docs/CONVENTIONS.md`; the essentials:
 
 ## Data, artifacts, and upstream
 
-- Register every dataset in `data/REGISTRY.md`. Save once, verify the
+- Register every dataset in `data/registry.json`. Save once, verify the
   manifest before reuse, and never rewrite; a changed dataset gets a new
   versioned name. Do not call generated data historical samples.
 - Completed outputs are immutable. Keep and report failed and partial runs.

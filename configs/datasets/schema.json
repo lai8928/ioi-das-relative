@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Immutable IOI dataset recipe",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "name", "purpose", "generator", "splits", "deduplicate_against"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "name": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*$"},
+    "purpose": {"type": "string", "minLength": 1},
+    "generator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "source_split", "seed", "max_batches"],
+      "properties": {
+        "name": {"const": "original_position"},
+        "source_split": {"enum": ["train", "test"]},
+        "seed": {"type": "integer", "minimum": 0},
+        "max_batches": {"type": "integer", "minimum": 1}
+      }
+    },
+    "splits": {
+      "type": "object", "minProperties": 1, "additionalProperties": false,
+      "properties": {
+        "train": {"$ref": "#/$defs/pairing_counts"},
+        "validation": {"$ref": "#/$defs/pairing_counts"},
+        "test": {"$ref": "#/$defs/pairing_counts"}
+      }
+    },
+    "deduplicate_against": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*(?:/(?:train|validation|test))?$"}
+    }
+  },
+  "$defs": {
+    "pairing_counts": {
+      "type": "object", "minProperties": 1,
+      "propertyNames": {"pattern": "^(?:ABB|BAB)->(?:ABB|BAB)$"},
+      "additionalProperties": {"type": "integer", "minimum": 1}
+    }
+  }
+}

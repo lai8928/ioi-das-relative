@@ -1,0 +1,61 @@
+{
+  "dataset": "val_indist_v1",
+  "deduplication": {
+    "batches_used": 3,
+    "candidate_seeds": [
+      314159,
+      314160,
+      314161
+    ],
+    "pairing_counts": {
+      "validation": {
+        "ABB->BAB": 100,
+        "BAB->ABB": 100
+      }
+    },
+    "policy": "prompt text and template + unordered names + object + place",
+    "rejections": {
+      "prompt_overlap": 1
+    },
+    "sources": {
+      "legacy_v1/test": {
+        "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+        "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+      },
+      "legacy_v1/train": {
+        "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+        "sha256": "3867b316d469df4b4c2d80136324c8cda4e001c617c584c30703283ad75db346"
+      }
+    }
+  },
+  "files": {
+    "validation": {
+      "count": 200,
+      "path": "validation.jsonl",
+      "sha256": "f62945c14803c2d9b8832b736bf5dd0d79226ea2e5fa7727b5aaa32aa54ba8e5"
+    }
+  },
+  "generation": {
+    "builder_sha256": "d46149f81f4caa42dd5e1530303c293fac3232279c10862d8ffb434792c08537",
+    "generator_revision": "ioi-position-v1-ordered-symbols",
+    "generator_sha256": "33f29b8b5fb6fc3a41f95773e081f0b2215cd6c1a6f6126a39aaa66dd903e644",
+    "max_batches": 1000,
+    "name": "original_position",
+    "seed": 314159,
+    "source_split": "train",
+    "specification_sha256": "2062b78f2bb6de0fda4210a356a789da2f56b6d4498fc9c70fd6955720615c03",
+    "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+    "upstream_sha256": {
+      "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+      "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+      "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+      "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+      "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+      "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+      "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+    }
+  },
+  "purpose": "Fixed in-distribution validation for selection: opposite-pattern directions, no prompt or semantic-group overlap with legacy_v1.",
+  "schema_version": 1
+}
