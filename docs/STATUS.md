@@ -8,81 +8,81 @@ Updated: 2026-10-15 · Cycle since: [2026-10-12](meetings/2026-10-12.md)
 | --- | --- | --- | --- | --- |
 | `position-audit` | Original IOI data and per-example position audit | done | 2026-10-12 | Phase 0–1 |
 | `single-condition-das` | One DAS run: GPT-2 Small, layer 8, N, rank 1 | done | 2026-10-12 | Phase 2 |
-| `layer-sweep` | Every layer at the last token, GPT-2 Small | active (rebuild on `main`) | 2026-10-12 | M3 / A |
+| `layer-sweep` | Every layer at the last token, GPT-2 Small | done | 2026-10-15 | M3 / A |
 | `model-scale` | Same protocol on a larger GPT-2 | active | 2026-10-12 | M4 / B |
 | `data-scale` | Larger training sets | active | 2026-10-12 | M5 / C |
 
 ## Infrastructure
 
-- Generic config pipeline merged (`649d454`): `ioi-das run --config`,
-  `ioi-das report`, inherited schema-validated configs, grid expansion,
-  `run.json` provenance, and resume. Reviewed by Claude Code, including an
-  independent GPU rerun.
-- `single-condition-das` reproduced bit-for-bit by the new pipeline:
-  `outputs/single-condition-das/20261015-layer8-seed42/` (94/200 → 173/200,
-  test 79/100; identical alignment tensors and predictions).
-- Next: [layer-sweep brief](briefs/2026-10-15-layer-sweep.md), which also
-  replaces the legacy `audit` command and the Markdown dataset registry.
-
-## layer-sweep
-
-- Goal: independent rank-1 DAS at block_output, last token N, every layer,
-  seeds 42/43/44; choose the layer on validation only.
-- Where: branch `m3-complete-20261015`, commit `d78221c`. Not yet on `main`.
-  - Config: `configs/m3_end_layer_sweep.json`
-  - Validation data: `val_indist_v1` (see `data/REGISTRY.md`)
-  - Experiment: `outputs/m3_end_layer_sweep/m3_20261015_a/` (summary.md,
-    selection.json, layer_summary.csv, figures/)
-  - Smoke: `outputs/m3_end_layer_sweep/m3_smoke_20261015_a/`
-- Result: 36/36 conditions complete; layer 8 selected (validation 0.83, test
-  0.79); layer 9 validation 0.64, layer 7 0.17, all other layers ≤ 0.02. Seed
-  SD < 0.01 everywhere. Layer 8 / seed 42 reproduces `single-condition-das`
-  exactly. About 31 s and 0.7 GB peak GPU memory per condition.
-- Next: rebuild on `main` with the generic config/pipeline. The branch code
-  (`m3.py`, `m3_data.py`, `plot.py`) is not merged; its results serve as the
-  parity reference for the rebuild.
+- Config pipeline (`649d454`, tag `brief/config-pipeline`): `ioi-das run`,
+  `ioi-das report`, inherited schema-validated configs, grids, `run.json`
+  provenance, resume.
+- Datasets and selection (`03dad11`): `data/registry.json`, one dataset
+  loader, `ioi-das data build` and `ioi-das data audit` (the legacy `audit`
+  command is removed), validation-only selection lock, post-lock evaluation,
+  and baselines in every condition.
+- Both merges were reviewed by Claude Code with independent GPU reruns.
 
 ## model-scale
 
 - Goal: rerun the layer-sweep protocol on GPT-2 Medium (24 layers).
-- State: not started.
-- Blockers:
-  - `load_model` accepts only `name == "gpt2"`
-    (`src/ioi_das/intervention.py`).
-  - Only `models--gpt2` is in the local HuggingFace cache; GPT-2 Medium needs a
-    download, which requires user approval.
-- Estimate: 72 conditions (24 layers × 3 seeds); Medium is roughly 3× Small
-  per condition, so a few hours on one RTX 2080 Ti (11 GB). All 7 GPUs were
-  idle at 2026-10-15 02:40.
+- State: [gpt2-family-loader brief](briefs/2026-10-15-gpt2-family-loader.md)
+  open; code and smoke only, full run later (possibly on a faster machine).
+- Blockers: loader and schema accept only `gpt2`; GPT-2 Medium weights are
+  not cached (download approval goes in the message that hands over the
+  brief).
+- Estimate: 72 conditions; about 1.5–2.5 h on one RTX 2080 Ti.
 
 ## data-scale
 
-- Goal: IIA versus training size (200 / 1000 / 5000 pairs) at a fixed layer.
-- State: not started.
-- Blocker: `generate_pairs` is fixed at 50 pairs per pattern combination
-  (`src/ioi_das/data.py`); the training name pool has 49 names and 2 templates,
-  so unique-prompt limits must be checked before choosing sizes.
+- Goal: IIA versus training size (200 / 1000 / 5000 pairs) at layer 8.
+- State: [training-size-datasets brief](briefs/2026-10-15-training-size-datasets.md)
+  open; code, dataset builds and audits, and smoke only.
+- Open decision: equal updates or equal epochs across sizes (both will be
+  supported; the config chooses).
 
 ## Closed tasks
+
+### layer-sweep (done 2026-10-15)
+
+GPT-2 Small, rank-1 DAS on block_output at N, layers 0–11 × seeds 42/43/44,
+36/36 complete. Layer 8 selected on validation (`val_indist_v1`) before any
+test evaluation.
+
+| Layer | 0–6 | 7 | 8 | 9 | 10 | 11 |
+| --- | --- | --- | --- | --- | --- | --- |
+| Validation (mean of 3 seeds) | 0.00 | 0.17 | **0.83** | 0.64 | 0.02 | 0.00 |
+| Test (descriptive) | 0.00 | 0.08 | **0.79** | 0.51 | 0.04 | 0.00 |
+
+Baselines: no-intervention and untrained-alignment validation IIA are 0 at
+every layer; train IIA has a 0.47 floor from same-pattern pairs (94/200).
+Every checkpoint matches the reference run on branch `m3-complete-20261015`
+and an independent rerun bit for bit. Evidence:
+`outputs/layer-sweep/20261015-gpt2-small/` (`summary.md`, `selection.json`,
+`layer_summary.csv`, `figures/`). Config: `configs/layer-sweep/gpt2-small.json`.
+
+### single-condition-das (done 2026-10-12)
+
+GPT-2 Small, layer 8, block_output, N, rank 1, seed 42: train IIA 0.47 →
+0.865, test IIA 0.79. Original evidence:
+`outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/`; reproduced
+bit for bit by the config pipeline in
+`outputs/single-condition-das/20261015-layer8-seed42/`. Walkthrough:
+`notebooks/phase2_walkthrough.ipynb`.
 
 ### position-audit (done 2026-10-12)
 
 All 300 legacy pairs audited with the real GPT-2 tokenizer: 600 fast/slow
 input comparisons, 1,800 continuation comparisons, and 2,400 batch/individual
-position comparisons agree; 0 unsupported answers. Evidence:
-`outputs/audit/summary.md`. Details:
-`archive/STATUS_until_2026-10-12.md`.
-
-### single-condition-das (done 2026-10-12)
-
-GPT-2 Small, layer 8, block_output, N, rank 1, seed 42: train IIA 0.47 →
-0.865, test IIA 0.79; all correctness checks passed. Evidence:
-`outputs/phase2/gpt2-layer8-block-output-N-rank1-seed42/full/`. Walkthrough:
-`notebooks/phase2_walkthrough.ipynb`. Details:
-`archive/STATUS_until_2026-10-12.md`.
+position comparisons agree; 0 unsupported answers. Original evidence:
+`outputs/audit/summary.md`; reproduced by `ioi-das data audit --dataset
+legacy_v1` in `outputs/data-audit/20261015-legacy_v1/`.
 
 ## Verification on main
 
 ```bash
 env PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 /home/ilingl/.conda/envs/ioi-das-v2/bin/python -B -m pytest -q
 ```
+
+Last result on `main` (2026-10-15): 145 passed, 1 skipped (opt-in GPU
+regression), 305 subtests.

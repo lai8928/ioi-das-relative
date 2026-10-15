@@ -47,7 +47,8 @@
 - [x] Mirror meeting notes to Notion (Chinese and English).
 - [x] Write CONVENTIONS, CLAUDE.md, and briefs for Codex.
 - [x] config-pipeline brief merged (`649d454`); parity verified.
-- [ ] Codex implements the remaining briefs: layer-sweep →
+- [x] layer-sweep brief merged (`03dad11`); baselines and parity verified.
+- [ ] Codex implements the remaining briefs:
   gpt2-family-loader and training-size-datasets.
 
 ## Deferred
