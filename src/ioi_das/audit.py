@@ -1,4 +1,4 @@
-"""Save fixed original-rule samples and audit them without model weights."""
+"""Audit registered IOI datasets without loading model weights or changing data."""
 
 from collections import Counter
 from dataclasses import asdict
@@ -8,18 +8,18 @@ from importlib import metadata
 import json
 from pathlib import Path
 import platform
+import subprocess
 import sys
+from zoneinfo import ZoneInfo
 
 from . import data
 from .checks import run_focused_checks
+from .config import config_sha256
 from .positions import resolve_pair_positions, resolve_position
 from .tokenization import check_answer, encode_pair_batch, encoded_to_dict, load_tokenizers
 
 
 UPSTREAM_COMMIT = "9e333904dcf9e597ca76170010d17f4d4580de8d"
-# This immutable manifest binds the generator used to create the registered data.
-# Current diagnostic wording may change without changing its historical provenance.
-LEGACY_MANIFEST_SHA256 = "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c"
 UPSTREAM_PATHS = {
     "LICENSE", "pyproject.toml", "tutorials/advanced_tutorials/IOI_with_DAS.ipynb",
     "tutorials/advanced_tutorials/tutorial_ioi_utils.py",
@@ -45,73 +45,6 @@ def verify_upstream(upstream_dir: Path) -> dict:
         if data.sha256_file(path) != entry["sha256"] or path.stat().st_size != entry["bytes"]:
             raise ValueError(f"Upstream original changed: {path}; restore exact pinned bytes before auditing.")
     return provenance
-
-
-def validate_counts(pairs: dict) -> dict:
-    expected = {
-        "train": {"ABB->ABB": 50, "ABB->BAB": 50, "BAB->ABB": 50, "BAB->BAB": 50},
-        "test": {"ABB->BAB": 50, "BAB->ABB": 50},
-    }
-    actual = {}
-    for split, records in pairs.items():
-        actual[split] = dict(Counter(f"{p.base.pattern}->{p.source.pattern}" for p in records))
-        if actual[split] != expected[split] or any(p.split != split for p in records):
-            raise ValueError(f"Saved {split} samples violate original POSITION counts or split labels.")
-        if [p.sample_id for p in records] != [f"{split}-{i:04d}" for i in range(len(records))]:
-            raise ValueError(f"Saved {split} sample IDs/order differ from the stable original-rule sequence.")
-    return actual
-
-
-def ensure_saved_pairs(config: dict, provenance: dict) -> tuple[dict, dict, bool]:
-    directory = config["generated_dir"]
-    paths = {split: directory / f"{split}.jsonl" for split in ("train", "test")}
-    manifest_path = directory / "manifest.json"
-    spec = {
-        "seed": config["seed"],
-        "generator_revision": data.GENERATOR_REVISION,
-        "generator_sha256": data.sha256_file(Path(data.__file__)),
-        "upstream_commit": UPSTREAM_COMMIT,
-        "upstream_sha256": {entry["path"]: entry["sha256"] for entry in provenance["files"]},
-        "target_variable": "position",
-    }
-    if any(path.exists() for path in (*paths.values(), manifest_path)):
-        if not all(path.is_file() for path in (*paths.values(), manifest_path)):
-            raise ValueError(f"Incomplete saved dataset at {directory}; preserve it and select "
-                             "a separate generated_dir, or restore its missing files.")
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if data.sha256_file(manifest_path) == LEGACY_MANIFEST_SHA256:
-            spec["generator_sha256"] = manifest["generation"]["generator_sha256"]
-        if manifest["generation"] != spec:
-            raise ValueError(f"Saved dataset generation metadata differs at {manifest_path}; "
-                             "restore the original config/generator or select a separate generated_dir.")
-        for split, path in paths.items():
-            if data.sha256_file(path) != manifest["files"][split]["sha256"]:
-                raise ValueError(f"Saved dataset hash mismatch: {path}; restore the saved file before reuse.")
-        pairs = {split: data.load_pairs(path) for split, path in paths.items()}
-        validate_counts(pairs)
-        return pairs, manifest, True
-    pairs = data.generate_pairs(config["upstream_dir"], config["seed"])
-    counts = validate_counts(pairs)
-    for split, path in paths.items():
-        data.write_pairs(path, pairs[split])
-    manifest = {
-        "schema_version": 1,
-        "generation": spec,
-        "tokenizer_at_generation": config["tokenizer"],
-        "pairing_counts": counts,
-        "files": {split: {"path": f"{split}.jsonl", "count": len(pairs[split]),
-                          "sha256": data.sha256_file(path)} for split, path in paths.items()},
-        "policies": {
-            "symbol_order": "first occurrence, replacing upstream unordered set iteration",
-            "resource_split": "original first/second halves; templates first two/rest",
-            "source_sampling": "resample each base using the same A/B names, template, object, place",
-            "historical_samples": False,
-            "name_span": "construction-time half-open character spans for formatted occurrences",
-            "reuse": "verify manifest and hashes; never regenerate on an audit rerun",
-        },
-    }
-    write_json(manifest_path, manifest)
-    return pairs, manifest, False
 
 
 def runtime_environment(config: dict, tokenizer) -> dict:
@@ -144,14 +77,99 @@ def runtime_environment(config: dict, tokenizer) -> dict:
     }
 
 
-def run_audit(config: dict) -> dict:
-    output_dir = config["output_dir"]
-    output_dir.mkdir(parents=True, exist_ok=True)
-    provenance = verify_upstream(config["upstream_dir"])
-    tokenizer, reference = load_tokenizers(config["tokenizer"])
-    environment = runtime_environment(config, tokenizer)
-    write_json(output_dir / "environment.json", environment)
-    pairs, manifest, reused = ensure_saved_pairs(config, provenance)
+def _allocate_output(root: Path, dataset: str) -> Path:
+    date = datetime.now(ZoneInfo("America/Los_Angeles")).strftime("%Y%m%d")
+    parent = root / "outputs" / "data-audit"
+    parent.mkdir(parents=True, exist_ok=True)
+    suffix = 1
+    while True:
+        name = f"{date}-{dataset}" + (f"-{suffix}" if suffix > 1 else "")
+        output = parent / name
+        try:
+            output.mkdir()
+            return output
+        except FileExistsError:
+            suffix += 1
+
+
+def _source_state(root: Path) -> dict:
+    def git(*arguments: str) -> str:
+        result = subprocess.run(["git", "-C", str(root), *arguments],
+                                check=True, capture_output=True, text=True)
+        return result.stdout.strip()
+
+    return {"commit": git("rev-parse", "HEAD"),
+            "clean_tree": not bool(git("status", "--porcelain")),
+            "implementation_sha256": {path.name: data.sha256_file(path)
+                                      for path in sorted(Path(__file__).parent.glob("*.py"))}}
+
+
+def run_audit(dataset: str, project_root: Path | None = None,
+              command: list[str] | None = None) -> dict:
+    """Audit every registered split and save a fresh, immutable evidence directory."""
+    from .datasets import load_dataset, load_registry
+
+    root = (project_root or Path(__file__).resolve().parents[2]).resolve()
+    registry = load_registry(root)
+    if dataset not in registry["datasets"]:
+        raise ValueError(f"Unknown dataset {dataset!r}; choose a name from data/registry.json.")
+    inputs = {split: load_dataset(f"{dataset}/{split}", root)
+              for split in registry["datasets"][dataset]["splits"]}
+    config_path = root / "configs" / "base.json"
+    tokenizer_options = json.loads(config_path.read_text(encoding="utf-8"))["tokenizer"]
+    config = {"dataset": dataset, "tokenizer": tokenizer_options, "batch_size": 20,
+              "intervention_locations": ["GOAL_NAME", "N", "N-1", "N-2"],
+              "readout_location": "N"}
+    provenance = verify_upstream(root / "vendor" / "pyvene_upstream")
+    source = _source_state(root)
+    output = _allocate_output(root, dataset)
+    metadata = {"status": "running", "run_kind": "data-audit", "dataset": dataset,
+                "started_at_utc": datetime.now(timezone.utc).isoformat(),
+                "command": command or [sys.executable, "-m", "ioi_das.cli", "data", "audit",
+                                        "--dataset", dataset],
+                "resolved_config": config, "config_sha256": config_sha256(config),
+                "config_source_sha256": data.sha256_file(config_path),
+                "registry_sha256": data.sha256_file(root / "data" / "registry.json"),
+                "dataset_hashes": {item.reference: item.sha256 for item in inputs.values()},
+                "dataset_manifest_sha256": {item.name: item.manifest_sha256 for item in inputs.values()},
+                "dataset_generation": {item.name: item.manifest.get("generation", {})
+                                       for item in inputs.values()},
+                "upstream": provenance, **source}
+    write_json(output / "resolved_config.json", config)
+    write_json(output / "run.json", metadata)
+    try:
+        tokenizer, reference = load_tokenizers(tokenizer_options)
+        metadata["environment"] = runtime_environment(config, tokenizer)
+        write_json(output / "environment.json", metadata["environment"])
+        write_json(output / "run.json", metadata)
+        summary = _audit_pairs(output, {split: item.pairs for split, item in inputs.items()},
+                               config, tokenizer, reference)
+        summary.update({"dataset": dataset, "dataset_reused": True,
+                        "config_sha256": metadata["config_sha256"],
+                        "implementation_sha256": metadata["implementation_sha256"],
+                        "dataset_manifest_sha256": metadata["dataset_manifest_sha256"],
+                        "output_dir": str(output)})
+        write_json(output / "summary.json", summary)
+        write_summary(output / "summary.md", summary, select_previews(_read_rows(output / "pairs.jsonl")))
+        metadata["status"] = summary["status"]
+        metadata["artifacts"] = {name: data.sha256_file(output / name) for name in
+                                 ("resolved_config.json", "environment.json", "focused_checks.json",
+                                  "pairs.jsonl", "summary.json", "summary.md")}
+    except Exception as error:
+        metadata["status"] = "failed"
+        metadata["error"] = f"{type(error).__name__}: {error}"
+        raise
+    finally:
+        metadata["completed_at_utc"] = datetime.now(timezone.utc).isoformat()
+        write_json(output / "run.json", metadata)
+    return summary
+
+
+def _read_rows(path: Path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def _audit_pairs(output_dir: Path, pairs: dict, config: dict, tokenizer, reference) -> dict:
     focused = run_focused_checks(tokenizer, reference)
     write_json(output_dir / "focused_checks.json", focused)
     length_counts = {split: {side: Counter() for side in ("base", "source")} for split in pairs}
@@ -210,18 +228,13 @@ def run_audit(config: dict) -> dict:
                     handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
                     preview_candidates.append(row)
     temporary.replace(output_dir / "pairs.jsonl")
-    previews = select_previews(preview_candidates)
     summary = {
-        "status": "passed",
+        "status": "failed" if unsupported else "passed",
         "completed_at_utc": datetime.now(timezone.utc).isoformat(),
         "upstream_commit": UPSTREAM_COMMIT,
-        "config_sha256": data.sha256_file(config["config_path"]),
-        "implementation_sha256": {path.name: data.sha256_file(path)
-                                  for path in sorted(Path(__file__).parent.glob("*.py"))},
-        "dataset_manifest_sha256": data.sha256_file(config["generated_dir"] / "manifest.json"),
-        "dataset_reused": reused,
         "counts": {split: len(records) for split, records in pairs.items()},
-        "pairing_counts": manifest["pairing_counts"],
+        "pairing_counts": {split: dict(Counter(f"{pair.base.pattern}->{pair.source.pattern}"
+                                               for pair in records)) for split, records in pairs.items()},
         "valid_length_counts": {split: {side: dict(sorted(counts.items())) for side, counts in sides.items()}
                                 for split, sides in length_counts.items()},
         "unequal_length_original_pairs": sum(p["base"]["valid_length"] != p["source"]["valid_length"]
@@ -242,30 +255,25 @@ def run_audit(config: dict) -> dict:
         "model_weights_loaded": False,
         "das_training_started": False,
     }
-    write_json(output_dir / "summary.json", summary)
-    write_summary(output_dir / "summary.md", summary, previews)
     return summary
 
 
 def select_previews(rows: list) -> list:
-    """Show both base patterns per split before filling with varied lengths."""
+    """Return up to four varied examples from every audited split."""
     selected, seen = [], set()
-    for split in ("train", "test"):
-        for pattern in ("ABB", "BAB"):
-            row = next(row for row in rows if row["split"] == split and row["base"]["pattern"] == pattern)
+    for row in rows:
+        split = row["split"]
+        key = split, row["base"]["pattern"], row["base"]["valid_length"]
+        if key not in seen and sum(item["split"] == split for item in selected) < 4:
             selected.append(row)
-            seen.add((split, pattern, row["base"]["valid_length"]))
-        for row in rows:
-            key = row["split"], row["base"]["pattern"], row["base"]["valid_length"]
-            if row["split"] == split and key not in seen and sum(r["split"] == split for r in selected) < 4:
-                selected.append(row)
-                seen.add(key)
-    return sorted(selected, key=lambda row: (row["split"] == "test", row["sample_id"]))
+            seen.add(key)
+    return selected
 
 
 def write_summary(path: Path, summary: dict, previews: list) -> None:
-    lines = ["# Position audit", "", "Full real-tokenizer position audit passed.", "",
-             f"- Original-rule samples: {summary['counts']['train']} training / {summary['counts']['test']} test pairs.",
+    lines = ["# Position audit", "", f"Real-tokenizer position audit {summary['status']}.", "",
+             f"- Registered dataset: {summary['dataset']}.",
+             f"- Saved pair counts: {summary['counts']}.",
              f"- Saved dataset reused: {summary['dataset_reused']}.",
              f"- Fast/reference GPT-2 comparisons: {summary['fast_reference_comparisons']}.",
              f"- Batch/individual position comparisons: {summary['batch_individual_position_comparisons']}.",
@@ -290,7 +298,7 @@ def write_summary(path: Path, summary: dict, previews: list) -> None:
         lines += ["", f"### {row['sample_id']}", "", f"Base: {row['base']['text']}", "",
                   f"Source: {row['source']['text']}"]
     lines += ["", "## Synthetic focused evidence", "",
-              "Synthetic data is excluded from the 200/100 sampled pairs. The mixed batch has base lengths [18, 22] "
+              "Synthetic data is excluded from all registered dataset pairs. The mixed batch has base lengths [18, 22] "
               "and source lengths [22, 18]. Expected N-1 arrays are base [16, 20] and source [20, 16]. "
               "END/END-1/END-2 match individual tokenization. Repeated subjects map to distinct occurrences. "
               "Mary Jane retains both continuation tokens and is diagnosed as unsupported for single-token evaluation. "

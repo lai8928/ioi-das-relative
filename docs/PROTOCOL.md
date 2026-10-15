@@ -23,7 +23,7 @@ with the meeting that decided it.
 - Never truncate, filter, rewrite, or append answers to prompts. Reject
   invalid positions with sample IDs. Report multi-token answer continuations
   as unsupported; never fall back to the first token.
-- Datasets are generated once, hashed, registered in `data/REGISTRY.md`, and
+- Datasets are generated once, hashed, registered in `data/registry.json`, and
   reused unchanged.
 
 ## Positions and readout

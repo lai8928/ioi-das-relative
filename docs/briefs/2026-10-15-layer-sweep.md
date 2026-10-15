@@ -2,7 +2,7 @@
 
 - Branch: `feat/layer-sweep`
 - Task: `layer-sweep`
-- Status: in review (revision requested 2026-10-15: baselines)
+- Status: merged
 - Written: 2026-10-15, from [meeting 2026-10-12](../meetings/2026-10-12.md)
 - Depends on: [config-pipeline](2026-10-15-config-pipeline.md) (merged)
 

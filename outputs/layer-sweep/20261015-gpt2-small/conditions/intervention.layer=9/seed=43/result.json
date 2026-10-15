@@ -1,0 +1,414 @@
+{
+  "artifacts": {
+    "alignment.pt": "b072a47370939520b68b5dd0fd792095f294e94d76f0644919653dab487b343f",
+    "environment.json": "13f23c58d5ed9ab78619cc98b1d9d575c3dcec3f0e998129350232265352764e",
+    "initial_alignment.pt": "cb332a35e3f0e389f44d4168880bb56de9407b79afd661e223582fa63a97eab3",
+    "initial_train_predictions.jsonl": "7a1ce5aa8f258aa15aeec122476215c5ccdd00c6ed3dc55cf0036bd29a1aa8e9",
+    "initial_validation_predictions.jsonl": "40cac79288c8a02cb4a46d1fa9fc8107c40439613eaa2d0a55c3120a9460b556",
+    "metrics.json": "615ecf511cdead2369acbef6d5305eab044262e02abe0b50826be835fc4d8dd8",
+    "train_predictions.jsonl": "0aa3d363ddc9cea97b85816d15d06011a767284d186c971faef88fd9032692fc",
+    "training.json": "6ccd9b218b38c87f821e8727cd8603166fe63886c1998712ecd375382735eae9",
+    "training_steps.jsonl": "7e6a7ccd66aefbfc7f8b7e0bb7da7661e920d42a1a58a085384a7fb40b345237",
+    "validation.json": "d78a1a2bdf5efffe282654a7f21bebb5b6a2fc7e30ad89c260a566e8f434d158",
+    "validation_predictions.jsonl": "a967d096bdde4f84982f9fae94eaef583b8b677def415720a687f1f5de630a78"
+  },
+  "completed_at_utc": "2026-10-15T17:02:24.178071+00:00",
+  "condition": {
+    "component": "block_output",
+    "intervention_location": "N",
+    "layer": 9,
+    "rank": 1,
+    "target_variable": "position"
+  },
+  "dataset_reused": true,
+  "datasets": {
+    "test": {
+      "generation": {
+        "generator_revision": "ioi-position-v1-ordered-symbols",
+        "generator_sha256": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+        "seed": 42,
+        "target_variable": "position",
+        "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+        "upstream_sha256": {
+          "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+          "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+          "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+          "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+          "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+          "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+          "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+        }
+      },
+      "manifest_path": "/home/ilingl/projects/ioi-das-relative-codex/data/generated/manifest.json",
+      "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+      "path": "/home/ilingl/projects/ioi-das-relative-codex/data/generated/test.jsonl",
+      "reference": "legacy_v1/test",
+      "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+    },
+    "train": {
+      "generation": {
+        "generator_revision": "ioi-position-v1-ordered-symbols",
+        "generator_sha256": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+        "seed": 42,
+        "target_variable": "position",
+        "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+        "upstream_sha256": {
+          "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+          "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+          "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+          "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+          "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+          "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+          "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+        }
+      },
+      "manifest_path": "/home/ilingl/projects/ioi-das-relative-codex/data/generated/manifest.json",
+      "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+      "path": "/home/ilingl/projects/ioi-das-relative-codex/data/generated/train.jsonl",
+      "reference": "legacy_v1/train",
+      "sha256": "3867b316d469df4b4c2d80136324c8cda4e001c617c584c30703283ad75db346"
+    },
+    "validation": {
+      "generation": {
+        "builder_sha256": "d46149f81f4caa42dd5e1530303c293fac3232279c10862d8ffb434792c08537",
+        "generator_revision": "ioi-position-v1-ordered-symbols",
+        "generator_sha256": "33f29b8b5fb6fc3a41f95773e081f0b2215cd6c1a6f6126a39aaa66dd903e644",
+        "max_batches": 1000,
+        "name": "original_position",
+        "seed": 314159,
+        "source_split": "train",
+        "specification_sha256": "2062b78f2bb6de0fda4210a356a789da2f56b6d4498fc9c70fd6955720615c03",
+        "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+        "upstream_sha256": {
+          "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+          "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+          "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+          "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+          "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+          "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+          "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+        }
+      },
+      "manifest_path": "/home/ilingl/projects/ioi-das-relative-codex/data/generated/val_indist_v1/manifest.json",
+      "manifest_sha256": "2c75e461b717bd16f0c8b0f3d5e8c528d7469775444d2cb9429a6e9a44900054",
+      "path": "/home/ilingl/projects/ioi-das-relative-codex/data/generated/val_indist_v1/validation.jsonl",
+      "reference": "val_indist_v1/validation",
+      "sha256": "f62945c14803c2d9b8832b736bf5dd0d79226ea2e5fa7727b5aaa32aa54ba8e5"
+    }
+  },
+  "elapsed_seconds": 34.733229387551546,
+  "gpu_peak_allocated_bytes": 679967232,
+  "implementation_sha256": {
+    "__init__.py": "6b2cac83b6926f48e4fe131a7d60f0bce7544fe4be30aaf27fa16f9de2203c41",
+    "audit.py": "44fcf723dd9d068f0a38889ce5ee9a6640dc72237e18dfcc656cb2e54679e203",
+    "checks.py": "8c685dc8e6effeee57deb1512bc39a81e75c58f680df4c8f8a3b631dc47de7f1",
+    "cli.py": "18320bd46748430416eb445ddb0186515411ab0c0d4da057bb1d7b07b8630350",
+    "config.py": "1b8dab485cd5fc717e3f38408dee67e67498fafffffd43982d04dea704174af8",
+    "data.py": "33f29b8b5fb6fc3a41f95773e081f0b2215cd6c1a6f6126a39aaa66dd903e644",
+    "datasets.py": "0dac868250619ac41596fee22fbddb7d27715d3964a6e6153072a6160214b4d6",
+    "environment.py": "dbd96cfbbdc60b01a28d5561b6e8f8ca820d56646274b8b12cdba0742b80c14a",
+    "evaluate.py": "3d57b417967d28b973d0f36673e37151b89801166dc1c210455f45f842161b88",
+    "experiment.py": "c7aa9acf52a68a93465c9a5018f3381fdd5980ef358d6ade8e640294ac75fee4",
+    "intervention.py": "9d83fab09e9a1926740a33e96047164187cc6af800515390f0c1ab72b52c2c3e",
+    "pipeline.py": "eeeeb4d5fc5a79c358ad1e06a81724e9ae9545a33e22a88d3042e81056227102",
+    "positions.py": "b38c1d90ed96f77d9229d66f68d64a272681363d60657b10dc7e0f2136bc3078",
+    "report.py": "862ef728882906a2fbbdcaca1bababcd21b654e37144fbd74ab24b1ad97c3dab",
+    "selection.py": "24043c028baad175916b53f993acbf907168797c211359cd3a161306c044f116",
+    "tokenization.py": "65ed374f80c9f76f7f33b44281dce188655629d0be760fadffc2921c2bc8bb4d",
+    "train.py": "ae70d878f5ec51a50ce66c3979403c1d76e4ee83b56af6d2bb79fc10c42b5b55",
+    "validation.py": "a544b5145d600551c454ebdd045a7e84c664cf8364f6714125c1e8ca2eedf512"
+  },
+  "language_model_weights_changed": false,
+  "metrics": {
+    "initial_train": {
+      "factual_accuracy": 0.95,
+      "factual_correct": 190,
+      "factual_total": 200,
+      "groups": {
+        "ABB->ABB": {
+          "iia": 0.92,
+          "iia_correct": 46,
+          "iia_total": 50,
+          "no_intervention_iia": 0.92,
+          "no_intervention_iia_correct": 46,
+          "no_intervention_iia_total": 50
+        },
+        "ABB->BAB": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->ABB": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->BAB": {
+          "iia": 0.96,
+          "iia_correct": 48,
+          "iia_total": 50,
+          "no_intervention_iia": 0.96,
+          "no_intervention_iia_correct": 48,
+          "no_intervention_iia_total": 50
+        },
+        "switch_required": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "unchanged_target": {
+          "iia": 0.94,
+          "iia_correct": 94,
+          "iia_total": 100,
+          "no_intervention_iia": 0.94,
+          "no_intervention_iia_correct": 94,
+          "no_intervention_iia_total": 100
+        }
+      },
+      "iia": 0.47,
+      "iia_correct": 94,
+      "iia_total": 200,
+      "mean_counterfactual_loss": 2.410177268497646,
+      "mean_factual_loss": 0.7140088380873203,
+      "mean_target_logit": -72.60953035354615,
+      "no_intervention_iia": 0.47,
+      "no_intervention_iia_correct": 94,
+      "no_intervention_iia_total": 200,
+      "prediction_rule": "argmax_full_vocabulary"
+    },
+    "initial_validation": {
+      "factual_accuracy": 0.975,
+      "factual_correct": 195,
+      "factual_total": 200,
+      "groups": {
+        "ABB->ABB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "ABB->BAB": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "BAB->ABB": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "BAB->BAB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "switch_required": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 200,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 200
+        },
+        "unchanged_target": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        }
+      },
+      "iia": 0.0,
+      "iia_correct": 0,
+      "iia_total": 200,
+      "mean_counterfactual_loss": 4.046454645395279,
+      "mean_factual_loss": 0.6919623120501638,
+      "mean_target_logit": -73.036634349823,
+      "no_intervention_iia": 0.0,
+      "no_intervention_iia_correct": 0,
+      "no_intervention_iia_total": 200,
+      "prediction_rule": "argmax_full_vocabulary"
+    },
+    "train": {
+      "factual_accuracy": 0.95,
+      "factual_correct": 190,
+      "factual_total": 200,
+      "groups": {
+        "ABB->ABB": {
+          "iia": 0.92,
+          "iia_correct": 46,
+          "iia_total": 50,
+          "no_intervention_iia": 0.92,
+          "no_intervention_iia_correct": 46,
+          "no_intervention_iia_total": 50
+        },
+        "ABB->BAB": {
+          "iia": 0.46,
+          "iia_correct": 23,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->ABB": {
+          "iia": 0.68,
+          "iia_correct": 34,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->BAB": {
+          "iia": 0.96,
+          "iia_correct": 48,
+          "iia_total": 50,
+          "no_intervention_iia": 0.96,
+          "no_intervention_iia_correct": 48,
+          "no_intervention_iia_total": 50
+        },
+        "switch_required": {
+          "iia": 0.57,
+          "iia_correct": 57,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "unchanged_target": {
+          "iia": 0.94,
+          "iia_correct": 94,
+          "iia_total": 100,
+          "no_intervention_iia": 0.94,
+          "no_intervention_iia_correct": 94,
+          "no_intervention_iia_total": 100
+        }
+      },
+      "iia": 0.755,
+      "iia_correct": 151,
+      "iia_total": 200,
+      "mean_counterfactual_loss": 1.1171666162833571,
+      "mean_factual_loss": 0.7140088380873203,
+      "mean_target_logit": -71.85907585144042,
+      "no_intervention_iia": 0.47,
+      "no_intervention_iia_correct": 94,
+      "no_intervention_iia_total": 200,
+      "prediction_rule": "argmax_full_vocabulary"
+    },
+    "validation": {
+      "factual_accuracy": 0.975,
+      "factual_correct": 195,
+      "factual_total": 200,
+      "groups": {
+        "ABB->ABB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "ABB->BAB": {
+          "iia": 0.61,
+          "iia_correct": 61,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "BAB->ABB": {
+          "iia": 0.68,
+          "iia_correct": 68,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "BAB->BAB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "switch_required": {
+          "iia": 0.645,
+          "iia_correct": 129,
+          "iia_total": 200,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 200
+        },
+        "unchanged_target": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        }
+      },
+      "iia": 0.645,
+      "iia_correct": 129,
+      "iia_total": 200,
+      "mean_counterfactual_loss": 1.4704256616532803,
+      "mean_factual_loss": 0.6919623120501638,
+      "mean_target_logit": -71.67849428176879,
+      "no_intervention_iia": 0.0,
+      "no_intervention_iia_correct": 0,
+      "no_intervention_iia_total": 200,
+      "prediction_rule": "argmax_full_vocabulary"
+    }
+  },
+  "model": {
+    "attn_implementation": "eager",
+    "dtype": "float32",
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "optimizer_steps": 100,
+  "original_dataset_counts": {
+    "train": 200,
+    "validation": 200
+  },
+  "resolved_config_sha256": "3d0f3e0f51e18cb6e307e61348d22e54d7a6c6868de1d2ae009566e9ac7fba9a",
+  "run_dataset_counts": {
+    "train": 200,
+    "validation": 200
+  },
+  "run_kind": "full",
+  "seed": 43,
+  "status": "complete",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+  "validation_status": "passed"
+}

@@ -1,0 +1,116 @@
+{
+  "artifacts": {
+    "test_predictions.jsonl": "abb3113878cd4fd5ef2b43da715c696a80807dea2617ba4d225d271a7daa4d18"
+  },
+  "checkpoint_sha256": "886aedb4da4d3d779852485b63f27fbd1dc0edbd53cc2cb74d5f866a3489c72d",
+  "completed_at_utc": "2026-10-15T17:08:49.085954+00:00",
+  "condition": {
+    "component": "block_output",
+    "intervention_location": "N",
+    "layer": 7,
+    "rank": 1,
+    "target_variable": "position"
+  },
+  "datasets": {
+    "test": {
+      "generation": {
+        "generator_revision": "ioi-position-v1-ordered-symbols",
+        "generator_sha256": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+        "seed": 42,
+        "target_variable": "position",
+        "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+        "upstream_sha256": {
+          "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+          "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+          "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+          "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+          "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+          "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+          "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+        }
+      },
+      "manifest_path": "/home/ilingl/projects/ioi-das-relative-codex/data/generated/manifest.json",
+      "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+      "path": "/home/ilingl/projects/ioi-das-relative-codex/data/generated/test.jsonl",
+      "reference": "legacy_v1/test",
+      "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+    }
+  },
+  "metrics": {
+    "test": {
+      "factual_accuracy": 0.98,
+      "factual_correct": 98,
+      "factual_total": 100,
+      "groups": {
+        "ABB->ABB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "ABB->BAB": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->ABB": {
+          "iia": 0.16,
+          "iia_correct": 8,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->BAB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "switch_required": {
+          "iia": 0.08,
+          "iia_correct": 8,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "unchanged_target": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        }
+      },
+      "iia": 0.08,
+      "iia_correct": 8,
+      "iia_total": 100,
+      "mean_counterfactual_loss": 2.798101173341274,
+      "mean_factual_loss": 0.7255913273245096,
+      "mean_target_logit": -78.01868423461914,
+      "no_intervention_iia": 0.0,
+      "no_intervention_iia_correct": 0,
+      "no_intervention_iia_total": 100,
+      "prediction_rule": "argmax_full_vocabulary"
+    }
+  },
+  "model_sha256": "0a55e4d995d2759030f7d4c2f85983069c42db3bbc6b91e456cbf941dce43d1b",
+  "run_kind": "full",
+  "seed": 43,
+  "selection_sha256": "5a7e32ef7912b4591bef8d8c6401aa8c7d0eeb92ac81fe89e464c18c32f9812b",
+  "status": "complete",
+  "validation": {
+    "cleanup": "passed",
+    "frozen_weights": "passed"
+  }
+}

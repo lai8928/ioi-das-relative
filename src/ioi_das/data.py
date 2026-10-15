@@ -260,8 +260,8 @@ def generate_pairs(upstream_dir: Path, seed: int = 42) -> dict[str, list[PairRec
 def _validate_pair(pair: PairRecord) -> None:
     if not isinstance(pair.sample_id, str) or not pair.sample_id:
         raise ValueError("sample_id must be a nonempty string.")
-    if pair.split not in ("train", "test"):
-        raise ValueError("split must be train or test.")
+    if pair.split not in ("train", "validation", "test"):
+        raise ValueError("split must be train, validation, or test.")
     if pair.target_variable != "position":
         raise ValueError("The dataset supports only target_variable='position'.")
     for side in ("base", "source"):

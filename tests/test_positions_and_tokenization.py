@@ -11,7 +11,7 @@ from ioi_das.tokenization import load_tokenizers
 
 @pytest.fixture(scope="module")
 def tokenizers():
-    config = json.loads((Path(__file__).resolve().parents[1] / "configs/audit.json").read_text())
+    config = json.loads((Path(__file__).resolve().parents[1] / "configs/base.json").read_text())
     return load_tokenizers(config["tokenizer"])
 
 

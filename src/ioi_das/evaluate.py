@@ -23,6 +23,28 @@ def _prediction(tokenizer: Any, token_id: int) -> dict[str, Any]:
     }
 
 
+def _group_metrics(predictions: Sequence[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Reduce intervention and no-intervention counts for every pairing group."""
+    names = [f"{base}->{source}" for base in ("ABB", "BAB") for source in ("ABB", "BAB")]
+    groups = {name: {"iia_correct": 0, "iia_total": 0,
+                     "no_intervention_iia_correct": 0, "no_intervention_iia_total": 0}
+              for name in (*names, "switch_required", "unchanged_target")}
+    for row in predictions:
+        pairing = f"{row['base_pattern']}->{row['source_pattern']}"
+        target_group = "switch_required" if row["switch_required"] else "unchanged_target"
+        for name in (pairing, target_group):
+            group = groups[name]
+            group["iia_correct"] += int(row["counterfactual_correct"])
+            group["iia_total"] += 1
+            group["no_intervention_iia_correct"] += int(row["no_intervention_correct"])
+            group["no_intervention_iia_total"] += 1
+    for group in groups.values():
+        count = group["iia_total"]
+        group["iia"] = group["iia_correct"] / count if count else None
+        group["no_intervention_iia"] = group["no_intervention_iia_correct"] / count if count else None
+    return groups
+
+
 def evaluate_condition(
     model: Any,
     intervenable: Any,
@@ -61,6 +83,7 @@ def evaluate_condition(
     predictions = []
     factual_correct = 0
     iia_correct = 0
+    no_intervention_iia_correct = 0
     with torch.no_grad():
         for start in range(0, len(pairs), batch_size):
             batch = prepare_batch(pairs[start:start + batch_size], tokenizer,
@@ -81,8 +104,10 @@ def evaluate_condition(
             counterfactual_ids = counterfactual_logits.argmax(dim=-1)
             factual_ok = factual_ids.eq(batch.factual_labels)
             counterfactual_ok = counterfactual_ids.eq(batch.counterfactual_labels)
+            no_intervention_ok = factual_ids.eq(batch.counterfactual_labels)
             factual_correct += int(factual_ok.sum().item())
             iia_correct += int(counterfactual_ok.sum().item())
+            no_intervention_iia_correct += int(no_intervention_ok.sum().item())
             factual_log_probabilities = factual_logits.log_softmax(dim=-1)
             counterfactual_log_probabilities = counterfactual_logits.log_softmax(dim=-1)
             factual_losses = functional.cross_entropy(
@@ -104,6 +129,7 @@ def evaluate_condition(
             counterfactual_labels = batch.counterfactual_labels.cpu().tolist()
             factual_ok = factual_ok.cpu().tolist()
             counterfactual_ok = counterfactual_ok.cpu().tolist()
+            no_intervention_ok = no_intervention_ok.cpu().tolist()
             base_lengths = batch.base_inputs["attention_mask"].sum(dim=-1).cpu().tolist()
             source_lengths = batch.source_inputs["attention_mask"].sum(dim=-1).cpu().tolist()
             readout_positions = batch.base_readout.cpu().tolist()
@@ -132,6 +158,8 @@ def evaluate_condition(
                     "factual_target_token_id": factual_labels[index],
                     "factual_prediction": _prediction(tokenizer, factual_ids[index]),
                     "factual_correct": factual_ok[index],
+                    "no_intervention_correct": no_intervention_ok[index],
+                    "switch_required": pair.counterfactual_answer != pair.base.io_name,
                     "factual_target_logit": factual_target_logits[index],
                     "factual_target_probability": factual_target_probs[index],
                     "factual_prediction_probability": factual_pred_probs[index],
@@ -157,6 +185,10 @@ def evaluate_condition(
         "iia_correct": iia_correct,
         "iia_total": count,
         "iia": iia_correct / count,
+        "no_intervention_iia_correct": no_intervention_iia_correct,
+        "no_intervention_iia_total": count,
+        "no_intervention_iia": no_intervention_iia_correct / count,
+        "groups": _group_metrics(predictions),
         "mean_factual_loss": sum(row["factual_loss"] for row in predictions) / count,
         "mean_counterfactual_loss": sum(row["counterfactual_loss"] for row in predictions) / count,
         "mean_target_logit": sum(row["counterfactual_target_logit"] for row in predictions) / count,

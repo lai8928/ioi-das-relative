@@ -17,7 +17,7 @@ lengths.
 | How are code, configs, scripts, and commits written? | [docs/CONVENTIONS.md](docs/CONVENTIONS.md) |
 | Which code changes are queued for implementation? | [docs/briefs/](docs/briefs/) |
 | What was discussed with the professor? | [docs/meetings/](docs/meetings/) |
-| Which datasets exist? | [data/REGISTRY.md](data/REGISTRY.md) |
+| Which datasets exist? | [data/registry.json](data/registry.json) |
 | Where did the upstream code come from? | [docs/UPSTREAM.md](docs/UPSTREAM.md) |
 | Rules for agents working here | [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md) |
 | Superseded plans, status, and specs | [docs/archive/](docs/archive/) |
@@ -26,7 +26,7 @@ lengths.
 
 ```
 configs/            experiment configs (legacy: audit.json, phase2.json)
-data/generated/     saved datasets, registered in data/REGISTRY.md
+data/generated/     saved datasets, registered in data/registry.json
 docs/               plan, status, protocol, conventions, meetings, briefs, archive
 notebooks/          saved-result walkthroughs (no training by default)
 outputs/            immutable experiment outputs
@@ -61,8 +61,12 @@ export PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 MPLCONFIGDIR=/tmp/
 # Tests
 $PY -B -m pytest -q
 
-# Dataset and position audit (CPU, tokenizer only)
-$PY -B -m ioi_das.cli audit --config configs/audit.json
+# Dataset and position audits (CPU, tokenizer only; saved files are verified).
+$PY -B -m ioi_das.cli data audit --dataset legacy_v1
+$PY -B -m ioi_das.cli data audit --dataset val_indist_v1
+
+# Create the validation dataset once in a project where it is not yet registered.
+$PY -B -m ioi_das.cli data build --config configs/datasets/val_indist_v1.json
 
 # Environment and GPU diagnostics
 CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli doctor --require-gpu
@@ -82,7 +86,13 @@ CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/single-conditi
 # Continue missing conditions, verifying saved hashes first.
 CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/single-condition-das/layer8-seed42.json --resume outputs/single-condition-das/YYYYMMDD-layer8-seed42
 
-# Rebuild conditions.csv, summary.md, and figures/iia.svg from saved JSON only.
+# All-layer sweep: validation selects the layer before any test evaluation.
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/layer-sweep/gpt2-small.json --smoke --override 'grid={"intervention.layer":[8],"seed":[42]}'
+# Run long GPU jobs in tmux; commit source/config/data before the full run.
+tmux new-session -s ioi-layer-sweep
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/layer-sweep/gpt2-small.json
+
+# Rebuild CSVs, summary.md, and SVG figures from saved JSON only.
 # Reporting imports no torch, transformers, or pyvene and needs no GPU.
 $PY -B -m ioi_das.cli report --experiment-dir outputs/single-condition-das/YYYYMMDD-layer8-seed42
 ```
@@ -92,12 +102,23 @@ Experiment directories are derived from the config task/name and start date:
 runs. Repeated starts on the same date add `-2`, `-3`, and so on. Resume uses
 the original resolved config; repeat any overrides or `--smoke` used for that
 run. It preserves completed conditions and adds missing ones after checking
-their artifact hashes.
+their artifact hashes. Failed partial conditions remain preserved; a new
+experiment is needed to retry them.
 
-The audit reuses the registered saved dataset. When its configured output
-already contains the completed audit, the command writes its verification
-to a new `/tmp/ioi-das-audit-*` directory and reports that path. It preserves
-the completed evidence under `outputs/audit/`.
+For configs with `selection`, every primary condition evaluates train and
+validation only. After all conditions complete, `selection.json` locks the
+highest mean validation IIA over seeds (ties choose the lowest layer).
+Every checkpoint is then evaluated on the configured locked splits in
+separate hashed `post_lock/` records. Smoke runs never evaluate test or lock
+a selection. Reports include `conditions.csv`, `layer_summary.csv`, and
+validation, train/validation, and descriptive test curves. Seed SD is seed
+variation, not a confidence interval.
+
+Dataset references resolve through `data/registry.json`. Loading verifies both
+split and manifest hashes; generator source hashes record provenance. Builders
+refuse existing dataset versions and enforce prompt and semantic-group
+deduplication. Each `data audit` writes a new directory under
+`outputs/data-audit/<date>-<dataset>/`, preserving previous audit evidence.
 
 Re-render the walkthrough notebook from saved outputs (no model load):
 

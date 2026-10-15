@@ -79,7 +79,7 @@ configs/
   (resolved from the model, for example its layer count). Conditions are the
   Cartesian product, run in the listed key order.
 - Datasets are referenced by `<dataset>/<split>` names from
-  `data/REGISTRY.md`, never by file path.
+  `data/registry.json`, never by file path.
 - Keys are `snake_case`. Every key is defined in `schema.json`; unknown keys
   are an error **(tested)**.
 - Changing what an existing key means requires bumping `schema_version` and a

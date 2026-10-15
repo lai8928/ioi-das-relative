@@ -1,0 +1,34 @@
+{
+  "datasets": {
+    "legacy_v1": {
+      "directory": "data/generated",
+      "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+      "purpose": "Original POSITION training pairs and legacy held-out pairs; test was inspected in earlier runs and is descriptive only.",
+      "splits": {
+        "test": {
+          "count": 100,
+          "file": "test.jsonl",
+          "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+        },
+        "train": {
+          "count": 200,
+          "file": "train.jsonl",
+          "sha256": "3867b316d469df4b4c2d80136324c8cda4e001c617c584c30703283ad75db346"
+        }
+      }
+    },
+    "val_indist_v1": {
+      "directory": "data/generated/val_indist_v1",
+      "manifest_sha256": "2c75e461b717bd16f0c8b0f3d5e8c528d7469775444d2cb9429a6e9a44900054",
+      "purpose": "Fixed in-distribution validation for selection: opposite-pattern directions, no prompt or semantic-group overlap with legacy_v1.",
+      "splits": {
+        "validation": {
+          "count": 200,
+          "file": "validation.jsonl",
+          "sha256": "f62945c14803c2d9b8832b736bf5dd0d79226ea2e5fa7727b5aaa32aa54ba8e5"
+        }
+      }
+    }
+  },
+  "schema_version": 1
+}
