@@ -2,7 +2,7 @@
 
 - Branch: `feat/layer-sweep`
 - Task: `layer-sweep`
-- Status: open
+- Status: in review (revision requested 2026-10-15: baselines)
 - Written: 2026-10-15, from [meeting 2026-10-12](../meetings/2026-10-12.md)
 - Depends on: [config-pipeline](2026-10-15-config-pipeline.md) (merged)
 
@@ -101,6 +101,21 @@ loader, and one `data audit` command that replaces the legacy `audit`.
   `grid: {"intervention.layer": "all", "seed": [42, 43, 44]}`, and the
   `selection` block from CONVENTIONS §3.
 
+### Baselines (added in review, required by PROTOCOL "Evaluation and selection")
+
+- For every condition and every pre-lock split (train, validation), save:
+  - untrained-alignment metrics (`initial_<split>`), evaluated before the
+    first optimizer step;
+  - no-intervention IIA: the unmodified model's prediction scored against
+    the counterfactual target;
+  - per-pairing groups (`ABB->ABB`, `ABB->BAB`, `BAB->ABB`, `BAB->BAB`) plus
+    `switch_required` and `unchanged_target`, each with IIA and
+    no-intervention IIA counts.
+- Post-lock records get the same no-intervention and per-pairing fields for
+  the locked splits.
+- `layer_summary.csv` gets `initial_validation` and no-intervention rows; the
+  report shows baselines next to trained values.
+
 ## Out of scope
 
 - Other token positions, components, ranks, or models.
@@ -129,7 +144,16 @@ loader, and one `data audit` command that replaces the legacy `audit`.
    decimal places.
 8. `report` regenerates all CSVs and figures from saved files without
    importing torch.
-9. Commit outputs as `results(layer-sweep): <experiment-id> — layer 8, val IIA 0.83`.
+9. Baselines match branch `m3-complete-20261015` for every layer and seed,
+   for example layer 8 / seed 42: train no-intervention 94/200
+   (`unchanged_target` 94, `switch_required` 0); trained train
+   `switch_required` 79/100; initial validation 0/200; validation
+   no-intervention 0/200; trained validation 166/200 (`ABB->BAB` 79,
+   `BAB->ABB` 87).
+10. Adding baseline evaluations does not change training: all 36
+    `alignment.pt` and `initial_alignment.pt` SHA-256 values equal those of
+    run `20261015-gpt2-small` (commit `fab5595`).
+11. Commit outputs as `results(layer-sweep): <experiment-id> — layer 8, val IIA 0.83`.
    Put the evidence log in that commit's body; do not edit `docs/STATUS.md`
    (Claude Code updates it after review).
 
