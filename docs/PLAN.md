@@ -30,7 +30,7 @@
 - Evidence to bring: per-layer validation IIA curve for Medium next to Small.
 - Depends on: the loader accepting GPT-2 family names; GPT-2 Medium weights in
   the local cache (currently absent; downloading needs user approval).
-- Brief: [gpt2-family-loader](briefs/2026-10-15-gpt2-family-loader.md) (draft).
+- Brief: [gpt2-family-loader](briefs/2026-10-15-gpt2-family-loader.md).
 
 ### data-scale: larger training sets
 
@@ -39,7 +39,7 @@
 - Evidence to bring: IIA as a function of training size, three seeds.
 - Depends on: a generator with configurable pairs per combination and
   deduplication against existing splits.
-- Brief: [training-size-datasets](briefs/2026-10-15-training-size-datasets.md) (draft).
+- Brief: [training-size-datasets](briefs/2026-10-15-training-size-datasets.md).
 
 ## Other work
 
