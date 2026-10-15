@@ -17,7 +17,7 @@
       "type": "object", "additionalProperties": false,
       "required": ["name", "revision", "local_files_only", "dtype", "attn_implementation"],
       "properties": {
-        "name": {"const": "gpt2"},
+        "name": {"type": "string", "pattern": "^(?:openai-community/)?gpt2(?:-medium|-large|-xl)?$"},
         "revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
         "local_files_only": {"const": true},
         "dtype": {"const": "float32"},
@@ -28,7 +28,7 @@
       "type": "object", "additionalProperties": false,
       "required": ["name", "revision", "local_files_only"],
       "properties": {
-        "name": {"const": "gpt2"},
+        "name": {"type": "string", "pattern": "^(?:openai-community/)?gpt2(?:-medium|-large|-xl)?$"},
         "revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
         "local_files_only": {"const": true}
       }

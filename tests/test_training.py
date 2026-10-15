@@ -10,7 +10,11 @@ torch = pytest.importorskip("torch", reason="Training checks require torch")
 pytest.importorskip("pyvene", reason="Intervention checks require pyvene")
 
 from ioi_das import train
+from ioi_das import intervention
 from ioi_das.intervention import load_model
+
+
+PINNED_REVISION = "a" * 40
 
 
 class TrainableAlignment(torch.nn.Module):
@@ -64,12 +68,48 @@ def test_unknown_schedule_fails_before_training(tmp_path):
 
 
 @pytest.mark.parametrize("name, revision, options, diagnostic", [
-    ("gpt2-medium", "pinned", {}, "requires name 'gpt2'"),
+    ("bert-base-uncased", PINNED_REVISION, {}, "GPT-2"),
     ("gpt2", "", {}, "pinned revision"),
-    ("gpt2", "pinned", {"local_files_only": False}, "existing cache"),
-    ("gpt2", "pinned", {"dtype": "float16"}, "Unsupported model dtype"),
-    ("gpt2", "pinned", {"attn_implementation": "sdpa"}, "Unsupported model dtype"),
+    ("gpt2", "pinned", {}, "pinned revision"),
+    ("gpt2", PINNED_REVISION, {"local_files_only": False}, "existing cache"),
+    ("gpt2", PINNED_REVISION, {"dtype": "float16"}, "Unsupported model dtype"),
+    ("gpt2", PINNED_REVISION, {"attn_implementation": "sdpa"}, "Unsupported model dtype"),
 ])
 def test_model_loader_rejects_unsupported_settings(name, revision, options, diagnostic):
     with pytest.raises(ValueError, match=diagnostic):
         load_model(name, revision, "cpu", **options)
+
+
+@pytest.mark.parametrize("family", ["gpt2", "gpt2-medium", "gpt2-large", "gpt2-xl"])
+@pytest.mark.parametrize("prefix", ["", "openai-community/"])
+def test_model_loader_accepts_pinned_family_without_downloading(monkeypatch, family, prefix):
+    import transformers
+
+    name = prefix + family
+    model = torch.nn.Linear(1, 1)
+    model.config = SimpleNamespace(eos_token_id=50256, use_cache=True, pad_token_id=None)
+    for parameter in model.parameters():
+        parameter.grad = torch.ones_like(parameter)
+    calls, cache_calls = [], []
+
+    def cached(*args, **kwargs):
+        cache_calls.append((args, kwargs))
+        return {}
+
+    def pretrained(*args, **kwargs):
+        calls.append((args, kwargs))
+        return model
+
+    monkeypatch.setattr(intervention, "require_cached_model", cached)
+    monkeypatch.setattr(transformers.GPT2LMHeadModel, "from_pretrained", pretrained)
+    loaded = load_model(name, PINNED_REVISION, "cpu")
+    assert loaded is model
+    assert cache_calls == [((name, PINNED_REVISION), {"include_tokenizer": False})]
+    assert calls == [((name,), {"revision": PINNED_REVISION, "local_files_only": True,
+                              "use_safetensors": True, "dtype": torch.float32,
+                              "attn_implementation": "eager"})]
+    assert model.config.use_cache is False
+    assert model.config.pad_token_id == model.config.eos_token_id
+    assert model.training is False
+    assert all(not parameter.requires_grad and parameter.grad is None
+               for parameter in model.parameters())

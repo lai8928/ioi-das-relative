@@ -125,3 +125,45 @@ def test_selection_requires_validation_and_separate_registered_locked_splits():
     ]:
         with pytest.raises(ConfigError, match=message):
             load_config(path, [override])
+
+
+@pytest.mark.parametrize("family", ["gpt2", "gpt2-medium", "gpt2-large", "gpt2-xl"])
+@pytest.mark.parametrize("prefix", ["", "openai-community/"])
+def test_schema_accepts_every_pinned_gpt2_family_name(family, prefix):
+    name = prefix + family
+    config = load_config(REFERENCE, [f"model.name={json.dumps(name)}",
+                                     f"tokenizer.name={json.dumps(name)}"])
+    assert config["model"]["name"] == config["tokenizer"]["name"] == name
+
+
+@pytest.mark.parametrize("model_name, tokenizer_name", [
+    ("gpt2-medium", "openai-community/gpt2-medium"),
+    ("openai-community/gpt2-xl", "gpt2-xl"),
+])
+def test_model_and_tokenizer_aliases_may_name_the_same_family(model_name, tokenizer_name):
+    config = load_config(REFERENCE, [f"model.name={json.dumps(model_name)}",
+                                     f"tokenizer.name={json.dumps(tokenizer_name)}"])
+    assert config["model"]["name"] == model_name
+    assert config["tokenizer"]["name"] == tokenizer_name
+
+
+@pytest.mark.parametrize("override", [
+    'tokenizer.name="gpt2-medium"',
+    'tokenizer.revision="' + "b" * 40 + '"',
+])
+def test_model_and_tokenizer_require_the_same_family_and_revision(override):
+    with pytest.raises(ConfigError, match="same pinned revision"):
+        load_config(REFERENCE, [override])
+
+
+@pytest.mark.parametrize("section", ["model", "tokenizer"])
+@pytest.mark.parametrize("revision", ["main", "a" * 39, "b" * 41, "z" * 40])
+def test_schema_requires_exact_40_hex_revisions(section, revision):
+    with pytest.raises(ConfigError, match="does not match"):
+        load_config(REFERENCE, [f"{section}.revision={json.dumps(revision)}"])
+
+
+@pytest.mark.parametrize("section", ["model", "tokenizer"])
+def test_schema_rejects_other_model_architectures(section):
+    with pytest.raises(ConfigError):
+        load_config(REFERENCE, [f'{section}.name="bert-base-uncased"'])

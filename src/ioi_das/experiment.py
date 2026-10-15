@@ -172,6 +172,9 @@ def run_condition(
             "status": "complete", "run_kind": kind,
             "completed_at_utc": datetime.now(timezone.utc).isoformat(),
             "condition": checkpoint["condition"], "model": model_options,
+            "model_metadata": {"name": model_options["name"], "revision": model_options["revision"],
+                               "parameter_count": sum(p.numel() for p in model.parameters()),
+                               "layer_count": model.config.n_layer, "hidden_size": model.config.n_embd},
             "tokenizer": tokenizer_options, "seed": seed,
             "original_dataset_counts": original_counts,
             "run_dataset_counts": {split: len(records) for split, records in pairs.items()},
@@ -256,6 +259,7 @@ def evaluate_checkpoint(
     from .validation import fingerprint_model, hook_snapshot
 
     output.mkdir(parents=True, exist_ok=True)
+    started = time.perf_counter()
     context = nullcontext(runtime) if runtime is not None else evaluation_runtime(
         model_options=model_options, tokenizer_options=tokenizer_options,
         device_name=device_name, cpu_threads=cpu_threads)
@@ -287,6 +291,10 @@ def evaluate_checkpoint(
                       "condition": checkpoint["condition"], "metrics": metrics,
                       "selection_sha256": selection_sha256, "checkpoint_sha256": checkpoint_sha256,
                       "datasets": dataset_metadata, "model_sha256": model_hash,
+                      "model_metadata": {"name": model_options["name"], "revision": model_options["revision"],
+                                         "parameter_count": sum(p.numel() for p in model.parameters()),
+                                         "layer_count": model.config.n_layer, "hidden_size": model.config.n_embd},
+                      "elapsed_seconds": time.perf_counter() - started,
                       "validation": {"cleanup": "passed", "frozen_weights": "passed"},
                       "completed_at_utc": datetime.now(timezone.utc).isoformat(),
                       "artifacts": {path.name: sha256_file(path) for path in sorted(output.iterdir()) if path.is_file()}}

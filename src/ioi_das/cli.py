@@ -15,6 +15,7 @@ def _parser() -> argparse.ArgumentParser:
     build.add_argument("--config", required=True, type=Path)
     audit = data_commands.add_parser("audit", help="Audit every saved split of a registered dataset.")
     audit.add_argument("--dataset", required=True)
+    audit.add_argument("--config", type=Path, help="Use the tokenizer from an experiment config.")
     doctor = commands.add_parser("doctor", help="Inspect dependencies and optionally verify CUDA.")
     doctor.add_argument("--require-gpu", action="store_true")
     doctor.add_argument("--device", default="cuda:0")
@@ -27,6 +28,8 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("--override", action="append", default=[], metavar="KEY.PATH=JSON")
     report = commands.add_parser("report", help="Rebuild reports from saved evidence without loading a model.")
     report.add_argument("--experiment-dir", required=True, type=Path)
+    status = commands.add_parser("status", help="Read run.json counts, elapsed time and estimated finish.")
+    status.add_argument("--experiment-dir", required=True, type=Path)
     return parser
 
 
@@ -39,6 +42,9 @@ def main(argv: list[str] | None = None) -> int:
             from .report import generate_report
             report = generate_report(args.experiment_dir)
             print(json.dumps(report, indent=2))
+        elif args.command == "status":
+            from .status import format_status, read_status
+            print(format_status(read_status(args.experiment_dir)))
         elif args.command == "doctor":
             from .audit import write_json
             from .environment import inspect_environment
@@ -61,7 +67,8 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(result, indent=2))
         else:
             from .audit import run_audit
-            summary = run_audit(args.dataset, command=command)
+            options = {"tokenizer_config": args.config} if args.config else {}
+            summary = run_audit(args.dataset, command=command, **options)
             print(f"Audit {summary['status']}: {summary['counts']}; "
                   f"{len(summary['unsupported_answer_checks'])} unsupported answer checks.")
             print(f"Evidence: {Path(summary['output_dir']) / 'summary.md'}")

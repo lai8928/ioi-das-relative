@@ -71,7 +71,9 @@ def runtime(tmp_path, monkeypatch):
     state = {"commit": "a" * 40, "clean_tree": True, "protected_tree_clean": True}
     calls = []
     monkeypatch.setattr(pipeline, "_git_state", lambda root: dict(state))
-    monkeypatch.setattr(pipeline, "_layer_count", lambda options: 12)
+    monkeypatch.setattr(pipeline, "_model_metadata", lambda *options: {
+        "name": "gpt2", "revision": "a" * 40, "parameter_count": 124439808,
+        "layer_count": 12, "hidden_size": 768})
     monkeypatch.setattr(pipeline, "_implementation_hashes", lambda: {"pipeline.py": "b" * 64})
     monkeypatch.setattr(pipeline, "_dataset_inputs", lambda root, options:
                         ({"train": [], "test": []}, {}, {},
@@ -113,6 +115,9 @@ def test_dirty_smoke_records_provenance_and_allocates_unique_paths(runtime):
     assert first["command"] == ["ioi-das", "run", "--smoke"]
     assert first["config_sha256"] == runtime["config"].sha256
     assert first["dataset_hashes"]["legacy_v1/train"] == "c" * 64
+    assert first["model"] == {
+        "name": "gpt2", "revision": "a" * 40, "parameter_count": 124439808,
+        "layer_count": 12, "hidden_size": 768}
     assert first["environment"]["executable"]
     assert first["started_at_utc"] and first["ended_at_utc"]
     assert json.loads((output / "resolved_config.json").read_text()) == runtime["config"].to_dict()

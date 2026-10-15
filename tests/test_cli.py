@@ -68,3 +68,27 @@ def test_report_help_does_not_import_torch():
     result = subprocess.run([sys.executable, "-B", "-c", code], cwd=ROOT,
                             text=True, capture_output=True)
     assert result.returncode == 0, result.stderr
+
+
+def test_data_audit_can_select_an_experiment_tokenizer(monkeypatch):
+    from ioi_das import audit
+
+    seen = []
+    monkeypatch.setattr(audit, "run_audit", lambda dataset, **kwargs:
+                        seen.append((dataset, kwargs)) or {"status": "passed", "counts": {},
+                            "unsupported_answer_checks": [], "output_dir": "/saved"})
+    assert cli.main(["data", "audit", "--dataset", "legacy_v1", "--config", "medium.json"]) == 0
+    assert seen[0][1]["tokenizer_config"] == Path("medium.json")
+
+
+def test_status_reads_run_metadata_without_importing_torch(tmp_path):
+    import json
+
+    (tmp_path / "run.json").write_text(json.dumps({"status": "complete", "conditions": [],
+        "started_at_utc": "2026-10-15T00:00:00+00:00", "ended_at_utc": "2026-10-15T00:01:00+00:00"}))
+    code = (f"import sys; sys.path.insert(0, {str(ROOT / 'src')!r}); from ioi_das.cli import main; "
+            f"assert main(['status', '--experiment-dir', {str(tmp_path)!r}]) == 0; "
+            "assert 'torch' not in sys.modules")
+    process = subprocess.run([sys.executable, "-B", "-c", code], text=True, capture_output=True)
+    assert process.returncode == 0, process.stderr
+    assert "Conditions" in process.stdout

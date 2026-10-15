@@ -42,7 +42,7 @@ class _ScopedFixture:
 @pytest.fixture
 def checkpoint_runtime(tmp_path, monkeypatch):
     model = torch.nn.Linear(1, 1, bias=False).requires_grad_(False)
-    model.config = SimpleNamespace(_attn_implementation="eager")
+    model.config = SimpleNamespace(_attn_implementation="eager", n_layer=12, n_embd=1)
     sentinel = model.register_forward_hook(lambda *args: None)
     original_hooks = validation.hook_snapshot(model)
     model_hash = validation.fingerprint_model(model)
@@ -252,6 +252,9 @@ def test_initial_train_and_validation_finish_before_training(checkpoint_runtime,
         evaluation_batch_size=1, dataset_metadata={}, provenance={"commit": "fixture"},
         config_sha256="fixture", evaluation_splits=("train", "validation"))
     assert result["status"] == "complete"
+    assert result["model_metadata"] == {
+        "name": config["model"]["name"], "revision": config["model"]["revision"],
+        "parameter_count": 1, "layer_count": 12, "hidden_size": 1}
     assert set(result["metrics"]) == {"initial_train", "initial_validation", "train", "validation"}
     assert events == [("evaluate", "train"), ("evaluate", "validation"),
                       ("train", "first_optimizer_step"),
