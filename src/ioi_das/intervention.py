@@ -1,4 +1,4 @@
-"""Frozen GPT-2 and a scoped pyvene low-rank intervention for Phase 2."""
+"""Frozen GPT-2 and a scoped pyvene low-rank intervention."""
 
 from dataclasses import dataclass, replace
 from typing import Any, Callable, Sequence
@@ -37,7 +37,7 @@ def prepare_batch(pairs: Sequence[PairRecord], tokenizer: Any, reference: Any,
         raise ValueError("Cannot prepare an empty intervention batch.")
     if any(pair.target_variable != "position" for pair in pairs):
         identifiers = [p.sample_id for p in pairs if p.target_variable != "position"]
-        raise ValueError(f"{identifiers}: Phase 2 requires target_variable='position'.")
+        raise ValueError(f"{identifiers}: target_variable must be 'position'.")
     encoded = encode_pair_batch(pairs, tokenizer, reference)
     positions = resolve_pair_positions(encoded, location)
     readout = resolve_pair_positions(encoded, "N")["base"]
@@ -58,16 +58,21 @@ def prepare_batch(pairs: Sequence[PairRecord], tokenizer: Any, reference: Any,
                          tensor(factual), tensor(counterfactual))
 
 
-def load_model(model_config: dict[str, Any], device: str | torch.device) -> Any:
+def load_model(name: str, revision: str, device: str | torch.device, *,
+               local_files_only: bool = True, dtype: str = "float32",
+               attn_implementation: str = "eager") -> Any:
     """Load pinned cached safetensors in float32 with deterministic eager attention."""
     from transformers import GPT2LMHeadModel
 
-    if model_config.get("name") != "gpt2" or not model_config.get("revision"):
-        raise ValueError("Phase 2 requires model name 'gpt2' and a pinned revision.")
-    if not model_config.get("local_files_only", True):
-        raise ValueError("Phase 2 uses the existing model cache; set local_files_only=true.")
+    if name != "gpt2" or not revision:
+        raise ValueError(f"Model {name!r} requires name 'gpt2' and a pinned revision.")
+    if not local_files_only:
+        raise ValueError("Model weights must use the existing cache; set local_files_only=true.")
+    if dtype != "float32" or attn_implementation != "eager":
+        raise ValueError(f"Unsupported model dtype={dtype!r}, attn_implementation={attn_implementation!r}; "
+                         "use float32 with eager attention for deterministic alignment training.")
     model = GPT2LMHeadModel.from_pretrained(
-        model_config["name"], revision=model_config["revision"],
+        name, revision=revision,
         local_files_only=True, use_safetensors=True,
         dtype=torch.float32, attn_implementation="eager",
     )

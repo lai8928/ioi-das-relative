@@ -1,57 +1,16 @@
-"""Run only the authorized Phase 2 condition using the unchanged saved dataset."""
+"""Train and evaluate an independent DAS condition with explicit runtime inputs."""
 
 from collections import defaultdict
 from datetime import datetime, timezone
+import gc
+from typing import Any
 import json
 from pathlib import Path
 import time
 
-from .audit import ensure_saved_pairs, runtime_environment, verify_upstream, write_json
+from .audit import runtime_environment, write_json
 from .data import sha256_file
 from .tokenization import load_tokenizers
-
-
-def load_phase2_config(path: Path, output_override: str | None = None) -> dict:
-    """Resolve explicit paths and reject conditions outside this checkpoint."""
-    path = path.expanduser().resolve()
-    config = json.loads(path.read_text(encoding="utf-8"))
-    root = (path.parent / config["project_root"]).resolve()
-    for key in ("upstream_dir", "generated_dir", "output_dir"):
-        value = output_override if key == "output_dir" and output_override else config[key]
-        config[key] = (root / value).resolve()
-    config["project_root"] = root
-    config["config_path"] = path
-    required = {"target_variable": "position", "intervention_location": "N", "readout_location": "N",
-                "layer": 8, "component": "block_output", "rank": 1}
-    if any(config.get(key) != value for key, value in required.items()):
-        raise ValueError("Phase 2 permits only position / GPT-2 / layer 8 / block_output / N / rank 1.")
-    for key in ("seed", "dataset_seed", "cpu_threads", "evaluation_batch_size"):
-        if isinstance(config.get(key), bool) or not isinstance(config.get(key), int):
-            raise ValueError(f"{key} must be an integer.")
-    if config["cpu_threads"] <= 0 or config["evaluation_batch_size"] <= 0:
-        raise ValueError("Thread and evaluation batch counts must be positive.")
-    model = config["model"]
-    if model.get("name") != "gpt2" or model.get("dtype") != "float32" or model.get("attn_implementation") != "eager":
-        raise ValueError("Phase 2 requires GPT-2 float32 with eager attention.")
-    if not model.get("revision") or not model.get("local_files_only"):
-        raise ValueError("Specify a pinned cached model revision with local_files_only=true.")
-    if config["tokenizer"]["name"] != model["name"] or config["tokenizer"]["revision"] != model["revision"]:
-        raise ValueError("Model and tokenizer identities/revisions must match for Phase 2.")
-    training = config["training"]
-    if training != {
-        "epochs": 10, "batch_size": 20, "optimizer": "Adam", "learning_rate": 0.01,
-        "betas": [0.9, 0.999], "eps": 1e-8, "weight_decay": 0.0,
-        "scheduler": {"name": "LinearLR", "start_factor": 1 / 3, "end_factor": 0.1,
-                      "total_iters": 10, "step_interval": "batch"},
-    }:
-        raise ValueError("Phase 2 preserves the pinned tutorial's 10 epochs, batch 20, "
-                         "Adam and per-batch LinearLR schedule; restore configs/phase2.json settings.")
-    return config
-
-
-def _json_config(config: dict, run_kind: str) -> dict:
-    return {**{key: str(value) if isinstance(value, Path) else value for key, value in config.items()},
-            "run_kind": run_kind}
 
 
 def _write_predictions(path: Path, rows: list) -> None:
@@ -71,8 +30,14 @@ def _balanced_subset(pairs, count_per_pairing: int):
     return selected
 
 
-def run_condition(config: dict, smoke: bool = False) -> dict:
-    """Train and evaluate one condition, with separately labeled smoke artifacts."""
+def run_condition(
+    output: Path, pairs: dict, *, model_options: dict, tokenizer_options: dict,
+    training_options: dict, layer: int, rank: int, component: str,
+    target_variable: str, location: str, seed: int, device_name: str,
+    cpu_threads: int, evaluation_batch_size: int, dataset_directory: Path,
+    manifest: dict, provenance: dict, config_sha256: str, smoke: bool = False,
+) -> dict[str, Any]:
+    """Save one freshly initialized alignment and all exact evaluation evidence."""
     import torch
     from transformers import set_seed
     from transformers.utils.hub import cached_file
@@ -84,39 +49,29 @@ def run_condition(config: dict, smoke: bool = False) -> dict:
     from .validation import hook_snapshot, run_preflight_validation, validate_after_training
 
     kind = "smoke" if smoke else "full"
-    output = config["output_dir"] / kind
     if output.exists() and any(output.iterdir()):
-        raise ValueError(f"Run directory is not empty: {output}; preserve it and select a new --output-dir.")
-    # Phase 2 must never generate a replacement for the completed saved data.
-    for name in ("manifest.json", "train.jsonl", "test.jsonl"):
-        if not (config["generated_dir"] / name).is_file():
-            raise FileNotFoundError(f"Missing saved dataset file {name}; restore the completed Phase 1 dataset.")
-    provenance = verify_upstream(config["upstream_dir"])
-    data_config = {**config, "seed": config["dataset_seed"]}
-    pairs, manifest, reused = ensure_saved_pairs(data_config, provenance)
-    if not reused:
-        raise RuntimeError("Phase 2 requires reusing saved datasets.")
+        raise ValueError(f"Condition directory is not empty: {output}; preserve it and resume only missing conditions.")
     original_counts = {split: len(records) for split, records in pairs.items()}
     if smoke:
         pairs = {"train": _balanced_subset(pairs["train"], 5),
                  "test": _balanced_subset(pairs["test"], 2)}
-    torch.set_num_threads(config["cpu_threads"])
+    torch.set_num_threads(cpu_threads)
     torch.set_float32_matmul_precision("highest")
-    device = torch.device(config["device"])
+    device = torch.device(device_name)
     if device.type != "cuda" or not torch.cuda.is_available():
-        raise RuntimeError("The configured Phase 2 run requires a server CUDA device. "
+        raise RuntimeError("The configured run requires a server CUDA device. "
                            "Run outside a GPU-restricted sandbox; no CPU fallback is performed.")
     # Initialize the allocator before resetting its statistics (torch 2.5.1).
     torch.cuda.set_device(device)
     torch.cuda.reset_peak_memory_stats(device)
     output.mkdir(parents=True, exist_ok=True)
-    write_json(output / "config.json", _json_config(config, kind))
+
     model, intervenable = None, None
     validation = {}
     started = time.perf_counter()
     try:
-        tokenizer, reference = load_tokenizers(config["tokenizer"])
-        environment = runtime_environment(config, tokenizer)
+        tokenizer, reference = load_tokenizers(tokenizer_options)
+        environment = runtime_environment({"tokenizer": tokenizer_options}, tokenizer)
         environment.update({"model_weights_loaded": False, "gpu_required": True,
                             "device": str(device), "device_name": torch.cuda.get_device_name(device),
                             "torch_cuda_runtime": torch.version.cuda,
@@ -124,14 +79,16 @@ def run_condition(config: dict, smoke: bool = False) -> dict:
                             "cpu_threads": torch.get_num_threads(), "dependency_changes": []})
         model_assets = {}
         for filename in ("config.json", "model.safetensors"):
-            path = Path(cached_file(config["model"]["name"], filename,
-                                    revision=config["model"]["revision"], local_files_only=True))
+            path = Path(cached_file(model_options["name"], filename,
+                                    revision=model_options["revision"], local_files_only=True))
             model_assets[filename] = {"path": str(path), "bytes": path.stat().st_size,
                                       "sha256": sha256_file(path)}
         environment["model_assets"] = model_assets
         write_json(output / "environment.json", environment)
         print(f"Loading pinned GPT-2 on {device} ({environment['device_name']}); run_kind={kind}.", flush=True)
-        model = load_model(config["model"], device)
+        model = load_model(model_options["name"], model_options["revision"], device,
+                           local_files_only=model_options["local_files_only"],
+                           dtype=model_options["dtype"], attn_implementation=model_options["attn_implementation"])
         environment.update({"model_weights_loaded": True, "parameter_count": sum(p.numel() for p in model.parameters()),
                             "model_dtype": str(next(model.parameters()).dtype),
                             "model_device": str(next(model.parameters()).device),
@@ -139,45 +96,51 @@ def run_condition(config: dict, smoke: bool = False) -> dict:
         write_json(output / "environment.json", environment)
         original_hooks = hook_snapshot(model)
         # Upstream seeds alignment after the already-created model, before DAS.
-        set_seed(config["seed"])
-        intervenable = build_intervention(model, config["layer"], config["rank"])
+        set_seed(seed)
+        intervenable = build_intervention(model, layer, rank)
         initial_alignment = alignment_state(intervenable)
         torch.save({"interventions": initial_alignment}, output / "initial_alignment.pt")
         validation["preflight"] = run_preflight_validation(
-            model, intervenable, pairs["train"], tokenizer, reference, device, "N")
+            model, intervenable, pairs["train"], tokenizer, reference, device, location)
         write_json(output / "validation.json", validation)
         print("Preflight passed: identity, frozen weights, alignment gradients, and variable-length batching.", flush=True)
         initial = evaluate_condition(model, intervenable, pairs["train"], tokenizer, reference,
-                                     device, config["evaluation_batch_size"], "N", "train")
+                                     device, evaluation_batch_size, location, "train")
         _write_predictions(output / "initial_train_predictions.jsonl", initial["predictions"])
-        training = train_alignment(model, intervenable, pairs["train"], tokenizer, reference,
-                                   device, config["training"], config["seed"], "N",
-                                   output / "training_steps.jsonl", smoke)
+        scheduler = training_options["scheduler"]
+        training = train_alignment(
+            model, intervenable, pairs["train"], tokenizer, reference, device,
+            seed=seed, location=location, output_path=output / "training_steps.jsonl",
+            epochs=training_options["epochs"], batch_size=training_options["batch_size"],
+            learning_rate=training_options["learning_rate"], betas=tuple(training_options["betas"]),
+            eps=training_options["eps"], weight_decay=training_options["weight_decay"],
+            schedule=training_options["schedule"], schedule_start_factor=scheduler["start_factor"],
+            schedule_end_factor=scheduler["end_factor"], schedule_total_iters=scheduler["total_iters"],
+            smoke=smoke)
         write_json(output / "training.json", training)
-        if not smoke and (training["optimizer_steps"] != 100 or training["presentations"] != 2000):
-            raise RuntimeError("The full Phase 2 run did not complete 100 updates / 2000 training presentations.")
         validation["frozen_weights_and_alignment"] = validate_after_training(
             model, intervenable, validation["preflight"]["model_sha256"], initial_alignment)
         validation["trained_identity_and_batching"] = run_preflight_validation(
-            model, intervenable, pairs["train"], tokenizer, reference, device, "N")
+            model, intervenable, pairs["train"], tokenizer, reference, device, location)
         write_json(output / "validation.json", validation)
         final = {}
         for split in ("train", "test"):
             evaluated = evaluate_condition(model, intervenable, pairs[split], tokenizer, reference,
-                                            device, config["evaluation_batch_size"], "N", split)
+                                            device, evaluation_batch_size, location, split)
             final[split] = evaluated["metrics"]
             _write_predictions(output / f"{split}_predictions.jsonl", evaluated["predictions"])
         state = alignment_state(intervenable)
         checkpoint = {
             "schema_version": 1,
-            "condition": {key: config[key] for key in ("layer", "component", "rank", "target_variable", "intervention_location")},
-            "model": config["model"], "interventions": state,
+            "condition": {"layer": layer, "component": component, "rank": rank,
+                          "target_variable": target_variable, "intervention_location": location},
+            "model": model_options, "interventions": state,
             "effective_projection": {key: intervention.rotate_layer.weight.detach().cpu().clone()
                                      for key, intervention in intervenable.interventions.items()},
         }
         torch.save(checkpoint, output / "alignment.pt")
         # Exercise the saved raw orthogonal state, not just its derived direction.
-        probe = prepare_batch(pairs["train"][:2], tokenizer, reference, device, "N")
+        probe = prepare_batch(pairs["train"][:2], tokenizer, reference, device, location)
         with torch.no_grad():
             before_reload = intervention_forward(intervenable, probe)
             saved = torch.load(output / "alignment.pt", map_location=device, weights_only=True)
@@ -202,12 +165,12 @@ def run_condition(config: dict, smoke: bool = False) -> dict:
         result = {
             "status": "complete", "run_kind": kind,
             "completed_at_utc": datetime.now(timezone.utc).isoformat(),
-            "condition": checkpoint["condition"], "model": config["model"],
-            "tokenizer": config["tokenizer"], "seed": config["seed"],
+            "condition": checkpoint["condition"], "model": model_options,
+            "tokenizer": tokenizer_options, "seed": seed,
             "original_dataset_counts": original_counts,
             "run_dataset_counts": {split: len(records) for split, records in pairs.items()},
-            "dataset_reused": True, "dataset_manifest_sha256": sha256_file(config["generated_dir"] / "manifest.json"),
-            "dataset_files": manifest["files"], "config_source_sha256": sha256_file(config["config_path"]),
+            "dataset_reused": True, "dataset_manifest_sha256": sha256_file(dataset_directory / "manifest.json"),
+            "dataset_files": manifest["files"], "resolved_config_sha256": config_sha256,
             "implementation_sha256": {path.name: sha256_file(path) for path in sorted(Path(__file__).parent.glob("*.py"))},
             "upstream_commit": provenance["commit"], "metrics": metrics,
             "optimizer_steps": training["optimizer_steps"], "validation_status": "passed",
@@ -215,20 +178,8 @@ def run_condition(config: dict, smoke: bool = False) -> dict:
             "gpu_peak_allocated_bytes": torch.cuda.max_memory_allocated(device),
             "artifacts": {path.name: sha256_file(path) for path in sorted(output.iterdir()) if path.is_file()},
         }
-        (output / "summary.md").write_text(
-            f"# Phase 2 {kind} run\n\n"
-            "GPT-2, layer 8, block_output, N, rank 1, target_variable=position.\n\n"
-            f"Optimizer updates: {training['optimizer_steps']}; training pairs: {len(pairs['train'])}.\n\n"
-            f"Train IIA: {final['train']['iia_correct']}/{final['train']['iia_total']} = {final['train']['iia']}.\n\n"
-            f"Test IIA: {final['test']['iia_correct']}/{final['test']['iia_total']} = {final['test']['iia']}.\n\n"
-            f"Test factual accuracy: {final['test']['factual_correct']}/{final['test']['factual_total']} = {final['test']['factual_accuracy']}.\n\n"
-            "Identity, gradients, bit-identical frozen model state, variable-length batching, saved alignment reload, "
-            "and hook cleanup passed. Full-precision values and counts are in metrics.json; this run does not use test data for tuning.\n",
-            encoding="utf-8")
-        result["artifacts"] = {path.name: sha256_file(path) for path in sorted(output.iterdir())
-                               if path.is_file() and path.name != "result.json"}
         write_json(output / "result.json", result)
-        print(f"Phase 2 {kind} complete: test IIA={final['test']['iia_correct']}/{final['test']['iia_total']}; evidence={output}.", flush=True)
+        print(f"Condition {kind} complete: test IIA={final['test']['iia_correct']}/{final['test']['iia_total']}; evidence={output}.", flush=True)
         return result
     except Exception as error:
         write_json(output / "failure.json", {"status": "failed", "run_kind": kind,
@@ -237,3 +188,6 @@ def run_condition(config: dict, smoke: bool = False) -> dict:
     finally:
         if intervenable is not None:
             cleanup_intervention(intervenable)
+        del intervenable, model
+        gc.collect()
+        torch.cuda.empty_cache()

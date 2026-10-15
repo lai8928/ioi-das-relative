@@ -17,6 +17,9 @@ from .tokenization import check_answer, encode_pair_batch, encoded_to_dict, load
 
 
 UPSTREAM_COMMIT = "9e333904dcf9e597ca76170010d17f4d4580de8d"
+# This immutable manifest binds the generator used to create the registered data.
+# Current diagnostic wording may change without changing its historical provenance.
+LEGACY_MANIFEST_SHA256 = "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c"
 UPSTREAM_PATHS = {
     "LICENSE", "pyproject.toml", "tutorials/advanced_tutorials/IOI_with_DAS.ipynb",
     "tutorials/advanced_tutorials/tutorial_ioi_utils.py",
@@ -76,6 +79,8 @@ def ensure_saved_pairs(config: dict, provenance: dict) -> tuple[dict, dict, bool
             raise ValueError(f"Incomplete saved dataset at {directory}; preserve it and select "
                              "a separate generated_dir, or restore its missing files.")
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if data.sha256_file(manifest_path) == LEGACY_MANIFEST_SHA256:
+            spec["generator_sha256"] = manifest["generation"]["generator_sha256"]
         if manifest["generation"] != spec:
             raise ValueError(f"Saved dataset generation metadata differs at {manifest_path}; "
                              "restore the original config/generator or select a separate generated_dir.")
@@ -259,7 +264,7 @@ def select_previews(rows: list) -> list:
 
 
 def write_summary(path: Path, summary: dict, previews: list) -> None:
-    lines = ["# Position audit", "", "Full real-tokenizer Phase 1 audit passed.", "",
+    lines = ["# Position audit", "", "Full real-tokenizer position audit passed.", "",
              f"- Original-rule samples: {summary['counts']['train']} training / {summary['counts']['test']} test pairs.",
              f"- Saved dataset reused: {summary['dataset_reused']}.",
              f"- Fast/reference GPT-2 comparisons: {summary['fast_reference_comparisons']}.",

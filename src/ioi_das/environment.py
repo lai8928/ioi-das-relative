@@ -24,8 +24,8 @@ def inspect_environment(require_gpu: bool = False, device: str = "cuda:0") -> di
         "prefix": sys.prefix,
         "python": platform.python_version(),
         "packages": packages,
-        "missing_phase1_test_dependencies": missing,
-        "phase1_dependency_status": "ready" if not missing else "missing_dependencies",
+        "missing_test_dependencies": missing,
+        "dependency_status": "ready" if not missing else "missing_dependencies",
         "environment_variables": {key: os.environ.get(key) for key in
                                   ("CONDA_PREFIX", "CONDA_DEFAULT_ENV", "CUDA_VISIBLE_DEVICES")},
         "gpu_required": require_gpu,

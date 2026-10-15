@@ -1,4 +1,4 @@
-"""Phase 2 contracts with a tiny random GPT-2 and the real pinned tokenizer.
+"""Intervention contracts with a tiny random GPT-2 and the pinned tokenizer.
 
 The random model is only a correctness fixture. These checks are not the
 configured pretrained-GPT-2 DAS experiment and provide no research metrics.
@@ -10,8 +10,8 @@ from pathlib import Path
 
 import pytest
 
-torch = pytest.importorskip("torch", reason="Phase 2 checks require the DAS runtime")
-pytest.importorskip("pyvene", reason="Phase 2 checks require the external pyvene dependency")
+torch = pytest.importorskip("torch", reason="Intervention checks require the DAS runtime")
+pytest.importorskip("pyvene", reason="Intervention checks require the external pyvene dependency")
 from transformers import GPT2Config, GPT2LMHeadModel
 
 from ioi_das.data import PairRecord, build_prompt, load_pairs
@@ -31,7 +31,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture(scope="module")
-def phase2_inputs():
+def intervention_inputs():
     config = json.loads((PROJECT_ROOT / "configs/audit.json").read_text())
     tokenizer, reference = load_tokenizers(config["tokenizer"])
     pairs = load_pairs(PROJECT_ROOT / "data/generated/train.jsonl")
@@ -39,8 +39,8 @@ def phase2_inputs():
 
 
 @pytest.fixture
-def tiny_intervention(phase2_inputs):
-    tokenizer, _, _ = phase2_inputs
+def tiny_intervention(intervention_inputs):
+    tokenizer, _, _ = intervention_inputs
     with torch.random.fork_rng(devices=[]):
         torch.manual_seed(17)
         config = GPT2Config(
@@ -57,8 +57,8 @@ def tiny_intervention(phase2_inputs):
 
 
 def test_real_tokenizer_frozen_gradients_identity_and_mixed_batching(
-        phase2_inputs, tiny_intervention):
-    tokenizer, reference, pairs = phase2_inputs
+        intervention_inputs, tiny_intervention):
+    tokenizer, reference, pairs = intervention_inputs
     model, wrapper = tiny_intervention
     initial_hash = fingerprint_model(model)
     initial_alignment = alignment_state(wrapper)
@@ -109,8 +109,8 @@ def test_real_tokenizer_frozen_gradients_identity_and_mixed_batching(
 
 
 def test_hook_cleanup_preserves_unrelated_hooks_even_after_failure(
-        phase2_inputs, tiny_intervention):
-    tokenizer, reference, _ = phase2_inputs
+        intervention_inputs, tiny_intervention):
+    tokenizer, reference, _ = intervention_inputs
     model, wrapper = tiny_intervention
     observed = []
     sentinel = model.transformer.h[8].register_forward_hook(
@@ -133,8 +133,8 @@ def test_hook_cleanup_preserves_unrelated_hooks_even_after_failure(
     assert hook_snapshot(model) == {}
 
 
-def test_prepare_batch_preserves_and_reports_multi_token_answer(phase2_inputs):
-    tokenizer, reference, _ = phase2_inputs
+def test_prepare_batch_preserves_and_reports_multi_token_answer(intervention_inputs):
+    tokenizer, reference, _ = intervention_inputs
     prompt = build_prompt(("Mary Jane", "Bob", "Bob"), SHORT_TEMPLATE,
                           0, "ABB", "ring", "store")
     pair = PairRecord("synthetic-multi-token", "synthetic", prompt, prompt,
@@ -146,10 +146,10 @@ def test_prepare_batch_preserves_and_reports_multi_token_answer(phase2_inputs):
 
 
 def test_evaluation_full_vocabulary_argmax_counts_and_sample_weighted_losses(
-        phase2_inputs, monkeypatch):
+        intervention_inputs, monkeypatch):
     from ioi_das import evaluate
 
-    tokenizer, reference, all_pairs = phase2_inputs
+    tokenizer, reference, all_pairs = intervention_inputs
     pairs = all_pairs[:3]
     sample_index = {pair.sample_id: index for index, pair in enumerate(pairs)}
     target_logit = [1.0, 3.0, 7.0]

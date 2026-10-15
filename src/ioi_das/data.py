@@ -263,7 +263,7 @@ def _validate_pair(pair: PairRecord) -> None:
     if pair.split not in ("train", "test"):
         raise ValueError("split must be train or test.")
     if pair.target_variable != "position":
-        raise ValueError("The Phase 1 dataset supports only target_variable='position'.")
+        raise ValueError("The dataset supports only target_variable='position'.")
     for side in ("base", "source"):
         prompt = getattr(pair, side)
         if any(isinstance(value, bool) or not isinstance(value, int) for value in (prompt.io_pos, prompt.s1_pos)):
