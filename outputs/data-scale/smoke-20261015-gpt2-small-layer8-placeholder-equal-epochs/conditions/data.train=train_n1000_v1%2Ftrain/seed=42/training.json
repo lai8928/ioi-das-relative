@@ -1,0 +1,30 @@
+{
+  "epoch_results": [
+    {
+      "accuracy": 0.5,
+      "correct": 10,
+      "epoch": 1,
+      "mean_loss": 2.6099534034729004,
+      "total": 20
+    }
+  ],
+  "epochs": 1,
+  "final_learning_rate": 0.0031,
+  "first_step_loss": 2.6099534034729004,
+  "initial_effective_learning_rate": 0.003333333333333333,
+  "last_step_loss": 2.6099534034729004,
+  "model_training_mode": false,
+  "optimizer": "Adam",
+  "optimizer_steps": 1,
+  "presentations": 20,
+  "run_kind": "smoke",
+  "scheduler": {
+    "end_factor": 0.1,
+    "name": "LinearLR",
+    "start_factor": 0.3333333333333333,
+    "step_interval": "batch",
+    "total_iters": 10
+  },
+  "shuffle": "NumPy RandomState(seed), MT19937; same permutation algorithm as upstream",
+  "training_pair_count": 20
+}

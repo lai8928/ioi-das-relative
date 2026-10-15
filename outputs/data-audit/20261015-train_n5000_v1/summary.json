@@ -1,0 +1,86 @@
+{
+  "answer_status_counts": {
+    "supported_single_token": 30000
+  },
+  "artifacts": {
+    "environment.json": "ca4ad87d0c26ebaaac479ca00ad5aca855ceaa8b70b5a37247342b111cce85aa",
+    "focused_checks.json": "356432984f0661f0e9a7ef2c7d92f47a8500eccb2536c518419ca728dab41476",
+    "pairs.jsonl": "03de549e995804d3228a6408075c87d596aaf061e7d8268a649814e30857f9fc"
+  },
+  "batch_individual_position_comparisons": 40000,
+  "completed_at_utc": "2026-10-15T17:59:26.621709+00:00",
+  "config_sha256": "3092844c2302d8dd73e9bdfac6714cac8fde40d1d48e85890c1dc1f0d8a30ed7",
+  "counts": {
+    "train": 5000
+  },
+  "das_training_started": false,
+  "dataset": "train_n5000_v1",
+  "dataset_manifest_sha256": {
+    "train_n5000_v1": "1b2ed95433494efa3c14ba2f7991699db4e9c65e4c4c1d44ddb10204d5ce7f07"
+  },
+  "dataset_reused": true,
+  "fast_reference_comparisons": {
+    "batched_sides": 500,
+    "continuations": 30000,
+    "inputs": 10000
+  },
+  "focused_checks": "passed",
+  "implementation_sha256": {
+    "__init__.py": "6b2cac83b6926f48e4fe131a7d60f0bce7544fe4be30aaf27fa16f9de2203c41",
+    "audit.py": "7c39d800080c6ba6ac091c9a7c02b8aad0bda4335ee9ff1265ad9fb94ebf3fd8",
+    "checks.py": "8c685dc8e6effeee57deb1512bc39a81e75c58f680df4c8f8a3b631dc47de7f1",
+    "cli.py": "411d9397e5a5426827890013779ca630de79b61cdae081d3503e55bea7a224db",
+    "config.py": "90ad7d6e8b29d497ddf97fa7c3c88d8a9cc89ee50810e4d2bda2d7029bc208f9",
+    "data.py": "2ad8e9efb94ae202814e4ab9fbc58e870fd172fef7efaab55e07c135204361ab",
+    "datasets.py": "bd6049a3093708caa0b629cc0307ebb3e770edc688ada6c827c1667280ffe231",
+    "environment.py": "fca413614bea036c4b58bffec5dcbdaecb3b9525ec37f2c92533a758fd32738f",
+    "evaluate.py": "3d57b417967d28b973d0f36673e37151b89801166dc1c210455f45f842161b88",
+    "experiment.py": "cc62c3569e07ca09b442beefbd29a5ed14ba01ad2bdd2e7b4f413dcb4b5c9474",
+    "intervention.py": "f10f960104e8f0e68cdf128b0ab96d13de858ae95a390762911e0bcf38ac42f1",
+    "models.py": "8abb9a26afd96067fd5360900b3fcadc688aaa727a95dcae0b1c87059acbfb92",
+    "pipeline.py": "1c4a8e6abb8e1ed1cd6f5785ea9646c4f2da970284a0659baa20df7812f0ab1b",
+    "positions.py": "b38c1d90ed96f77d9229d66f68d64a272681363d60657b10dc7e0f2136bc3078",
+    "report.py": "d01b7fb8bd3b2ae9774a8e5c56909a5c31900265371f0f8b3fc070b924992825",
+    "selection.py": "24043c028baad175916b53f993acbf907168797c211359cd3a161306c044f116",
+    "status.py": "8b5aaece017c3ad2ca354408fabc2af5bd5d05625239222ceed29c312328a635",
+    "tokenization.py": "65ed374f80c9f76f7f33b44281dce188655629d0be760fadffc2921c2bc8bb4d",
+    "train.py": "7ae06a7871fa9a9a427aacaf90065c9bda45419253c3fc531629cfc344ce543d",
+    "validation.py": "a544b5145d600551c454ebdd045a7e84c664cf8364f6714125c1e8ca2eedf512"
+  },
+  "model_weights_loaded": false,
+  "output_dir": "/home/ilingl/projects/ioi-das-relative-codex/training-size-datasets/outputs/data-audit/20261015-train_n5000_v1",
+  "pairing_counts": {
+    "train": {
+      "ABB->ABB": 1250,
+      "ABB->BAB": 1250,
+      "BAB->ABB": 1250,
+      "BAB->BAB": 1250
+    }
+  },
+  "policies": {
+    "name_scalar": "last token of full factual occurrence span",
+    "padding": "independent right padding, no truncation or appended answers",
+    "readout": "base N = sum(base attention_mask) - 1"
+  },
+  "status": "passed",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "unequal_length_original_pairs": 0,
+  "unsupported_answer_checks": [],
+  "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+  "valid_length_counts": {
+    "train": {
+      "base": {
+        "15": 2452,
+        "19": 2548
+      },
+      "source": {
+        "15": 2452,
+        "19": 2548
+      }
+    }
+  }
+}
