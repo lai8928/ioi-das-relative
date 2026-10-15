@@ -1,0 +1,106 @@
+{
+  "answer_status_counts": {
+    "supported_single_token": 1800
+  },
+  "artifacts": {
+    "environment.json": "ca4ad87d0c26ebaaac479ca00ad5aca855ceaa8b70b5a37247342b111cce85aa",
+    "focused_checks.json": "356432984f0661f0e9a7ef2c7d92f47a8500eccb2536c518419ca728dab41476",
+    "pairs.jsonl": "625f2308f076239b8a64063c328f555b7e20e15019d07aa3ec93e561151fdbd5"
+  },
+  "batch_individual_position_comparisons": 2400,
+  "completed_at_utc": "2026-10-15T10:40:08.021958+00:00",
+  "config_sha256": "bda7a7f96e0e5a72d95278cee8d580019d4dc0b3c06ffbef0ba0be19dce314d1",
+  "counts": {
+    "test": 100,
+    "train": 200
+  },
+  "das_training_started": false,
+  "dataset": "legacy_v1",
+  "dataset_manifest_sha256": {
+    "legacy_v1": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c"
+  },
+  "dataset_reused": true,
+  "fast_reference_comparisons": {
+    "batched_sides": 30,
+    "continuations": 1800,
+    "inputs": 600
+  },
+  "focused_checks": "passed",
+  "implementation_sha256": {
+    "__init__.py": "6b2cac83b6926f48e4fe131a7d60f0bce7544fe4be30aaf27fa16f9de2203c41",
+    "audit.py": "44fcf723dd9d068f0a38889ce5ee9a6640dc72237e18dfcc656cb2e54679e203",
+    "checks.py": "8c685dc8e6effeee57deb1512bc39a81e75c58f680df4c8f8a3b631dc47de7f1",
+    "cli.py": "18320bd46748430416eb445ddb0186515411ab0c0d4da057bb1d7b07b8630350",
+    "config.py": "1b8dab485cd5fc717e3f38408dee67e67498fafffffd43982d04dea704174af8",
+    "data.py": "33f29b8b5fb6fc3a41f95773e081f0b2215cd6c1a6f6126a39aaa66dd903e644",
+    "datasets.py": "0dac868250619ac41596fee22fbddb7d27715d3964a6e6153072a6160214b4d6",
+    "environment.py": "dbd96cfbbdc60b01a28d5561b6e8f8ca820d56646274b8b12cdba0742b80c14a",
+    "evaluate.py": "b534d8da8c4c0c5dbe36146e89b79678e1c1130d535a8c4030afb577d473450d",
+    "experiment.py": "bbd8a8fa1bcb9c0a8febfa64cef34f12ad690d0ac114a11b95225cea3bc34bf1",
+    "intervention.py": "9d83fab09e9a1926740a33e96047164187cc6af800515390f0c1ab72b52c2c3e",
+    "pipeline.py": "d3c052de7b4242d23c712634ac8df399120e101a77eaecfa84c7d2635e161e76",
+    "positions.py": "b38c1d90ed96f77d9229d66f68d64a272681363d60657b10dc7e0f2136bc3078",
+    "report.py": "059420c5849f56e641ef04040e4376b005e34ed2e499fac17f5916aef5701433",
+    "tokenization.py": "65ed374f80c9f76f7f33b44281dce188655629d0be760fadffc2921c2bc8bb4d",
+    "train.py": "ae70d878f5ec51a50ce66c3979403c1d76e4ee83b56af6d2bb79fc10c42b5b55",
+    "validation.py": "a544b5145d600551c454ebdd045a7e84c664cf8364f6714125c1e8ca2eedf512"
+  },
+  "model_weights_loaded": false,
+  "output_dir": "/home/ilingl/projects/ioi-das-relative-codex/outputs/data-audit/20261015-legacy_v1",
+  "pairing_counts": {
+    "test": {
+      "ABB->BAB": 50,
+      "BAB->ABB": 50
+    },
+    "train": {
+      "ABB->ABB": 50,
+      "ABB->BAB": 50,
+      "BAB->ABB": 50,
+      "BAB->BAB": 50
+    }
+  },
+  "policies": {
+    "name_scalar": "last token of full factual occurrence span",
+    "padding": "independent right padding, no truncation or appended answers",
+    "readout": "base N = sum(base attention_mask) - 1"
+  },
+  "status": "passed",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "unequal_length_original_pairs": 0,
+  "unsupported_answer_checks": [],
+  "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+  "valid_length_counts": {
+    "test": {
+      "base": {
+        "14": 17,
+        "15": 45,
+        "16": 7,
+        "17": 11,
+        "18": 10,
+        "20": 10
+      },
+      "source": {
+        "14": 17,
+        "15": 45,
+        "16": 7,
+        "17": 11,
+        "18": 10,
+        "20": 10
+      }
+    },
+    "train": {
+      "base": {
+        "15": 87,
+        "19": 113
+      },
+      "source": {
+        "15": 87,
+        "19": 113
+      }
+    }
+  }
+}

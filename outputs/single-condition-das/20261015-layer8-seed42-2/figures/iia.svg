@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="224" viewBox="0 0 1100 224" role="img" aria-labelledby="title description">
+<title id="title">Saved IIA by condition (full run)</title>
+<desc id="description">IIA ratios range from zero to one. Missing results have no bars.</desc>
+<rect width="100%" height="100%" fill="white"/>
+<g font-family="sans-serif" font-size="12" fill="#0f172a">
+<text x="20" y="26" font-size="18">Saved IIA by condition — full run</text>
+<rect x="20" y="42" width="12" height="12" fill="#94a3b8"/>
+<text x="38" y="53">Initial train</text>
+<rect x="240" y="42" width="12" height="12" fill="#2563eb"/>
+<text x="258" y="53">Train</text>
+<rect x="460" y="42" width="12" height="12" fill="#d97706"/>
+<text x="478" y="53">Validation</text>
+<rect x="680" y="42" width="12" height="12" fill="#059669"/>
+<text x="698" y="53">Test (descriptive)</text>
+<line x1="480" y1="78" x2="480" y2="206" stroke="#e2e8f0"/>
+<text x="480" y="74" text-anchor="middle">0</text>
+<line x1="580" y1="78" x2="580" y2="206" stroke="#e2e8f0"/>
+<text x="580" y="74" text-anchor="middle">0.2</text>
+<line x1="680" y1="78" x2="680" y2="206" stroke="#e2e8f0"/>
+<text x="680" y="74" text-anchor="middle">0.4</text>
+<line x1="780" y1="78" x2="780" y2="206" stroke="#e2e8f0"/>
+<text x="780" y="74" text-anchor="middle">0.6</text>
+<line x1="880" y1="78" x2="880" y2="206" stroke="#e2e8f0"/>
+<text x="880" y="74" text-anchor="middle">0.8</text>
+<line x1="980" y1="78" x2="980" y2="206" stroke="#e2e8f0"/>
+<text x="980" y="74" text-anchor="middle">1</text>
+<text x="20" y="112">conditions/intervention.layer=8/seed=42</text>
+<text x="20" y="130" fill="#64748b">complete</text>
+<rect x="480" y="94" width="235" height="14" fill="#94a3b8"/>
+<text x="720" y="106">0.47</text>
+<rect x="480" y="114" width="432.5" height="14" fill="#2563eb"/>
+<text x="917.5" y="126">0.865</text>
+<rect x="480" y="154" width="395" height="14" fill="#059669"/>
+<text x="880" y="166">0.79</text>
+</g>
+</svg>
