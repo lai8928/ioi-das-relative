@@ -1,0 +1,229 @@
+{
+  "actual_indices": {
+    "END": {
+      "base": [
+        17,
+        21
+      ],
+      "source": [
+        21,
+        17
+      ]
+    },
+    "END-1": {
+      "base": [
+        16,
+        20
+      ],
+      "source": [
+        20,
+        16
+      ]
+    },
+    "END-2": {
+      "base": [
+        15,
+        19
+      ],
+      "source": [
+        19,
+        15
+      ]
+    },
+    "GOAL_NAME": {
+      "base": [
+        2,
+        4
+      ],
+      "source": [
+        4,
+        2
+      ]
+    },
+    "N": {
+      "base": [
+        17,
+        21
+      ],
+      "source": [
+        21,
+        17
+      ]
+    },
+    "N-1": {
+      "base": [
+        16,
+        20
+      ],
+      "source": [
+        20,
+        16
+      ]
+    },
+    "N-2": {
+      "base": [
+        15,
+        19
+      ],
+      "source": [
+        19,
+        15
+      ]
+    },
+    "S1": {
+      "base": [
+        4,
+        2
+      ],
+      "source": [
+        2,
+        4
+      ]
+    },
+    "S2": {
+      "base": [
+        13,
+        17
+      ],
+      "source": [
+        17,
+        13
+      ]
+    }
+  },
+  "checks": [
+    "four hand-derived ABB/BAB POSITION cases",
+    "different-name source uses base names",
+    "repeated subject occurrence spans",
+    "18/22 unequal lengths with separate base/source masks",
+    "explicit mixed-batch and individual indices for nine locations",
+    "invalid locations, offsets, and left padding diagnosed",
+    "full multi-token name span and unsupported answer retained",
+    "leading-space prompt continuation boundary"
+  ],
+  "data_origin": "synthetic; not included in the 200/100 original-rule samples",
+  "expected_indices": {
+    "END": {
+      "base": [
+        17,
+        21
+      ],
+      "source": [
+        21,
+        17
+      ]
+    },
+    "END-1": {
+      "base": [
+        16,
+        20
+      ],
+      "source": [
+        20,
+        16
+      ]
+    },
+    "END-2": {
+      "base": [
+        15,
+        19
+      ],
+      "source": [
+        19,
+        15
+      ]
+    },
+    "GOAL_NAME": {
+      "base": [
+        2,
+        4
+      ],
+      "source": [
+        4,
+        2
+      ]
+    },
+    "N": {
+      "base": [
+        17,
+        21
+      ],
+      "source": [
+        21,
+        17
+      ]
+    },
+    "N-1": {
+      "base": [
+        16,
+        20
+      ],
+      "source": [
+        20,
+        16
+      ]
+    },
+    "N-2": {
+      "base": [
+        15,
+        19
+      ],
+      "source": [
+        19,
+        15
+      ]
+    },
+    "S1": {
+      "base": [
+        4,
+        2
+      ],
+      "source": [
+        2,
+        4
+      ]
+    },
+    "S2": {
+      "base": [
+        13,
+        17
+      ],
+      "source": [
+        17,
+        13
+      ]
+    }
+  },
+  "invalid_position_diagnostics": [
+    "synthetic-unequal/base: N-18 resolves to -1, outside valid token indices 0..17 (length=18); choose an offset that stays inside this prompt.",
+    "synthetic-unequal/base: N+1 resolves to 18, outside valid token indices 0..17 (length=18); choose an offset that stays inside this prompt.",
+    "synthetic-unequal/base: invalid location 'UNKNOWN'; use GOAL_NAME, IO, S1, S2, END/N, or a signed offset such as N-2.",
+    "synthetic-unequal/base: IO-3 resolves to -1, outside valid token indices 0..17 (length=18); choose an offset that stays inside this prompt.",
+    "synthetic-unequal/base: mask must contain a nonempty input followed only by right padding; check tokenization and batching."
+  ],
+  "multi_token_answer": {
+    "diagnostic": "synthetic-multi-token/base: 'Mary Jane': Answer requires 2 continuation tokens; sequence-level evaluation is required. The example is retained.",
+    "name": "Mary Jane",
+    "status": "unsupported_multi_token",
+    "token_id": null,
+    "token_ids": [
+      5335,
+      12091
+    ]
+  },
+  "status": "passed",
+  "synthetic_texts": {
+    "base": "Then, Alice and Bob went to the small local grocery store. Bob gave a ring to",
+    "source": "Then, Bob and Alice had a lot of fun at the small local grocery store. Bob gave a ring to"
+  },
+  "valid_lengths": {
+    "base": [
+      18,
+      22
+    ],
+    "source": [
+      22,
+      18
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="288" viewBox="0 0 1250 288" role="img" aria-labelledby="title description">
+<title id="title">Saved IIA by condition (smoke run)</title>
+<desc id="description">IIA ratios range from zero to one. Missing results have no bars.</desc>
+<rect width="100%" height="100%" fill="white"/>
+<g font-family="sans-serif" font-size="12" fill="#0f172a">
+<text x="20" y="26" font-size="18">Saved IIA by condition — smoke run</text>
+<rect x="20" y="42" width="12" height="12" fill="#94a3b8"/>
+<text x="38" y="53">Initial train IIA</text>
+<rect x="420" y="42" width="12" height="12" fill="#2563eb"/>
+<text x="438" y="53">Train IIA</text>
+<rect x="820" y="42" width="12" height="12" fill="#64748b"/>
+<text x="838" y="53">No intervention train IIA</text>
+<rect x="20" y="64" width="12" height="12" fill="#c4b5fd"/>
+<text x="38" y="75">Initial validation IIA</text>
+<rect x="420" y="64" width="12" height="12" fill="#d97706"/>
+<text x="438" y="75">Validation IIA</text>
+<rect x="820" y="64" width="12" height="12" fill="#9333ea"/>
+<text x="838" y="75">No intervention validation IIA</text>
+<line x1="600" y1="130" x2="600" y2="270" stroke="#e2e8f0"/>
+<text x="600" y="126" text-anchor="middle">0</text>
+<line x1="700" y1="130" x2="700" y2="270" stroke="#e2e8f0"/>
+<text x="700" y="126" text-anchor="middle">0.2</text>
+<line x1="800" y1="130" x2="800" y2="270" stroke="#e2e8f0"/>
+<text x="800" y="126" text-anchor="middle">0.4</text>
+<line x1="900" y1="130" x2="900" y2="270" stroke="#e2e8f0"/>
+<text x="900" y="126" text-anchor="middle">0.6</text>
+<line x1="1000" y1="130" x2="1000" y2="270" stroke="#e2e8f0"/>
+<text x="1000" y="126" text-anchor="middle">0.8</text>
+<line x1="1100" y1="130" x2="1100" y2="270" stroke="#e2e8f0"/>
+<text x="1100" y="126" text-anchor="middle">1</text>
+<text x="20" y="158">conditions/intervention.layer=12/seed=42</text>
+<text x="20" y="176" fill="#64748b">complete</text>
+<rect x="600" y="140" width="225" height="14" fill="#94a3b8"/>
+<text x="830" y="152">0.45</text>
+<rect x="600" y="158" width="225" height="14" fill="#2563eb"/>
+<text x="830" y="170">0.45</text>
+<rect x="600" y="176" width="225" height="14" fill="#64748b"/>
+<text x="830" y="188">0.45</text>
+<rect x="600" y="194" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="206">0.0</text>
+<rect x="600" y="212" width="0" height="14" fill="#d97706"/>
+<text x="605" y="224">0.0</text>
+<rect x="600" y="230" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="242">0.0</text>
+</g>
+</svg>
