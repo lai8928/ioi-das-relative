@@ -32,7 +32,7 @@ notebooks/          saved-result walkthroughs (no training by default)
 outputs/            immutable experiment outputs
 scripts/            thin wrappers and notebook rendering
 src/ioi_das/        package: data, tokenization, positions, intervention,
-                    train, evaluate, validation, experiment, cli
+                    train, evaluate, validation, config, pipeline, report, cli
 tests/              pytest suite
 vendor/pyvene_upstream/  eight pinned upstream originals, unchanged
 ```
@@ -67,10 +67,37 @@ $PY -B -m ioi_das.cli audit --config configs/audit.json
 # Environment and GPU diagnostics
 CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli doctor --require-gpu
 
-# Single DAS condition (GPT-2 Small, layer 8, N, rank 1); --smoke for a one-update check.
-# Existing output directories are refused; pass --output-dir <new path> to repeat.
-CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/phase2.json --smoke
+# Check availability before choosing a physical GPU.
+nvidia-smi
+
+# One-update smoke check of the same pipeline used by a full experiment.
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/single-condition-das/layer8-seed42.json --smoke
+
+# Full run: source, configs, and data must have no uncommitted changes.
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/single-condition-das/layer8-seed42.json
+
+# Override one value; the resolved config and its SHA-256 are saved.
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/single-condition-das/layer8-seed42.json --smoke --override seed=43
+
+# Continue missing conditions, verifying saved hashes first.
+CUDA_VISIBLE_DEVICES=0 $PY -B -m ioi_das.cli run --config configs/single-condition-das/layer8-seed42.json --resume outputs/single-condition-das/YYYYMMDD-layer8-seed42
+
+# Rebuild conditions.csv, summary.md, and figures/iia.svg from saved JSON only.
+# Reporting imports no torch, transformers, or pyvene and needs no GPU.
+$PY -B -m ioi_das.cli report --experiment-dir outputs/single-condition-das/YYYYMMDD-layer8-seed42
 ```
+
+Experiment directories are derived from the config task/name and start date:
+`outputs/<task>/<YYYYMMDD>-<name>/`, with `smoke-` before the date for smoke
+runs. Repeated starts on the same date add `-2`, `-3`, and so on. Resume uses
+the original resolved config; repeat any overrides or `--smoke` used for that
+run. It preserves completed conditions and adds missing ones after checking
+their artifact hashes.
+
+The audit reuses the registered saved dataset. When its configured output
+already contains the completed audit, the command writes its verification
+to a new `/tmp/ioi-das-audit-*` directory and reports that path. It preserves
+the completed evidence under `outputs/audit/`.
 
 Re-render the walkthrough notebook from saved outputs (no model load):
 

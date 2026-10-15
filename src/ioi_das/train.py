@@ -1,39 +1,68 @@
 """Optimize only alignment parameters with the pinned tutorial's Adam schedule."""
 
 import json
+from pathlib import Path
 import time
+from typing import Any, Sequence
 
 import numpy as np
 import torch
 from torch.nn import functional as F
 
-from .intervention import intervention_forward, prepare_batch
+from .data import PairRecord
+from .intervention import ScopedIntervenableModel, intervention_forward, prepare_batch
 
 
-def train_alignment(model, intervenable, pairs, tokenizer, reference, device,
-                    training_config: dict, seed: int, location: str, output_path,
-                    smoke: bool = False) -> dict:
+def train_alignment(
+    model: Any,
+    intervenable: ScopedIntervenableModel,
+    pairs: Sequence[PairRecord],
+    tokenizer: Any,
+    reference: Any,
+    device: str | torch.device,
+    *,
+    seed: int,
+    location: str,
+    output_path: Path,
+    epochs: int,
+    batch_size: int,
+    learning_rate: float,
+    schedule: str = "legacy_per_update_linearlr",
+    betas: tuple[float, float] = (0.9, 0.999),
+    eps: float = 1e-8,
+    weight_decay: float = 0.0,
+    schedule_start_factor: float = 1 / 3,
+    schedule_end_factor: float = 0.1,
+    schedule_total_iters: int = 10,
+    smoke: bool = False,
+) -> dict:
     """Preserve per-batch LinearLR steps and eval-mode language-model dropout.
 
     No test data is consulted during optimization. Preflight backward checks
     do not consume the independent MT19937 batch-shuffle RNG used here.
     """
+    if schedule != "legacy_per_update_linearlr":
+        raise ValueError(f"Unsupported schedule {schedule!r}; use 'legacy_per_update_linearlr'.")
+    if not pairs or epochs < 1 or batch_size < 1:
+        raise ValueError("Training requires nonempty pairs and positive epochs and batch_size.")
     model.eval()
     parameters = list(intervenable.get_trainable_parameters())
     if not parameters or any(not parameter.requires_grad for parameter in parameters):
         raise ValueError("Expected trainable alignment parameters.")
     if any(parameter.requires_grad for parameter in model.parameters()):
         raise ValueError("Language-model parameters must be frozen before training.")
-    optimizer = torch.optim.Adam(parameters, lr=training_config["learning_rate"],
-                                 betas=tuple(training_config["betas"]), eps=training_config["eps"],
-                                 weight_decay=training_config["weight_decay"])
-    schedule = training_config["scheduler"]
+    optimizer = torch.optim.Adam(parameters, lr=learning_rate, betas=betas, eps=eps,
+                                 weight_decay=weight_decay)
+    scheduler_options = {
+        "name": "LinearLR", "start_factor": schedule_start_factor,
+        "end_factor": schedule_end_factor, "total_iters": schedule_total_iters,
+        "step_interval": "batch",
+    }
     scheduler = torch.optim.lr_scheduler.LinearLR(
-        optimizer, start_factor=schedule["start_factor"], end_factor=schedule["end_factor"],
-        total_iters=schedule["total_iters"])
+        optimizer, start_factor=schedule_start_factor, end_factor=schedule_end_factor,
+        total_iters=schedule_total_iters)
     rng = np.random.RandomState(seed)
-    epochs = 1 if smoke else training_config["epochs"]
-    batch_size = training_config["batch_size"]
+    epochs = 1 if smoke else epochs
     steps, epoch_records = [], []
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8") as handle:
@@ -88,7 +117,7 @@ def train_alignment(model, intervenable, pairs, tokenizer, reference, device,
         "run_kind": "smoke" if smoke else "full", "epochs": epochs,
         "optimizer_steps": len(steps), "training_pair_count": len(pairs),
         "presentations": sum(record["total"] for record in steps),
-        "optimizer": "Adam", "scheduler": schedule,
+        "optimizer": "Adam", "scheduler": scheduler_options,
         "initial_effective_learning_rate": steps[0]["learning_rate_used"],
         "final_learning_rate": optimizer.param_groups[0]["lr"],
         "first_step_loss": steps[0]["loss"], "last_step_loss": steps[-1]["loss"],

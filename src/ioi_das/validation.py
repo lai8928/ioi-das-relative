@@ -36,7 +36,7 @@ def hook_snapshot(model: Any) -> dict[str, int]:
 
 def _require(condition: bool, message: str) -> None:
     if not condition:
-        raise ValueError(f"Phase 2 validation failed: {message}")
+        raise ValueError(f"Intervention validation failed: {message}")
 
 
 def _state_tensors(state: Mapping, prefix: str = "") -> dict[str, Any]:
@@ -74,7 +74,7 @@ def _logit_comparison(actual: Any, expected: Any, description: str,
 
 
 def synthetic_unequal_pairs() -> list[PairRecord]:
-    """Build the Phase 1 18/22-token validation prompts outside the saved research data."""
+    """Build 18/22-token validation prompts outside the saved research data."""
     short = build_prompt(("Alice", "Bob", "Bob"), SHORT_TEMPLATE, 0,
                          "ABB", "ring", "small local grocery store")
     long = build_prompt(("Bob", "Alice", "Bob"), LONG_TEMPLATE, 1,

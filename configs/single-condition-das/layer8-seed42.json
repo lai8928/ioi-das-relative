@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "extends": "../base.json",
+  "task": "single-condition-das",
+  "name": "layer8-seed42"
+}
