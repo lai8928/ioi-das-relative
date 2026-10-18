@@ -38,9 +38,11 @@
 - Caveat: a higher rank gives the optimizer more freedom to find a subspace
   that changes the output without being the one the model uses (Makelov et
   al. 2023). Read every rank against its baseline, on validation and test.
-- Depends on: brief `grouped-selection-compare` (selection within groups of
-  grid values, a cross-run comparison figure) for the optimization check and
-  the side-by-side figure. The sweep itself does not wait for it.
+- Depends on: brief
+  [grouped-selection-compare](briefs/2026-10-18-grouped-selection-compare.md)
+  (selection within groups of grid values, cross-run comparison) for the
+  optimization check and the side-by-side figure. The sweep itself does not
+  wait for it.
 
 ### object-names: object nouns in place of person names
 
@@ -62,11 +64,15 @@
   accuracy, IIA); representative successes and failures from saved
   per-example predictions.
 - Depends on: the design decisions in step 1; briefs
-  `entity-vocabulary-datasets` and `alignment-transfer-eval`.
+  [entity-vocabulary-datasets](briefs/2026-10-18-entity-vocabulary-datasets.md)
+  (blocked on those decisions) and
+  [alignment-transfer-eval](briefs/2026-10-18-alignment-transfer-eval.md).
 
 ## Other work
 
-- [ ] Write the briefs above for Codex.
+- [x] Write the briefs above for Codex (2026-10-18).
+- [ ] Codex implements grouped-selection-compare and alignment-transfer-eval;
+  entity-vocabulary-datasets waits for the design decisions.
 - [ ] Consolidate results for the next meeting: settings recorded per run,
   unified IIA figures across conditions, supported conclusions, uncertain
   observations, and questions for next time.

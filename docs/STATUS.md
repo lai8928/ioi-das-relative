@@ -85,14 +85,21 @@ Updated: 2026-10-17 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
   conditions each); not run yet. One config per rank because selection
   groups by layer only. Rank 8 checked on CPU before launch (GPT-2 Small,
   layer 8, 8 cross-pattern pairs): nonzero finite alignment gradient,
-  identity intervention reproduces factual logits exactly. Next: HPC3 run
-  (A30) of all 8 configs.
+  identity intervention reproduces factual logits exactly. HPC3 smoke of
+  rank 8 (Medium layer 14, Small layer 8, seed 42) passed preflight on an
+  A30 (Slurm job 58213355). Full array job not yet running: the first
+  submissions ignored the `#SBATCH` header (ran on `standard`, no array) and
+  exited at once. Optimization check and comparison figure wait for
+  [grouped-selection-compare](briefs/2026-10-18-grouped-selection-compare.md).
 
 ## object-names
 
 - Goal: object nouns in place of person names; compare behavior and DAS.
-- State: not started. Design decisions pending (vocabulary, articles,
-  transfer vs. retrain).
+- State: not started. Briefs written 2026-10-18:
+  [alignment-transfer-eval](briefs/2026-10-18-alignment-transfer-eval.md)
+  (open) and
+  [entity-vocabulary-datasets](briefs/2026-10-18-entity-vocabulary-datasets.md)
+  (blocked on vocabulary, determiner, and matched-source decisions).
 
 ## data-scale
 
