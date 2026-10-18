@@ -1,6 +1,6 @@
 # Status
 
-Updated: 2026-10-15 · Cycle since: [2026-10-12](meetings/2026-10-12.md)
+Updated: 2026-10-17 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
 
 ## Tasks
 
@@ -9,8 +9,10 @@ Updated: 2026-10-15 · Cycle since: [2026-10-12](meetings/2026-10-12.md)
 | `position-audit` | Original IOI data and per-example position audit | done | 2026-10-12 | Phase 0–1 |
 | `single-condition-das` | One DAS run: GPT-2 Small, layer 8, N, rank 1 | done | 2026-10-12 | Phase 2 |
 | `layer-sweep` | Every layer at the last token, GPT-2 Small | done | 2026-10-15 | M3 / A |
-| `model-scale` | Same protocol on a larger GPT-2 | active | 2026-10-12 | M4 / B |
-| `data-scale` | Larger training sets | active | 2026-10-12 | M5 / C |
+| `model-scale` | Same protocol on a larger GPT-2 | done | 2026-10-15 | M4 / B |
+| `data-scale` | Larger training sets | paused | 2026-10-17 | M5 / C |
+| `rank-sweep` | DAS rank 1/2/4/8, GPT-2 Medium and Small, with an optimization check | active | 2026-10-15 | |
+| `object-names` | Object nouns in place of person names: behavior and DAS | active | 2026-10-15 | |
 
 ## Infrastructure
 
@@ -44,6 +46,7 @@ Updated: 2026-10-15 · Cycle since: [2026-10-12](meetings/2026-10-12.md)
 ## model-scale
 
 - Goal: rerun the layer-sweep protocol on GPT-2 Medium (24 layers).
+  Done; the follow-up (rank, learning rate, budget) is task `rank-sweep`.
 - State: full run complete (`f833245`), 72/72 conditions plus 72/72
   post-lock, on HPC3 (one A30, Slurm job 58157400, 46 min, mean 33 s per
   condition). Source `c578921`, `protected_tree_clean=true` (`clean_tree`
@@ -73,13 +76,31 @@ Updated: 2026-10-15 · Cycle since: [2026-10-12](meetings/2026-10-12.md)
   about 1e-6 (initial counterfactual loss 2.4105420 vs 2.4105425).
   Output kept on HPC3 under `~/hpc3-checks/`.
 
+## rank-sweep
+
+- Goal: does DAS rank 1/2/4/8 change IIA (GPT-2 Medium layers 12–16, GPT-2
+  Small layers 6–10), and is any difference due to optimization?
+- State: per-rank configs committed
+  (`configs/rank-sweep/gpt2-{medium,small}-rank{1,2,4,8}.json`, 15
+  conditions each); not run yet. One config per rank because selection
+  groups by layer only. Rank 8 checked on CPU before launch (GPT-2 Small,
+  layer 8, 8 cross-pattern pairs): nonzero finite alignment gradient,
+  identity intervention reproduces factual logits exactly. Next: HPC3 run
+  (A30) of all 8 configs.
+
+## object-names
+
+- Goal: object nouns in place of person names; compare behavior and DAS.
+- State: not started. Design decisions pending (vocabulary, articles,
+  transfer vs. retrain).
+
 ## data-scale
 
 - Goal: IIA versus training size (200 / 1000 / 5000 pairs) at layer 8.
 - State: code, datasets, audits, and smoke runs of both budgets merged
   (`c578921`). No full run yet.
-- Blocker: equal updates or equal epochs across sizes is an advisor
-  decision. The configs in `configs/data-scale/` carry `placeholder` in their
+- Paused: not in the 2026-10-15 cycle. Blocker: equal updates or equal
+  epochs across sizes is an advisor decision. The configs in `configs/data-scale/` carry `placeholder` in their
   names until it is made.
 
 ## Closed tasks
@@ -125,5 +146,5 @@ legacy_v1` in `outputs/data-audit/20261015-legacy_v1/`.
 env PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 /home/ilingl/.conda/envs/ioi-das-v2/bin/python -B -m pytest -q
 ```
 
-Last result on `main` (2026-10-15, `f833245`): 282 passed, 1 skipped (opt-in
+Last result on `main` (2026-10-17, before the rank-sweep configs commit): 282 passed, 1 skipped (opt-in
 GPU regression), 305 subtests.
