@@ -1,0 +1,7 @@
+{
+  "extends": "../layer-sweep/gpt2-small.json",
+  "task": "rank-sweep",
+  "name": "gpt2-small-rank8",
+  "intervention": {"rank": 8},
+  "grid": {"intervention.layer": [6, 7, 8, 9, 10], "seed": [42, 43, 44]}
+}

@@ -1,0 +1,7 @@
+{
+  "extends": "../model-scale/gpt2-medium.json",
+  "task": "rank-sweep",
+  "name": "gpt2-medium-rank1",
+  "intervention": {"rank": 1},
+  "grid": {"intervention.layer": [12, 13, 14, 15, 16], "seed": [42, 43, 44]}
+}
