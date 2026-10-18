@@ -78,18 +78,19 @@ Updated: 2026-10-17 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
 
 ## rank-sweep
 
-- Goal: does DAS rank 1/2/4/8 change IIA (GPT-2 Medium layers 12–16, GPT-2
-  Small layers 6–10), and is any difference due to optimization?
+- Goal: does DAS rank 1/2/4/8 change IIA (GPT-2 Medium all 24 layers,
+  GPT-2 Small layers 6–10), and is any difference due to optimization?
 - State: per-rank configs committed
-  (`configs/rank-sweep/gpt2-{medium,small}-rank{1,2,4,8}.json`, 15
-  conditions each); not run yet. One config per rank because selection
+  (`configs/rank-sweep/gpt2-{medium,small}-rank{1,2,4,8}.json`; Medium 72
+  conditions each, Small 15 each); not run yet. One config per rank because selection
   groups by layer only. Rank 8 checked on CPU before launch (GPT-2 Small,
   layer 8, 8 cross-pattern pairs): nonzero finite alignment gradient,
   identity intervention reproduces factual logits exactly. HPC3 smoke of
   rank 8 (Medium layer 14, Small layer 8, seed 42) passed preflight on an
   A30 (Slurm job 58213355). Full array job not yet running: the first
   submissions ignored the `#SBATCH` header (ran on `standard`, no array) and
-  exited at once. Optimization check and comparison figure wait for
+  exited at once. Job 58223636 (Medium, layers 12–16) was queued and is
+  to be cancelled before the all-layer configs are pulled. Optimization check and comparison figure wait for
   [grouped-selection-compare](briefs/2026-10-18-grouped-selection-compare.md).
 
 ## object-names

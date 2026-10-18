@@ -17,8 +17,9 @@
 
 - Try (sweep): rank 1 / 2 / 4 / 8 × seeds 42 / 43 / 44, otherwise the
   layer-sweep protocol (N, block_output, legacy training data,
-  `val_indist_v1` selection, test after the lock). GPT-2 Medium layers
-  12–16; GPT-2 Small layers 6–10 (peak 8 ± 2) as the reference. The best
+  `val_indist_v1` selection, test after the lock). GPT-2 Medium all 24
+  layers (widened from 12–16 on 2026-10-18; see the meeting amendment);
+  GPT-2 Small layers 6–10 (peak 8 ± 2) as the reference. The best
   layer is selected per rank on validation. All runs on HPC3 (A30), so every
   rank shares one GPU type; rank 1 repeats existing results as a check.
   - Runs now as one config per model and rank
