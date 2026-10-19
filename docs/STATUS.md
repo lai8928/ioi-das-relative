@@ -1,6 +1,6 @@
 # Status
 
-Updated: 2026-10-17 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
+Updated: 2026-10-19 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
 
 ## Tasks
 
@@ -10,7 +10,7 @@ Updated: 2026-10-17 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
 | `single-condition-das` | One DAS run: GPT-2 Small, layer 8, N, rank 1 | done | 2026-10-12 | Phase 2 |
 | `layer-sweep` | Every layer at the last token, GPT-2 Small | done | 2026-10-15 | M3 / A |
 | `model-scale` | Same protocol on a larger GPT-2 | done | 2026-10-15 | M4 / B |
-| `data-scale` | Larger training sets | paused | 2026-10-17 | M5 / C |
+| `data-scale` | Larger training sets | active | 2026-10-19 | M5 / C |
 | `rank-sweep` | DAS rank 1/2/4/8, GPT-2 Medium and Small, with an optimization check | active | 2026-10-15 | |
 | `object-names` | Object nouns in place of person names: behavior and DAS | active | 2026-10-15 | |
 
@@ -80,17 +80,36 @@ Updated: 2026-10-17 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
 
 - Goal: does DAS rank 1/2/4/8 change IIA (GPT-2 Medium all 24 layers,
   GPT-2 Small layers 6–10), and is any difference due to optimization?
-- State: per-rank configs committed
-  (`configs/rank-sweep/gpt2-{medium,small}-rank{1,2,4,8}.json`; Medium 72
-  conditions each, Small 15 each); not run yet. One config per rank because selection
-  groups by layer only. Rank 8 checked on CPU before launch (GPT-2 Small,
-  layer 8, 8 cross-pattern pairs): nonzero finite alignment gradient,
-  identity intervention reproduces factual logits exactly. HPC3 smoke of
-  rank 8 (Medium layer 14, Small layer 8, seed 42) passed preflight on an
-  A30 (Slurm job 58213355). Full array job not yet running: the first
-  submissions ignored the `#SBATCH` header (ran on `standard`, no array) and
-  exited at once. Job 58223636 (Medium, layers 12–16) was queued and is
-  to be cancelled before the all-layer configs are pulled. Optimization check and comparison figure wait for
+- State: GPT-2 Medium done, 4 × 72/72 conditions plus post-lock test, on
+  HPC3 (one A30 per rank, Slurm jobs 58223841–58223844, 46–48 min each,
+  median 33 s per condition). Source `0e448cb`, `clean_tree=true`. Results
+  commit `77da9d3`. GPT-2 Small rank configs not run yet. One config per
+  rank, because selection groups by layer only.
+- Result (Medium): rank barely changes anything. Every rank selects layer
+  14 on validation. At layer 14 (mean of 3 seeds):
+
+  | Rank | Validation | Test (descriptive) | Train | Train, switch-required pairs |
+  | --- | --- | --- | --- | --- |
+  | 1 | 0.283 | 0.470 | 0.528 | 0.247 |
+  | 2 | 0.287 | 0.473 | 0.527 | 0.243 |
+  | 4 | 0.277 | 0.467 | 0.532 | 0.253 |
+  | 8 | **0.295** | 0.477 | 0.537 | 0.263 |
+
+  The by-layer profile is the same for every rank: validation 0 at layers
+  0–11 and 20–23, and nonzero at 12–19 (layer 12: 0.10–0.12; 17:
+  0.05–0.06; 19: ≤ 0.01). Validation seed SD ≤ 0.03. Untrained-alignment
+  and no-intervention validation IIA are 0 at every layer for every rank.
+  Even rank 8 fits only 26% of its own switch-required training pairs, so
+  the subspace dimension is not what limits Medium at this learning rate
+  and budget.
+- Reproduction: rank 1 matches `outputs/model-scale/20261015-gpt2-medium`
+  bit for bit (same A30 type). All 288 compared artifact hashes are
+  identical (alignment, initial alignment, train and validation
+  predictions).
+- Evidence: `outputs/rank-sweep/20261018-gpt2-medium-rank{1,2,4,8}/`
+  (`summary.md`, `selection.json`, `layer_summary.csv`, `figures/`).
+- Next: the GPT-2 Small rank configs. The optimization check and the
+  side-by-side figure wait for
   [grouped-selection-compare](briefs/2026-10-18-grouped-selection-compare.md).
 
 ## object-names
@@ -104,12 +123,29 @@ Updated: 2026-10-17 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
 
 ## data-scale
 
-- Goal: IIA versus training size (200 / 1000 / 5000 pairs) at layer 8.
-- State: code, datasets, audits, and smoke runs of both budgets merged
-  (`c578921`). No full run yet.
-- Paused: not in the 2026-10-15 cycle. Blocker: equal updates or equal
-  epochs across sizes is an advisor decision. The configs in `configs/data-scale/` carry `placeholder` in their
-  names until it is made.
+- Goal: IIA versus training size. Resumed 2026-10-19 on GPT-2 Medium,
+  crossed with rank (see the 2026-10-15 meeting amendment and PLAN).
+- State: 16 configs committed, not run yet.
+  - Main: `configs/data-scale/gpt2-medium-rank{1,2,4,8}-n{200,1000,5000}.json`,
+    each 30 conditions: layers 11–20 × seeds 42/43/44, 10 epochs.
+  - Control: `…-n200-updates2500.json`, each 3 conditions: layer 14, 2,500
+    updates.
+  - All 16 resolve and expand as intended. Test suite: 282 passed, 1 skipped.
+- Estimated A30 time per job, from the rank sweep (0.10–0.12 s per update,
+  about 20 s fixed per condition):
+
+  | Config | Time per job |
+  | --- | --- |
+  | n200 | about 20 min |
+  | n1000 | about 45 min |
+  | n5000 | about 3 h |
+  | Control | about 20 min |
+
+  The total is about 17 GPU-hours.
+- Datasets: `train_pool_v1` and nested `train_n200_v1` / `train_n1000_v1` /
+  `train_n5000_v1`, built and audited in `c578921`.
+- The GPT-2 Small layer-8 configs (`placeholder` in their names) stay
+  paused until the budget question is settled.
 
 ## Closed tasks
 
@@ -154,5 +190,5 @@ legacy_v1` in `outputs/data-audit/20261015-legacy_v1/`.
 env PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 /home/ilingl/.conda/envs/ioi-das-v2/bin/python -B -m pytest -q
 ```
 
-Last result on `main` (2026-10-17, before the rank-sweep configs commit): 282 passed, 1 skipped (opt-in
-GPU regression), 305 subtests.
+Last result on `main` (2026-10-19, with the data-scale Medium configs): 282
+passed, 1 skipped (opt-in GPU regression), 305 subtests.

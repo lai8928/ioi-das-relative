@@ -10,6 +10,8 @@
    GPT-2 Small, and is any difference due to rank or to optimization?
 2. With object nouns in place of person names, does GPT-2 still solve IOI,
    and does the POSITION alignment still apply?
+3. Does a larger training set raise GPT-2 Medium's IIA at any rank, and is
+   any gain due to more data or to more updates?
 
 ## This cycle
 
@@ -22,11 +24,13 @@
   GPT-2 Small layers 6–10 (peak 8 ± 2) as the reference. The best
   layer is selected per rank on validation. All runs on HPC3 (A30), so every
   rank shares one GPU type; rank 1 repeats existing results as a check.
-  - Runs now as one config per model and rank
+  - Runs as one config per model and rank
     (`configs/rank-sweep/gpt2-{medium,small}-rank{1,2,4,8}.json`), with no
     code change. One config with a rank grid axis is not usable yet:
     selection groups by layer only and fails after all training ("Duplicate
     seed 42 for layer 12"), and the report would average ranks together.
+  - [x] GPT-2 Medium, all four ranks (2026-10-19; see STATUS).
+  - [ ] GPT-2 Small, all four ranks.
 - Try (optimization check): at the layer each model's earlier sweep
   selected (Medium 14, Small 8), rank 1 / 2 / 4 / 8 × learning rate ×
   budget × 3 seeds. Proposed values: learning rate 0.01 / 0.03 / 0.1 (the
@@ -44,6 +48,30 @@
   (selection within groups of grid values, cross-run comparison) for the
   optimization check and the side-by-side figure. The sweep itself does not
   wait for it.
+
+### data-scale: training-set size × rank on GPT-2 Medium
+
+Added 2026-10-19 (see the meeting amendment).
+
+- Try (main): nested `train_n200_v1` / `train_n1000_v1` / `train_n5000_v1`
+  × rank 1 / 2 / 4 / 8 × layers 11–20 × seeds 42 / 43 / 44. Training is
+  10 epochs (equal epochs, so 100 / 500 / 2,500 updates); everything else
+  follows the rank sweep. The best layer is selected per run on validation
+  before test. Layers 11–20 cover every layer where any rank had nonzero IIA
+  (12–19), plus one layer of margin on each side.
+- Try (control): `train_n200_v1` at layer 14 for 2,500 updates, every rank.
+  Against the main runs at layer 14, this separates data from updates:
+  - n200 at 2,500 vs. n5000 at 2,500 updates: same updates, 25× the data;
+  - n200 at 100 vs. n200 at 2,500 updates: same data, 25× the updates.
+- Configs: `configs/data-scale/gpt2-medium-rank{1,2,4,8}-n{200,1000,5000}.json`
+  (30 conditions each) and `…-n200-updates2500.json` (3 each). One config
+  per rank and size, for the same selection reason as the rank sweep.
+- All on HPC3 (A30), so results compare directly with the rank sweep. The
+  legacy-data rank sweep is a reference point but is not nested with these
+  sets; compare sizes within `train_n*_v1`.
+- Evidence to bring: validation IIA vs. training size, one line per rank,
+  at the selected layer and by layer; the control comparison at layer 14;
+  train IIA (switch-required pairs) to judge fit.
 
 ### object-names: object nouns in place of person names
 
@@ -80,8 +108,8 @@
 
 ## Deferred
 
-- data-scale full run: waits for the budget decision (equal updates or equal
-  epochs).
+- data-scale on GPT-2 Small at layer 8 (the `placeholder` configs): still
+  waits for the budget decision. The Medium runs above may settle it.
 - Phase 2 figure guide: explain each figure, field, and comparison.
 - Earlier M4/M5 protocol drafts remain on branch `m3-complete-20261015` for
   reference only.
