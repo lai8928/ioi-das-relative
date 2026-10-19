@@ -92,3 +92,18 @@ always = [r for r in reference if wins[r['sample_id']] == len(paths)]
 print(f'  conditions {len(paths)}; examples never flipped {len(never)}, always flipped {len(always)} of {len(reference)}')
 for label, rows in (('all', reference), ('never', never), ('always', always)):
     print(f'  {label:6s} factual top-1 accuracy {sum(r["factual_correct"] for r in rows) / len(rows):.2f}')
+
+print('\nBy object ("gave a <object> to"), same pooled layer-14 conditions')
+by_object = collections.defaultdict(collections.Counter)
+for path in paths:
+    for r in jsonl(path):
+        counts = by_object[r['base_text'].split('gave a ')[1].split(' ')[0]]
+        counts['total'] += 1
+        counts['success'] += r['counterfactual_correct']
+        counts['the'] += r['counterfactual_prediction']['continuation'] == ' the'
+for name, counts in sorted(by_object.items()):
+    factual_the = sum(r['factual_prediction']['continuation'] == ' the' for r in reference
+                      if f'gave a {name} ' in r['base_text'])
+    size = sum(f'gave a {name} ' in r['base_text'] for r in reference)
+    print(f'  {name:10s} IIA {counts["success"] / counts["total"]:.2f}  " the" top-1 after DAS '
+          f'{counts["the"] / counts["total"]:.2f}  " the" without intervention {factual_the}/{size}')

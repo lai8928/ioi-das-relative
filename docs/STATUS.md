@@ -184,6 +184,11 @@ Updated: 2026-10-19 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
     Medium's own accuracy is 0.57. Counting only S vs IO, IIA is 0.35–0.41;
     the median logit(S) − logit(IO) moves from −3.1 to −0.2 / −0.3
     (Small: −3.1 → +1.6).
+  - By object: 40 of Medium's 41 no-intervention " the" answers are on
+    "gave a bone to" prompts (40/57; Small 5/57). Pooled layer-14 DAS IIA
+    by object: bone 0.03 (" the" top-1 after DAS 0.95), kiss 0.29,
+    basketball 0.42, ring 0.43; 0.38 without bone prompts. Small layer 8
+    (seed 42): bone 0.61, others 0.90–0.93.
   - Caveat: DAS exceeds the full-residual patch at the same site (Medium
     0.27–0.32 vs 0.105; Small 0.83 vs 0.70). A subspace patch beating the
     full patch is the pattern Makelov et al. (2023) warn about, so part of
