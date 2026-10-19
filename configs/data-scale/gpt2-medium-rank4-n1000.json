@@ -1,0 +1,7 @@
+{
+  "extends": "../rank-sweep/gpt2-medium-rank4.json",
+  "task": "data-scale",
+  "name": "gpt2-medium-rank4-n1000",
+  "data": {"train": "train_n1000_v1/train"},
+  "grid": {"intervention.layer": [11, 12, 13, 14, 15, 16, 17, 18, 19, 20], "seed": [42, 43, 44]}
+}

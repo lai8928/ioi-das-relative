@@ -1,0 +1,7 @@
+{
+  "extends": "gpt2-medium-rank4-n200.json",
+  "task": "data-scale",
+  "name": "gpt2-medium-rank4-n200-updates2500",
+  "training": {"epochs": null, "max_updates": 2500},
+  "grid": {"intervention.layer": [14]}
+}
