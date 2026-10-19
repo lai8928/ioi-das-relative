@@ -37,8 +37,8 @@ Three capabilities, all driven by config, with no change to training:
   runs, so a cross-run comparison is needed in any case.
 - Because of the selection limit, the rank sweep runs as one config per model
   and rank: `configs/rank-sweep/gpt2-{medium,small}-rank{1,2,4,8}.json`
-  (layers 12–16 and 6–10, seeds 42/43/44). Its outputs are produced on HPC3
-  and committed to `main` separately.
+  (Medium layers 0–23, Small layers 6–10, seeds 42/43/44). Its outputs are
+  produced on HPC3 and committed to `main` separately.
 - Inputs available on `main` now: `outputs/layer-sweep/20261015-gpt2-small`
   and `outputs/model-scale/20261015-gpt2-medium`. Both are rank 1, share
   `val_indist_v1`, and have a selection lock and post-lock test.

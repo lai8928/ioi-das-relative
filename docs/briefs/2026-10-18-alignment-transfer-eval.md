@@ -93,7 +93,11 @@ Two uses:
      server); record the commands and results in the merge commit body.
 3. A GPU evaluation of the GPT-2 Medium layer-14 checkpoints on
    `val_indist_v1/validation` completes and matches their saved validation
-   metrics.
+   metrics. The source run trained on an A30 (HPC3); on the lab server's
+   RTX 2080 Ti, every count (factual accuracy, IIA, per-example
+   predictions) must match exactly, while float values such as losses may
+   differ at about 1e-6 (see the cross-GPU check in STATUS). Report any
+   difference.
 
 ## Notes for the implementer
 
