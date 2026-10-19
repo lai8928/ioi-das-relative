@@ -108,6 +108,9 @@ Updated: 2026-10-19 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
   predictions).
 - Evidence: `outputs/rank-sweep/20261018-gpt2-medium-rank{1,2,4,8}/`
   (`summary.md`, `selection.json`, `layer_summary.csv`, `figures/`).
+- Why rank does not help: see the 2026-10-19 analysis under data-scale
+  (one useful direction at layer 14; the full-residual patch at N reaches
+  only 0.105).
 - Next: the GPT-2 Small rank configs. The optimization check and the
   side-by-side figure wait for
   [grouped-selection-compare](briefs/2026-10-18-grouped-selection-compare.md).
@@ -125,23 +128,69 @@ Updated: 2026-10-19 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
 
 - Goal: IIA versus training size. Resumed 2026-10-19 on GPT-2 Medium,
   crossed with rank (see the 2026-10-15 meeting amendment and PLAN).
-- State: 16 configs committed, not run yet.
-  - Main: `configs/data-scale/gpt2-medium-rank{1,2,4,8}-n{200,1000,5000}.json`,
-    each 30 conditions: layers 11–20 × seeds 42/43/44, 10 epochs.
-  - Control: `…-n200-updates2500.json`, each 3 conditions: layer 14, 2,500
-    updates.
-  - All 16 resolve and expand as intended. Test suite: 282 passed, 1 skipped.
-- Estimated A30 time per job, from the rank sweep (0.10–0.12 s per update,
-  about 20 s fixed per condition):
+- State: 10 of 16 configs complete on HPC3 (one A30 per job, Slurm jobs
+  58242123–58242137, 2026-10-19), source `43a0d06`, results commit
+  `4cad294`. Main configs: 30/30 conditions plus post-lock test; controls:
+  3/3.
+  - Complete: rank 1 n200 / n5000 / control; rank 2 n5000; rank 4 all
+    three sizes and control; rank 8 n1000 / n5000.
+  - Not run (cancelled 2026-10-19 at the user's request): rank 1 n1000,
+    rank 2 n200 / n1000, rank 8 n200, and the rank 2 / rank 8 controls.
+    `4cad294` contains partial directories for the first four (0–1 of 30
+    conditions); the user decides whether to remove them.
+- Result: every complete run selects layer 14 on validation. At layer 14
+  (mean of 3 seeds ± seed SD):
 
-  | Config | Time per job |
-  | --- | --- |
-  | n200 | about 20 min |
-  | n1000 | about 45 min |
-  | n5000 | about 3 h |
-  | Control | about 20 min |
+  | Rank | Training set | Updates | Validation | Test (descriptive) | Train, switch-required |
+  | --- | --- | --- | --- | --- | --- |
+  | 1 | n200 | 100 | 0.265 ± 0.000 | 0.497 | 0.320 |
+  | 1 | n200 | 2,500 (control) | 0.265 ± 0.005 | 0.497 | 0.320 |
+  | 1 | n5000 | 2,500 | 0.258 ± 0.008 | 0.473 | 0.268 |
+  | 2 | n5000 | 2,500 | 0.282 ± 0.015 | 0.470 | 0.273 |
+  | 4 | n200 | 100 | 0.253 ± 0.012 | 0.460 | 0.257 |
+  | 4 | n200 | 2,500 (control) | 0.250 ± 0.013 | 0.457 | 0.290 |
+  | 4 | n1000 | 500 | 0.293 ± 0.016 | 0.490 | 0.287 |
+  | 4 | n5000 | 2,500 | 0.300 ± 0.023 | 0.487 | 0.292 |
+  | 8 | n1000 | 500 | **0.322 ± 0.006** | 0.483 | 0.305 |
+  | 8 | n5000 | 2,500 | 0.305 ± 0.018 | 0.483 | 0.304 |
 
-  The total is about 17 GPU-hours.
+  The by-layer profile matches the rank sweep (0 at layers 11 and 20,
+  peak at 14). Untrained-alignment and no-intervention validation IIA are 0
+  everywhere. Across all sizes and ranks, validation stays within
+  0.25–0.32: 25× more data or 25× more updates changes it by at most 0.05.
+- Why rank and size barely matter (analysis of saved outputs, plus a
+  fixed-weight validation evaluation; scripts
+  `scripts/adhoc/20261019-rank-data-plateau.py` and
+  `scripts/adhoc/20261019-medium-ceiling.py`):
+  - Not a bug: saved projections are 1024 × rank and pyvene swaps all rank
+    dimensions; update counts are 100 / 500 / 2,500; re-evaluating saved
+    alignments reproduces the saved IIA counts exactly.
+  - Training finds the same direction every time: the trained rank-1
+    direction is far from its random start (cos ≤ 0.08) and nearly
+    identical across seeds and training sizes (|cos| 0.90–1.0). Every higher-rank
+    subspace contains it (projection 0.91–1.0).
+  - Underfitting, not overfitting: with the same 200 pairs, 100 and 2,500
+    updates end at the same loss (1.705 vs 1.703) and the same IIA
+    (train switch-required 0.320, validation 0.265). Train ≈ validation in
+    every run.
+  - The site holds little of the decision in Medium. Replacing the whole
+    residual vector at N with the source's gives at most 0.105 validation
+    IIA (layer 14) in Medium, vs 0.70 at layer 8 in Small. Medium itself
+    answers IO top-1 on only 0.79 of validation prompts (Small 0.975) and
+    puts " the" top-1 on 0.205.
+  - Outcomes pooled over 42 layer-14 conditions (all ranks, sizes, seeds):
+    S top-1 0.281, IO still top-1 0.394, another token (mostly " the")
+    0.325. 91/200 validation pairs never flip in any condition; on those,
+    Medium's own accuracy is 0.57. Counting only S vs IO, IIA is 0.35–0.41;
+    the median logit(S) − logit(IO) moves from −3.1 to −0.2 / −0.3
+    (Small: −3.1 → +1.6).
+  - Caveat: DAS exceeds the full-residual patch at the same site (Medium
+    0.27–0.32 vs 0.105; Small 0.83 vs 0.70). A subspace patch beating the
+    full patch is the pattern Makelov et al. (2023) warn about, so part of
+    Medium's IIA may use a path the model does not normally use. The
+    untrained baseline cannot detect this.
+- Evidence: `outputs/data-scale/20261019-gpt2-medium-*` (the ten complete
+  runs: `summary.md`, `selection.json`, `layer_summary.csv`, `figures/`).
 - Datasets: `train_pool_v1` and nested `train_n200_v1` / `train_n1000_v1` /
   `train_n5000_v1`, built and audited in `c578921`.
 - The GPT-2 Small layer-8 configs (`placeholder` in their names) stay
