@@ -1,0 +1,93 @@
+{
+  "epoch_results": [
+    {
+      "accuracy": 0.498,
+      "correct": 498,
+      "epoch": 1,
+      "mean_loss": 1.8409867453575135,
+      "total": 1000
+    },
+    {
+      "accuracy": 0.518,
+      "correct": 518,
+      "epoch": 2,
+      "mean_loss": 1.7544046998023988,
+      "total": 1000
+    },
+    {
+      "accuracy": 0.524,
+      "correct": 524,
+      "epoch": 3,
+      "mean_loss": 1.7446862363815308,
+      "total": 1000
+    },
+    {
+      "accuracy": 0.518,
+      "correct": 518,
+      "epoch": 4,
+      "mean_loss": 1.731832013130188,
+      "total": 1000
+    },
+    {
+      "accuracy": 0.529,
+      "correct": 529,
+      "epoch": 5,
+      "mean_loss": 1.7225327897071838,
+      "total": 1000
+    },
+    {
+      "accuracy": 0.531,
+      "correct": 531,
+      "epoch": 6,
+      "mean_loss": 1.7159863305091858,
+      "total": 1000
+    },
+    {
+      "accuracy": 0.532,
+      "correct": 532,
+      "epoch": 7,
+      "mean_loss": 1.7112823987007142,
+      "total": 1000
+    },
+    {
+      "accuracy": 0.526,
+      "correct": 526,
+      "epoch": 8,
+      "mean_loss": 1.7091058540344237,
+      "total": 1000
+    },
+    {
+      "accuracy": 0.535,
+      "correct": 535,
+      "epoch": 9,
+      "mean_loss": 1.7042560839653016,
+      "total": 1000
+    },
+    {
+      "accuracy": 0.532,
+      "correct": 532,
+      "epoch": 10,
+      "mean_loss": 1.7028905534744263,
+      "total": 1000
+    }
+  ],
+  "epochs": 10,
+  "final_learning_rate": 0.0010000000000000002,
+  "first_step_loss": 2.6725502014160156,
+  "initial_effective_learning_rate": 0.003333333333333333,
+  "last_step_loss": 1.7699346542358398,
+  "model_training_mode": false,
+  "optimizer": "Adam",
+  "optimizer_steps": 500,
+  "presentations": 10000,
+  "run_kind": "full",
+  "scheduler": {
+    "end_factor": 0.1,
+    "name": "LinearLR",
+    "start_factor": 0.3333333333333333,
+    "step_interval": "batch",
+    "total_iters": 10
+  },
+  "shuffle": "NumPy RandomState(seed), MT19937; same permutation algorithm as upstream",
+  "training_pair_count": 1000
+}

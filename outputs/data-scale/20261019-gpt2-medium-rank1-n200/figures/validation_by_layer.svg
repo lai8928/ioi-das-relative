@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="510" viewBox="0 0 960 510" role="img" aria-labelledby="title description">
+<title id="title">Validation IIA by layer (full run)</title>
+<desc id="description">IIA by layer. Error bars show sample SD across seeds, not a confidence interval. Missing results have no points; means with missing seeds are incomplete.</desc>
+<rect width="100%" height="100%" fill="white"/>
+<g font-family="sans-serif" font-size="12" fill="#0f172a">
+<text x="30" y="28" font-size="18">Validation IIA by layer — full run</text>
+<text x="30" y="53" fill="#2563eb">Seed 42</text>
+<circle cx="80" cy="440" r="2.5" fill="#2563eb"><title>IIA 0</title></circle>
+<circle cx="162.222222222" cy="416" r="2.5" fill="#2563eb"><title>IIA 0.075</title></circle>
+<circle cx="244.444444444" cy="372.8" r="2.5" fill="#2563eb"><title>IIA 0.21</title></circle>
+<circle cx="326.666666667" cy="355.2" r="2.5" fill="#2563eb"><title>IIA 0.265</title></circle>
+<circle cx="408.888888889" cy="396.8" r="2.5" fill="#2563eb"><title>IIA 0.135</title></circle>
+<circle cx="491.111111111" cy="387.2" r="2.5" fill="#2563eb"><title>IIA 0.165</title></circle>
+<circle cx="573.333333333" cy="420.8" r="2.5" fill="#2563eb"><title>IIA 0.06</title></circle>
+<circle cx="655.555555556" cy="432" r="2.5" fill="#2563eb"><title>IIA 0.025</title></circle>
+<circle cx="737.777777778" cy="438.4" r="2.5" fill="#2563eb"><title>IIA 0.005</title></circle>
+<circle cx="820" cy="440" r="2.5" fill="#2563eb"><title>IIA 0</title></circle>
+<polyline points="80,440 162.222222222,416 244.444444444,372.8 326.666666667,355.2 408.888888889,396.8 491.111111111,387.2 573.333333333,420.8 655.555555556,432 737.777777778,438.4 820,440" fill="none" stroke="#2563eb" stroke-width="1.2"/>
+<text x="410" y="53" fill="#d97706">Seed 43</text>
+<circle cx="80" cy="440" r="2.5" fill="#d97706"><title>IIA 0</title></circle>
+<circle cx="162.222222222" cy="404.8" r="2.5" fill="#d97706"><title>IIA 0.11</title></circle>
+<circle cx="244.444444444" cy="374.4" r="2.5" fill="#d97706"><title>IIA 0.205</title></circle>
+<circle cx="326.666666667" cy="355.2" r="2.5" fill="#d97706"><title>IIA 0.265</title></circle>
+<circle cx="408.888888889" cy="393.6" r="2.5" fill="#d97706"><title>IIA 0.145</title></circle>
+<circle cx="491.111111111" cy="390.4" r="2.5" fill="#d97706"><title>IIA 0.155</title></circle>
+<circle cx="573.333333333" cy="419.2" r="2.5" fill="#d97706"><title>IIA 0.065</title></circle>
+<circle cx="655.555555556" cy="432" r="2.5" fill="#d97706"><title>IIA 0.025</title></circle>
+<circle cx="737.777777778" cy="438.4" r="2.5" fill="#d97706"><title>IIA 0.005</title></circle>
+<circle cx="820" cy="440" r="2.5" fill="#d97706"><title>IIA 0</title></circle>
+<polyline points="80,440 162.222222222,404.8 244.444444444,374.4 326.666666667,355.2 408.888888889,393.6 491.111111111,390.4 573.333333333,419.2 655.555555556,432 737.777777778,438.4 820,440" fill="none" stroke="#d97706" stroke-width="1.2"/>
+<text x="30" y="73" fill="#059669">Seed 44</text>
+<circle cx="80" cy="440" r="2.5" fill="#059669"><title>IIA 0</title></circle>
+<circle cx="162.222222222" cy="404.8" r="2.5" fill="#059669"><title>IIA 0.11</title></circle>
+<circle cx="244.444444444" cy="372.8" r="2.5" fill="#059669"><title>IIA 0.21</title></circle>
+<circle cx="326.666666667" cy="355.2" r="2.5" fill="#059669"><title>IIA 0.265</title></circle>
+<circle cx="408.888888889" cy="393.6" r="2.5" fill="#059669"><title>IIA 0.145</title></circle>
+<circle cx="491.111111111" cy="388.8" r="2.5" fill="#059669"><title>IIA 0.16</title></circle>
+<circle cx="573.333333333" cy="419.2" r="2.5" fill="#059669"><title>IIA 0.065</title></circle>
+<circle cx="655.555555556" cy="432" r="2.5" fill="#059669"><title>IIA 0.025</title></circle>
+<circle cx="737.777777778" cy="438.4" r="2.5" fill="#059669"><title>IIA 0.005</title></circle>
+<circle cx="820" cy="440" r="2.5" fill="#059669"><title>IIA 0</title></circle>
+<polyline points="80,440 162.222222222,404.8 244.444444444,372.8 326.666666667,355.2 408.888888889,393.6 491.111111111,388.8 573.333333333,419.2 655.555555556,432 737.777777778,438.4 820,440" fill="none" stroke="#059669" stroke-width="1.2"/>
+<text x="410" y="73" fill="#0f172a">Validation IIA mean ± seed SD</text>
+<circle cx="80" cy="440" r="4" fill="#0f172a"><title>IIA 0</title></circle>
+<circle cx="162.222222222" cy="408.533333333" r="4" fill="#0f172a"><title>IIA 0.0983333333333</title></circle>
+<circle cx="244.444444444" cy="373.333333333" r="4" fill="#0f172a"><title>IIA 0.208333333333</title></circle>
+<circle cx="326.666666667" cy="355.2" r="4" fill="#0f172a"><title>IIA 0.265</title></circle>
+<circle cx="408.888888889" cy="394.666666667" r="4" fill="#0f172a"><title>IIA 0.141666666667</title></circle>
+<circle cx="491.111111111" cy="388.8" r="4" fill="#0f172a"><title>IIA 0.16</title></circle>
+<circle cx="573.333333333" cy="419.733333333" r="4" fill="#0f172a"><title>IIA 0.0633333333333</title></circle>
+<circle cx="655.555555556" cy="432" r="4" fill="#0f172a"><title>IIA 0.025</title></circle>
+<circle cx="737.777777778" cy="438.4" r="4" fill="#0f172a"><title>IIA 0.005</title></circle>
+<circle cx="820" cy="440" r="4" fill="#0f172a"><title>IIA 0</title></circle>
+<polyline points="80,440 162.222222222,408.533333333 244.444444444,373.333333333 326.666666667,355.2 408.888888889,394.666666667 491.111111111,388.8 573.333333333,419.733333333 655.555555556,432 737.777777778,438.4 820,440" fill="none" stroke="#0f172a" stroke-width="3"/>
+<path d="M 80 440 V 440 M 76 440 H 84 M 76 440 H 84" stroke="#0f172a" fill="none"/>
+<path d="M 162.222222222 402.067010318 V 414.999656348 M 158.222222222 402.067010318 H 166.222222222 M 158.222222222 414.999656348 H 166.222222222" stroke="#0f172a" fill="none"/>
+<path d="M 244.444444444 372.409572903 V 374.257093764 M 240.444444444 372.409572903 H 248.444444444 M 240.444444444 374.257093764 H 248.444444444" stroke="#0f172a" fill="none"/>
+<path d="M 326.666666667 355.2 V 355.2 M 322.666666667 355.2 H 330.666666667 M 322.666666667 355.2 H 330.666666667" stroke="#0f172a" fill="none"/>
+<path d="M 408.888888889 392.819145805 V 396.514187528 M 404.888888889 392.819145805 H 412.888888889 M 404.888888889 396.514187528 H 412.888888889" stroke="#0f172a" fill="none"/>
+<path d="M 491.111111111 387.2 V 390.4 M 487.111111111 387.2 H 495.111111111 M 487.111111111 390.4 H 495.111111111" stroke="#0f172a" fill="none"/>
+<path d="M 573.333333333 418.809572903 V 420.657093764 M 569.333333333 418.809572903 H 577.333333333 M 569.333333333 420.657093764 H 577.333333333" stroke="#0f172a" fill="none"/>
+<path d="M 655.555555556 432 V 432 M 651.555555556 432 H 659.555555556 M 651.555555556 432 H 659.555555556" stroke="#0f172a" fill="none"/>
+<path d="M 737.777777778 438.4 V 438.4 M 733.777777778 438.4 H 741.777777778 M 733.777777778 438.4 H 741.777777778" stroke="#0f172a" fill="none"/>
+<path d="M 820 440 V 440 M 816 440 H 824 M 816 440 H 824" stroke="#0f172a" fill="none"/>
+<text x="30" y="93" fill="#d97706">Initial validation IIA mean ± seed SD</text>
+<circle cx="80" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<circle cx="162.222222222" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<circle cx="244.444444444" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<circle cx="326.666666667" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<circle cx="408.888888889" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<circle cx="491.111111111" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<circle cx="573.333333333" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<circle cx="655.555555556" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<circle cx="737.777777778" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<circle cx="820" cy="440" r="4" fill="#d97706"><title>IIA 0</title></circle>
+<polyline points="80,440 162.222222222,440 244.444444444,440 326.666666667,440 408.888888889,440 491.111111111,440 573.333333333,440 655.555555556,440 737.777777778,440 820,440" fill="none" stroke="#d97706" stroke-width="3"/>
+<path d="M 80 440 V 440 M 76 440 H 84 M 76 440 H 84" stroke="#d97706" fill="none"/>
+<path d="M 162.222222222 440 V 440 M 158.222222222 440 H 166.222222222 M 158.222222222 440 H 166.222222222" stroke="#d97706" fill="none"/>
+<path d="M 244.444444444 440 V 440 M 240.444444444 440 H 248.444444444 M 240.444444444 440 H 248.444444444" stroke="#d97706" fill="none"/>
+<path d="M 326.666666667 440 V 440 M 322.666666667 440 H 330.666666667 M 322.666666667 440 H 330.666666667" stroke="#d97706" fill="none"/>
+<path d="M 408.888888889 440 V 440 M 404.888888889 440 H 412.888888889 M 404.888888889 440 H 412.888888889" stroke="#d97706" fill="none"/>
+<path d="M 491.111111111 440 V 440 M 487.111111111 440 H 495.111111111 M 487.111111111 440 H 495.111111111" stroke="#d97706" fill="none"/>
+<path d="M 573.333333333 440 V 440 M 569.333333333 440 H 577.333333333 M 569.333333333 440 H 577.333333333" stroke="#d97706" fill="none"/>
+<path d="M 655.555555556 440 V 440 M 651.555555556 440 H 659.555555556 M 651.555555556 440 H 659.555555556" stroke="#d97706" fill="none"/>
+<path d="M 737.777777778 440 V 440 M 733.777777778 440 H 741.777777778 M 733.777777778 440 H 741.777777778" stroke="#d97706" fill="none"/>
+<path d="M 820 440 V 440 M 816 440 H 824 M 816 440 H 824" stroke="#d97706" fill="none"/>
+<text x="410" y="93" fill="#059669">No intervention validation IIA mean ± seed SD</text>
+<circle cx="80" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<circle cx="162.222222222" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<circle cx="244.444444444" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<circle cx="326.666666667" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<circle cx="408.888888889" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<circle cx="491.111111111" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<circle cx="573.333333333" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<circle cx="655.555555556" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<circle cx="737.777777778" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<circle cx="820" cy="440" r="4" fill="#059669"><title>IIA 0</title></circle>
+<polyline points="80,440 162.222222222,440 244.444444444,440 326.666666667,440 408.888888889,440 491.111111111,440 573.333333333,440 655.555555556,440 737.777777778,440 820,440" fill="none" stroke="#059669" stroke-width="3"/>
+<path d="M 80 440 V 440 M 76 440 H 84 M 76 440 H 84" stroke="#059669" fill="none"/>
+<path d="M 162.222222222 440 V 440 M 158.222222222 440 H 166.222222222 M 158.222222222 440 H 166.222222222" stroke="#059669" fill="none"/>
+<path d="M 244.444444444 440 V 440 M 240.444444444 440 H 248.444444444 M 240.444444444 440 H 248.444444444" stroke="#059669" fill="none"/>
+<path d="M 326.666666667 440 V 440 M 322.666666667 440 H 330.666666667 M 322.666666667 440 H 330.666666667" stroke="#059669" fill="none"/>
+<path d="M 408.888888889 440 V 440 M 404.888888889 440 H 412.888888889 M 404.888888889 440 H 412.888888889" stroke="#059669" fill="none"/>
+<path d="M 491.111111111 440 V 440 M 487.111111111 440 H 495.111111111 M 487.111111111 440 H 495.111111111" stroke="#059669" fill="none"/>
+<path d="M 573.333333333 440 V 440 M 569.333333333 440 H 577.333333333 M 569.333333333 440 H 577.333333333" stroke="#059669" fill="none"/>
+<path d="M 655.555555556 440 V 440 M 651.555555556 440 H 659.555555556 M 651.555555556 440 H 659.555555556" stroke="#059669" fill="none"/>
+<path d="M 737.777777778 440 V 440 M 733.777777778 440 H 741.777777778 M 733.777777778 440 H 741.777777778" stroke="#059669" fill="none"/>
+<path d="M 820 440 V 440 M 816 440 H 824 M 816 440 H 824" stroke="#059669" fill="none"/>
+<line x1="70" y1="440" x2="830" y2="440" stroke="#e2e8f0"/>
+<text x="60" y="444" text-anchor="end">0</text>
+<line x1="70" y1="376" x2="830" y2="376" stroke="#e2e8f0"/>
+<text x="60" y="380" text-anchor="end">0.2</text>
+<line x1="70" y1="312" x2="830" y2="312" stroke="#e2e8f0"/>
+<text x="60" y="316" text-anchor="end">0.4</text>
+<line x1="70" y1="248" x2="830" y2="248" stroke="#e2e8f0"/>
+<text x="60" y="252" text-anchor="end">0.6</text>
+<line x1="70" y1="184" x2="830" y2="184" stroke="#e2e8f0"/>
+<text x="60" y="188" text-anchor="end">0.8</text>
+<line x1="70" y1="120" x2="830" y2="120" stroke="#e2e8f0"/>
+<text x="60" y="124" text-anchor="end">1</text>
+<text x="80" y="462" text-anchor="middle">11</text>
+<text x="162.222222222" y="462" text-anchor="middle">12</text>
+<text x="244.444444444" y="462" text-anchor="middle">13</text>
+<text x="326.666666667" y="462" text-anchor="middle">14</text>
+<text x="408.888888889" y="462" text-anchor="middle">15</text>
+<text x="491.111111111" y="462" text-anchor="middle">16</text>
+<text x="573.333333333" y="462" text-anchor="middle">17</text>
+<text x="655.555555556" y="462" text-anchor="middle">18</text>
+<text x="737.777777778" y="462" text-anchor="middle">19</text>
+<text x="820" y="462" text-anchor="middle">20</text>
+<text x="450" y="487" text-anchor="middle">Layer</text>
+<text x="15" y="280" transform="rotate(-90 15 280)" text-anchor="middle">IIA</text>
+</g>
+</svg>

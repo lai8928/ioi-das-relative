@@ -1,0 +1,93 @@
+{
+  "epoch_results": [
+    {
+      "accuracy": 0.5124,
+      "correct": 2562,
+      "epoch": 1,
+      "mean_loss": 1.754993575334549,
+      "total": 5000
+    },
+    {
+      "accuracy": 0.5326,
+      "correct": 2663,
+      "epoch": 2,
+      "mean_loss": 1.690118978023529,
+      "total": 5000
+    },
+    {
+      "accuracy": 0.5326,
+      "correct": 2663,
+      "epoch": 3,
+      "mean_loss": 1.690272503376007,
+      "total": 5000
+    },
+    {
+      "accuracy": 0.5332,
+      "correct": 2666,
+      "epoch": 4,
+      "mean_loss": 1.690512396812439,
+      "total": 5000
+    },
+    {
+      "accuracy": 0.5304,
+      "correct": 2652,
+      "epoch": 5,
+      "mean_loss": 1.6907367358207703,
+      "total": 5000
+    },
+    {
+      "accuracy": 0.5298,
+      "correct": 2649,
+      "epoch": 6,
+      "mean_loss": 1.6919503674507141,
+      "total": 5000
+    },
+    {
+      "accuracy": 0.5338,
+      "correct": 2669,
+      "epoch": 7,
+      "mean_loss": 1.6904726185798644,
+      "total": 5000
+    },
+    {
+      "accuracy": 0.5314,
+      "correct": 2657,
+      "epoch": 8,
+      "mean_loss": 1.6905829520225526,
+      "total": 5000
+    },
+    {
+      "accuracy": 0.5334,
+      "correct": 2667,
+      "epoch": 9,
+      "mean_loss": 1.6915186491012573,
+      "total": 5000
+    },
+    {
+      "accuracy": 0.5306,
+      "correct": 2653,
+      "epoch": 10,
+      "mean_loss": 1.6911532301902772,
+      "total": 5000
+    }
+  ],
+  "epochs": 10,
+  "final_learning_rate": 0.0010000000000000002,
+  "first_step_loss": 3.117706775665283,
+  "initial_effective_learning_rate": 0.003333333333333333,
+  "last_step_loss": 1.7779178619384766,
+  "model_training_mode": false,
+  "optimizer": "Adam",
+  "optimizer_steps": 2500,
+  "presentations": 50000,
+  "run_kind": "full",
+  "scheduler": {
+    "end_factor": 0.1,
+    "name": "LinearLR",
+    "start_factor": 0.3333333333333333,
+    "step_interval": "batch",
+    "total_iters": 10
+  },
+  "shuffle": "NumPy RandomState(seed), MT19937; same permutation algorithm as upstream",
+  "training_pair_count": 5000
+}

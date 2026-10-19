@@ -1,0 +1,124 @@
+{
+  "artifacts": {
+    "test_predictions.jsonl": "201b6b8f2d14d7b3798e40b5099475c0f17b51f74f0ab845a0b8f2d5713b9c70"
+  },
+  "checkpoint_sha256": "e338a7b67c9f9f4ea4685d77a02b443e2275e3dbbcecbcb67166dbe5581b4756",
+  "completed_at_utc": "2026-10-19T12:25:30.994151+00:00",
+  "condition": {
+    "component": "block_output",
+    "intervention_location": "N",
+    "layer": 17,
+    "rank": 8,
+    "target_variable": "position"
+  },
+  "datasets": {
+    "test": {
+      "generation": {
+        "generator_revision": "ioi-position-v1-ordered-symbols",
+        "generator_sha256": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+        "seed": 42,
+        "target_variable": "position",
+        "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+        "upstream_sha256": {
+          "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+          "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+          "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+          "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+          "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+          "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+          "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+        }
+      },
+      "manifest_path": "/data/homezvol0/ilingl/ioi-das-relative/data/generated/manifest.json",
+      "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+      "path": "/data/homezvol0/ilingl/ioi-das-relative/data/generated/test.jsonl",
+      "reference": "legacy_v1/test",
+      "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+    }
+  },
+  "elapsed_seconds": 5.001090507954359,
+  "metrics": {
+    "test": {
+      "factual_accuracy": 1.0,
+      "factual_correct": 100,
+      "factual_total": 100,
+      "groups": {
+        "ABB->ABB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "ABB->BAB": {
+          "iia": 0.14,
+          "iia_correct": 7,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->ABB": {
+          "iia": 0.08,
+          "iia_correct": 4,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->BAB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "switch_required": {
+          "iia": 0.11,
+          "iia_correct": 11,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "unchanged_target": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        }
+      },
+      "iia": 0.11,
+      "iia_correct": 11,
+      "iia_total": 100,
+      "mean_counterfactual_loss": 2.693862038850784,
+      "mean_factual_loss": 0.7169711695611477,
+      "mean_target_logit": -60.619614925384525,
+      "no_intervention_iia": 0.0,
+      "no_intervention_iia_correct": 0,
+      "no_intervention_iia_total": 100,
+      "prediction_rule": "argmax_full_vocabulary"
+    }
+  },
+  "model_metadata": {
+    "hidden_size": 1024,
+    "layer_count": 24,
+    "name": "gpt2-medium",
+    "parameter_count": 354823168,
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da"
+  },
+  "model_sha256": "9d858dde56f55f3105160a2127bc38ba1d6fe31e455eebb7cf3543a65a681fd8",
+  "run_kind": "full",
+  "seed": 44,
+  "selection_sha256": "1d613581472a90d3927429ac0efe391e7a23c9716764c6957b04c68c1d63b943",
+  "status": "complete",
+  "validation": {
+    "cleanup": "passed",
+    "frozen_weights": "passed"
+  }
+}

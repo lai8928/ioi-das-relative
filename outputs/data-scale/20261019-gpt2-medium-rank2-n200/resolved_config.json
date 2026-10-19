@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "seed": 42,
+  "device": "cuda:0",
+  "cpu_threads": 8,
+  "evaluation_batch_size": 20,
+  "model": {
+    "name": "gpt2-medium",
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+    "local_files_only": true,
+    "dtype": "float32",
+    "attn_implementation": "eager"
+  },
+  "tokenizer": {
+    "name": "gpt2-medium",
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+    "local_files_only": true
+  },
+  "data": {
+    "train": "train_n200_v1/train",
+    "test": "legacy_v1/test",
+    "validation": "val_indist_v1/validation"
+  },
+  "intervention": {
+    "target_variable": "position",
+    "component": "block_output",
+    "layer": 8,
+    "location": "N",
+    "rank": 2
+  },
+  "training": {
+    "epochs": 10,
+    "batch_size": 20,
+    "optimizer": "Adam",
+    "learning_rate": 0.01,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.0,
+    "schedule": "legacy_per_update_linearlr",
+    "scheduler": {
+      "name": "LinearLR",
+      "start_factor": 0.3333333333333333,
+      "end_factor": 0.1,
+      "total_iters": 10,
+      "step_interval": "batch"
+    }
+  },
+  "grid": {
+    "intervention.layer": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "seed": [
+      42,
+      43,
+      44
+    ]
+  },
+  "task": "data-scale",
+  "name": "gpt2-medium-rank2-n200",
+  "selection": {
+    "metric": "validation_iia",
+    "aggregate": "mean_over_seeds",
+    "tie_break": "lowest_layer",
+    "evaluate_after_lock": [
+      "test"
+    ]
+  }
+}

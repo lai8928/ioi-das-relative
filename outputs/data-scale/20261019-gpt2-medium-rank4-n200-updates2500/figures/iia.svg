@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="672" viewBox="0 0 1250 672" role="img" aria-labelledby="title description">
+<title id="title">Saved IIA by condition (full run)</title>
+<desc id="description">IIA ratios range from zero to one. Missing results have no bars.</desc>
+<rect width="100%" height="100%" fill="white"/>
+<g font-family="sans-serif" font-size="12" fill="#0f172a">
+<text x="20" y="26" font-size="18">Saved IIA by condition — full run</text>
+<rect x="20" y="42" width="12" height="12" fill="#94a3b8"/>
+<text x="38" y="53">Initial train IIA</text>
+<rect x="420" y="42" width="12" height="12" fill="#2563eb"/>
+<text x="438" y="53">Train IIA</text>
+<rect x="820" y="42" width="12" height="12" fill="#64748b"/>
+<text x="838" y="53">No intervention train IIA</text>
+<rect x="20" y="64" width="12" height="12" fill="#c4b5fd"/>
+<text x="38" y="75">Initial validation IIA</text>
+<rect x="420" y="64" width="12" height="12" fill="#d97706"/>
+<text x="438" y="75">Validation IIA</text>
+<rect x="820" y="64" width="12" height="12" fill="#9333ea"/>
+<text x="838" y="75">No intervention validation IIA</text>
+<rect x="20" y="86" width="12" height="12" fill="#059669"/>
+<text x="38" y="97">Test IIA (descriptive)</text>
+<rect x="420" y="86" width="12" height="12" fill="#065f46"/>
+<text x="438" y="97">No intervention test IIA (descriptive)</text>
+<line x1="600" y1="130" x2="600" y2="654" stroke="#e2e8f0"/>
+<text x="600" y="126" text-anchor="middle">0</text>
+<line x1="700" y1="130" x2="700" y2="654" stroke="#e2e8f0"/>
+<text x="700" y="126" text-anchor="middle">0.2</text>
+<line x1="800" y1="130" x2="800" y2="654" stroke="#e2e8f0"/>
+<text x="800" y="126" text-anchor="middle">0.4</text>
+<line x1="900" y1="130" x2="900" y2="654" stroke="#e2e8f0"/>
+<text x="900" y="126" text-anchor="middle">0.6</text>
+<line x1="1000" y1="130" x2="1000" y2="654" stroke="#e2e8f0"/>
+<text x="1000" y="126" text-anchor="middle">0.8</text>
+<line x1="1100" y1="130" x2="1100" y2="654" stroke="#e2e8f0"/>
+<text x="1100" y="126" text-anchor="middle">1</text>
+<text x="20" y="158">conditions/intervention.layer=14/seed=42</text>
+<text x="20" y="176" fill="#64748b">complete</text>
+<rect x="600" y="140" width="207.5" height="14" fill="#94a3b8"/>
+<text x="812.5" y="152">0.415</text>
+<rect x="600" y="158" width="295" height="14" fill="#2563eb"/>
+<text x="900" y="170">0.59</text>
+<rect x="600" y="176" width="207.5" height="14" fill="#64748b"/>
+<text x="812.5" y="188">0.415</text>
+<rect x="600" y="194" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="206">0.0</text>
+<rect x="600" y="212" width="130" height="14" fill="#d97706"/>
+<text x="735" y="224">0.26</text>
+<rect x="600" y="230" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="242">0.0</text>
+<rect x="600" y="248" width="240" height="14" fill="#059669"/>
+<text x="845" y="260">0.48</text>
+<rect x="600" y="266" width="0" height="14" fill="#065f46"/>
+<text x="605" y="278">0.0</text>
+<text x="20" y="332">conditions/intervention.layer=14/seed=43</text>
+<text x="20" y="350" fill="#64748b">complete</text>
+<rect x="600" y="314" width="207.5" height="14" fill="#94a3b8"/>
+<text x="812.5" y="326">0.415</text>
+<rect x="600" y="332" width="272.5" height="14" fill="#2563eb"/>
+<text x="877.5" y="344">0.545</text>
+<rect x="600" y="350" width="207.5" height="14" fill="#64748b"/>
+<text x="812.5" y="362">0.415</text>
+<rect x="600" y="368" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="380">0.0</text>
+<rect x="600" y="386" width="117.5" height="14" fill="#d97706"/>
+<text x="722.5" y="398">0.235</text>
+<rect x="600" y="404" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="416">0.0</text>
+<rect x="600" y="422" width="220" height="14" fill="#059669"/>
+<text x="825" y="434">0.44</text>
+<rect x="600" y="440" width="0" height="14" fill="#065f46"/>
+<text x="605" y="452">0.0</text>
+<text x="20" y="506">conditions/intervention.layer=14/seed=44</text>
+<text x="20" y="524" fill="#64748b">complete</text>
+<rect x="600" y="488" width="207.5" height="14" fill="#94a3b8"/>
+<text x="812.5" y="500">0.415</text>
+<rect x="600" y="506" width="272.5" height="14" fill="#2563eb"/>
+<text x="877.5" y="518">0.545</text>
+<rect x="600" y="524" width="207.5" height="14" fill="#64748b"/>
+<text x="812.5" y="536">0.415</text>
+<rect x="600" y="542" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="554">0.0</text>
+<rect x="600" y="560" width="127.5" height="14" fill="#d97706"/>
+<text x="732.5" y="572">0.255</text>
+<rect x="600" y="578" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="590">0.0</text>
+<rect x="600" y="596" width="225" height="14" fill="#059669"/>
+<text x="830" y="608">0.45</text>
+<rect x="600" y="614" width="0" height="14" fill="#065f46"/>
+<text x="605" y="626">0.0</text>
+</g>
+</svg>
