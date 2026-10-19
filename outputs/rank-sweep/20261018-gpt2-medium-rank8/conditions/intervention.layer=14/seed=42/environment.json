@@ -1,0 +1,63 @@
+{
+  "attention_implementation": "eager",
+  "backend_sha256": "11e818f948f43497f364722def50c13f419158554961ee4bb095fbd3350895c3",
+  "cpu_threads": 8,
+  "dependency_changes": [],
+  "device": "cuda:0",
+  "device_name": "NVIDIA A30",
+  "executable": "/data/homezvol0/ilingl/.conda/envs/ioi-das-v2/bin/python",
+  "gpu_required": true,
+  "model_assets": {
+    "config.json": {
+      "bytes": 718,
+      "path": "/data/homezvol0/ilingl/.cache/huggingface/hub/models--gpt2-medium/snapshots/6dcaa7a952f72f9298047fd5137cd6e4f05f41da/config.json",
+      "sha256": "ef1a44d889ad1a0acc7731c78134f1b87d2d222f110e97dd10fd4117331caf22"
+    },
+    "model.safetensors": {
+      "bytes": 1519984962,
+      "path": "/data/homezvol0/ilingl/.cache/huggingface/hub/models--gpt2-medium/snapshots/6dcaa7a952f72f9298047fd5137cd6e4f05f41da/model.safetensors",
+      "sha256": "fc5a354a19255ad494f3d71549390baca1ccf61d1d822b9408971705c687c9cd"
+    }
+  },
+  "model_device": "cuda:0",
+  "model_dtype": "torch.float32",
+  "model_weights_loaded": true,
+  "packages": {
+    "numpy": "2.2.6",
+    "packaging": "26.3",
+    "pytest": "9.1.1",
+    "pyvene": "0.1.8",
+    "tokenizers": "0.22.2",
+    "torch": "2.5.1+cu121",
+    "transformers": "4.57.6"
+  },
+  "parameter_count": 354823168,
+  "python": "3.10.21",
+  "reference_tokenizer_class": "GPT2Tokenizer",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2-medium",
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da"
+  },
+  "tokenizer_assets": {
+    "merges.txt": {
+      "path": "/data/homezvol0/ilingl/.cache/huggingface/hub/models--gpt2-medium/snapshots/6dcaa7a952f72f9298047fd5137cd6e4f05f41da/merges.txt",
+      "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+    },
+    "tokenizer.json": {
+      "path": "/data/homezvol0/ilingl/.cache/huggingface/hub/models--gpt2-medium/snapshots/6dcaa7a952f72f9298047fd5137cd6e4f05f41da/tokenizer.json",
+      "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+    },
+    "tokenizer_config.json": {
+      "path": "/data/homezvol0/ilingl/.cache/huggingface/hub/models--gpt2-medium/snapshots/6dcaa7a952f72f9298047fd5137cd6e4f05f41da/tokenizer_config.json",
+      "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f"
+    },
+    "vocab.json": {
+      "path": "/data/homezvol0/ilingl/.cache/huggingface/hub/models--gpt2-medium/snapshots/6dcaa7a952f72f9298047fd5137cd6e4f05f41da/vocab.json",
+      "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+    }
+  },
+  "tokenizer_class": "GPT2TokenizerFast",
+  "torch_cuda_runtime": "12.1",
+  "visible_device_count": 1
+}

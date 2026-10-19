@@ -1,0 +1,1332 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="12678" viewBox="0 0 1250 12678" role="img" aria-labelledby="title description">
+<title id="title">Saved IIA by condition (full run)</title>
+<desc id="description">IIA ratios range from zero to one. Missing results have no bars.</desc>
+<rect width="100%" height="100%" fill="white"/>
+<g font-family="sans-serif" font-size="12" fill="#0f172a">
+<text x="20" y="26" font-size="18">Saved IIA by condition — full run</text>
+<rect x="20" y="42" width="12" height="12" fill="#94a3b8"/>
+<text x="38" y="53">Initial train IIA</text>
+<rect x="420" y="42" width="12" height="12" fill="#2563eb"/>
+<text x="438" y="53">Train IIA</text>
+<rect x="820" y="42" width="12" height="12" fill="#64748b"/>
+<text x="838" y="53">No intervention train IIA</text>
+<rect x="20" y="64" width="12" height="12" fill="#c4b5fd"/>
+<text x="38" y="75">Initial validation IIA</text>
+<rect x="420" y="64" width="12" height="12" fill="#d97706"/>
+<text x="438" y="75">Validation IIA</text>
+<rect x="820" y="64" width="12" height="12" fill="#9333ea"/>
+<text x="838" y="75">No intervention validation IIA</text>
+<rect x="20" y="86" width="12" height="12" fill="#059669"/>
+<text x="38" y="97">Test IIA (descriptive)</text>
+<rect x="420" y="86" width="12" height="12" fill="#065f46"/>
+<text x="438" y="97">No intervention test IIA (descriptive)</text>
+<line x1="600" y1="130" x2="600" y2="12660" stroke="#e2e8f0"/>
+<text x="600" y="126" text-anchor="middle">0</text>
+<line x1="700" y1="130" x2="700" y2="12660" stroke="#e2e8f0"/>
+<text x="700" y="126" text-anchor="middle">0.2</text>
+<line x1="800" y1="130" x2="800" y2="12660" stroke="#e2e8f0"/>
+<text x="800" y="126" text-anchor="middle">0.4</text>
+<line x1="900" y1="130" x2="900" y2="12660" stroke="#e2e8f0"/>
+<text x="900" y="126" text-anchor="middle">0.6</text>
+<line x1="1000" y1="130" x2="1000" y2="12660" stroke="#e2e8f0"/>
+<text x="1000" y="126" text-anchor="middle">0.8</text>
+<line x1="1100" y1="130" x2="1100" y2="12660" stroke="#e2e8f0"/>
+<text x="1100" y="126" text-anchor="middle">1</text>
+<text x="20" y="158">conditions/intervention.layer=0/seed=42</text>
+<text x="20" y="176" fill="#64748b">complete</text>
+<rect x="600" y="140" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="152">0.405</text>
+<rect x="600" y="158" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="170">0.405</text>
+<rect x="600" y="176" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="188">0.405</text>
+<rect x="600" y="194" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="206">0.0</text>
+<rect x="600" y="212" width="0" height="14" fill="#d97706"/>
+<text x="605" y="224">0.0</text>
+<rect x="600" y="230" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="242">0.0</text>
+<rect x="600" y="248" width="0" height="14" fill="#059669"/>
+<text x="605" y="260">0.0</text>
+<rect x="600" y="266" width="0" height="14" fill="#065f46"/>
+<text x="605" y="278">0.0</text>
+<text x="20" y="332">conditions/intervention.layer=0/seed=43</text>
+<text x="20" y="350" fill="#64748b">complete</text>
+<rect x="600" y="314" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="326">0.405</text>
+<rect x="600" y="332" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="344">0.405</text>
+<rect x="600" y="350" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="362">0.405</text>
+<rect x="600" y="368" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="380">0.0</text>
+<rect x="600" y="386" width="0" height="14" fill="#d97706"/>
+<text x="605" y="398">0.0</text>
+<rect x="600" y="404" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="416">0.0</text>
+<rect x="600" y="422" width="0" height="14" fill="#059669"/>
+<text x="605" y="434">0.0</text>
+<rect x="600" y="440" width="0" height="14" fill="#065f46"/>
+<text x="605" y="452">0.0</text>
+<text x="20" y="506">conditions/intervention.layer=0/seed=44</text>
+<text x="20" y="524" fill="#64748b">complete</text>
+<rect x="600" y="488" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="500">0.405</text>
+<rect x="600" y="506" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="518">0.405</text>
+<rect x="600" y="524" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="536">0.405</text>
+<rect x="600" y="542" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="554">0.0</text>
+<rect x="600" y="560" width="0" height="14" fill="#d97706"/>
+<text x="605" y="572">0.0</text>
+<rect x="600" y="578" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="590">0.0</text>
+<rect x="600" y="596" width="0" height="14" fill="#059669"/>
+<text x="605" y="608">0.0</text>
+<rect x="600" y="614" width="0" height="14" fill="#065f46"/>
+<text x="605" y="626">0.0</text>
+<text x="20" y="680">conditions/intervention.layer=1/seed=42</text>
+<text x="20" y="698" fill="#64748b">complete</text>
+<rect x="600" y="662" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="674">0.405</text>
+<rect x="600" y="680" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="692">0.405</text>
+<rect x="600" y="698" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="710">0.405</text>
+<rect x="600" y="716" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="728">0.0</text>
+<rect x="600" y="734" width="0" height="14" fill="#d97706"/>
+<text x="605" y="746">0.0</text>
+<rect x="600" y="752" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="764">0.0</text>
+<rect x="600" y="770" width="0" height="14" fill="#059669"/>
+<text x="605" y="782">0.0</text>
+<rect x="600" y="788" width="0" height="14" fill="#065f46"/>
+<text x="605" y="800">0.0</text>
+<text x="20" y="854">conditions/intervention.layer=1/seed=43</text>
+<text x="20" y="872" fill="#64748b">complete</text>
+<rect x="600" y="836" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="848">0.405</text>
+<rect x="600" y="854" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="866">0.405</text>
+<rect x="600" y="872" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="884">0.405</text>
+<rect x="600" y="890" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="902">0.0</text>
+<rect x="600" y="908" width="0" height="14" fill="#d97706"/>
+<text x="605" y="920">0.0</text>
+<rect x="600" y="926" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="938">0.0</text>
+<rect x="600" y="944" width="0" height="14" fill="#059669"/>
+<text x="605" y="956">0.0</text>
+<rect x="600" y="962" width="0" height="14" fill="#065f46"/>
+<text x="605" y="974">0.0</text>
+<text x="20" y="1028">conditions/intervention.layer=1/seed=44</text>
+<text x="20" y="1046" fill="#64748b">complete</text>
+<rect x="600" y="1010" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="1022">0.405</text>
+<rect x="600" y="1028" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="1040">0.405</text>
+<rect x="600" y="1046" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="1058">0.405</text>
+<rect x="600" y="1064" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="1076">0.0</text>
+<rect x="600" y="1082" width="0" height="14" fill="#d97706"/>
+<text x="605" y="1094">0.0</text>
+<rect x="600" y="1100" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="1112">0.0</text>
+<rect x="600" y="1118" width="0" height="14" fill="#059669"/>
+<text x="605" y="1130">0.0</text>
+<rect x="600" y="1136" width="0" height="14" fill="#065f46"/>
+<text x="605" y="1148">0.0</text>
+<text x="20" y="1202">conditions/intervention.layer=2/seed=42</text>
+<text x="20" y="1220" fill="#64748b">complete</text>
+<rect x="600" y="1184" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="1196">0.405</text>
+<rect x="600" y="1202" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="1214">0.405</text>
+<rect x="600" y="1220" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="1232">0.405</text>
+<rect x="600" y="1238" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="1250">0.0</text>
+<rect x="600" y="1256" width="0" height="14" fill="#d97706"/>
+<text x="605" y="1268">0.0</text>
+<rect x="600" y="1274" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="1286">0.0</text>
+<rect x="600" y="1292" width="0" height="14" fill="#059669"/>
+<text x="605" y="1304">0.0</text>
+<rect x="600" y="1310" width="0" height="14" fill="#065f46"/>
+<text x="605" y="1322">0.0</text>
+<text x="20" y="1376">conditions/intervention.layer=2/seed=43</text>
+<text x="20" y="1394" fill="#64748b">complete</text>
+<rect x="600" y="1358" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="1370">0.405</text>
+<rect x="600" y="1376" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="1388">0.405</text>
+<rect x="600" y="1394" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="1406">0.405</text>
+<rect x="600" y="1412" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="1424">0.0</text>
+<rect x="600" y="1430" width="0" height="14" fill="#d97706"/>
+<text x="605" y="1442">0.0</text>
+<rect x="600" y="1448" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="1460">0.0</text>
+<rect x="600" y="1466" width="0" height="14" fill="#059669"/>
+<text x="605" y="1478">0.0</text>
+<rect x="600" y="1484" width="0" height="14" fill="#065f46"/>
+<text x="605" y="1496">0.0</text>
+<text x="20" y="1550">conditions/intervention.layer=2/seed=44</text>
+<text x="20" y="1568" fill="#64748b">complete</text>
+<rect x="600" y="1532" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="1544">0.405</text>
+<rect x="600" y="1550" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="1562">0.405</text>
+<rect x="600" y="1568" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="1580">0.405</text>
+<rect x="600" y="1586" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="1598">0.0</text>
+<rect x="600" y="1604" width="0" height="14" fill="#d97706"/>
+<text x="605" y="1616">0.0</text>
+<rect x="600" y="1622" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="1634">0.0</text>
+<rect x="600" y="1640" width="0" height="14" fill="#059669"/>
+<text x="605" y="1652">0.0</text>
+<rect x="600" y="1658" width="0" height="14" fill="#065f46"/>
+<text x="605" y="1670">0.0</text>
+<text x="20" y="1724">conditions/intervention.layer=3/seed=42</text>
+<text x="20" y="1742" fill="#64748b">complete</text>
+<rect x="600" y="1706" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="1718">0.405</text>
+<rect x="600" y="1724" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="1736">0.405</text>
+<rect x="600" y="1742" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="1754">0.405</text>
+<rect x="600" y="1760" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="1772">0.0</text>
+<rect x="600" y="1778" width="0" height="14" fill="#d97706"/>
+<text x="605" y="1790">0.0</text>
+<rect x="600" y="1796" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="1808">0.0</text>
+<rect x="600" y="1814" width="0" height="14" fill="#059669"/>
+<text x="605" y="1826">0.0</text>
+<rect x="600" y="1832" width="0" height="14" fill="#065f46"/>
+<text x="605" y="1844">0.0</text>
+<text x="20" y="1898">conditions/intervention.layer=3/seed=43</text>
+<text x="20" y="1916" fill="#64748b">complete</text>
+<rect x="600" y="1880" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="1892">0.405</text>
+<rect x="600" y="1898" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="1910">0.405</text>
+<rect x="600" y="1916" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="1928">0.405</text>
+<rect x="600" y="1934" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="1946">0.0</text>
+<rect x="600" y="1952" width="0" height="14" fill="#d97706"/>
+<text x="605" y="1964">0.0</text>
+<rect x="600" y="1970" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="1982">0.0</text>
+<rect x="600" y="1988" width="0" height="14" fill="#059669"/>
+<text x="605" y="2000">0.0</text>
+<rect x="600" y="2006" width="0" height="14" fill="#065f46"/>
+<text x="605" y="2018">0.0</text>
+<text x="20" y="2072">conditions/intervention.layer=3/seed=44</text>
+<text x="20" y="2090" fill="#64748b">complete</text>
+<rect x="600" y="2054" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="2066">0.405</text>
+<rect x="600" y="2072" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="2084">0.405</text>
+<rect x="600" y="2090" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="2102">0.405</text>
+<rect x="600" y="2108" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="2120">0.0</text>
+<rect x="600" y="2126" width="0" height="14" fill="#d97706"/>
+<text x="605" y="2138">0.0</text>
+<rect x="600" y="2144" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="2156">0.0</text>
+<rect x="600" y="2162" width="0" height="14" fill="#059669"/>
+<text x="605" y="2174">0.0</text>
+<rect x="600" y="2180" width="0" height="14" fill="#065f46"/>
+<text x="605" y="2192">0.0</text>
+<text x="20" y="2246">conditions/intervention.layer=4/seed=42</text>
+<text x="20" y="2264" fill="#64748b">complete</text>
+<rect x="600" y="2228" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="2240">0.405</text>
+<rect x="600" y="2246" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="2258">0.405</text>
+<rect x="600" y="2264" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="2276">0.405</text>
+<rect x="600" y="2282" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="2294">0.0</text>
+<rect x="600" y="2300" width="0" height="14" fill="#d97706"/>
+<text x="605" y="2312">0.0</text>
+<rect x="600" y="2318" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="2330">0.0</text>
+<rect x="600" y="2336" width="0" height="14" fill="#059669"/>
+<text x="605" y="2348">0.0</text>
+<rect x="600" y="2354" width="0" height="14" fill="#065f46"/>
+<text x="605" y="2366">0.0</text>
+<text x="20" y="2420">conditions/intervention.layer=4/seed=43</text>
+<text x="20" y="2438" fill="#64748b">complete</text>
+<rect x="600" y="2402" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="2414">0.405</text>
+<rect x="600" y="2420" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="2432">0.405</text>
+<rect x="600" y="2438" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="2450">0.405</text>
+<rect x="600" y="2456" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="2468">0.0</text>
+<rect x="600" y="2474" width="0" height="14" fill="#d97706"/>
+<text x="605" y="2486">0.0</text>
+<rect x="600" y="2492" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="2504">0.0</text>
+<rect x="600" y="2510" width="0" height="14" fill="#059669"/>
+<text x="605" y="2522">0.0</text>
+<rect x="600" y="2528" width="0" height="14" fill="#065f46"/>
+<text x="605" y="2540">0.0</text>
+<text x="20" y="2594">conditions/intervention.layer=4/seed=44</text>
+<text x="20" y="2612" fill="#64748b">complete</text>
+<rect x="600" y="2576" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="2588">0.405</text>
+<rect x="600" y="2594" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="2606">0.405</text>
+<rect x="600" y="2612" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="2624">0.405</text>
+<rect x="600" y="2630" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="2642">0.0</text>
+<rect x="600" y="2648" width="0" height="14" fill="#d97706"/>
+<text x="605" y="2660">0.0</text>
+<rect x="600" y="2666" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="2678">0.0</text>
+<rect x="600" y="2684" width="0" height="14" fill="#059669"/>
+<text x="605" y="2696">0.0</text>
+<rect x="600" y="2702" width="0" height="14" fill="#065f46"/>
+<text x="605" y="2714">0.0</text>
+<text x="20" y="2768">conditions/intervention.layer=5/seed=42</text>
+<text x="20" y="2786" fill="#64748b">complete</text>
+<rect x="600" y="2750" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="2762">0.405</text>
+<rect x="600" y="2768" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="2780">0.405</text>
+<rect x="600" y="2786" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="2798">0.405</text>
+<rect x="600" y="2804" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="2816">0.0</text>
+<rect x="600" y="2822" width="0" height="14" fill="#d97706"/>
+<text x="605" y="2834">0.0</text>
+<rect x="600" y="2840" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="2852">0.0</text>
+<rect x="600" y="2858" width="0" height="14" fill="#059669"/>
+<text x="605" y="2870">0.0</text>
+<rect x="600" y="2876" width="0" height="14" fill="#065f46"/>
+<text x="605" y="2888">0.0</text>
+<text x="20" y="2942">conditions/intervention.layer=5/seed=43</text>
+<text x="20" y="2960" fill="#64748b">complete</text>
+<rect x="600" y="2924" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="2936">0.405</text>
+<rect x="600" y="2942" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="2954">0.405</text>
+<rect x="600" y="2960" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="2972">0.405</text>
+<rect x="600" y="2978" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="2990">0.0</text>
+<rect x="600" y="2996" width="0" height="14" fill="#d97706"/>
+<text x="605" y="3008">0.0</text>
+<rect x="600" y="3014" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="3026">0.0</text>
+<rect x="600" y="3032" width="0" height="14" fill="#059669"/>
+<text x="605" y="3044">0.0</text>
+<rect x="600" y="3050" width="0" height="14" fill="#065f46"/>
+<text x="605" y="3062">0.0</text>
+<text x="20" y="3116">conditions/intervention.layer=5/seed=44</text>
+<text x="20" y="3134" fill="#64748b">complete</text>
+<rect x="600" y="3098" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="3110">0.405</text>
+<rect x="600" y="3116" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="3128">0.405</text>
+<rect x="600" y="3134" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="3146">0.405</text>
+<rect x="600" y="3152" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="3164">0.0</text>
+<rect x="600" y="3170" width="0" height="14" fill="#d97706"/>
+<text x="605" y="3182">0.0</text>
+<rect x="600" y="3188" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="3200">0.0</text>
+<rect x="600" y="3206" width="0" height="14" fill="#059669"/>
+<text x="605" y="3218">0.0</text>
+<rect x="600" y="3224" width="0" height="14" fill="#065f46"/>
+<text x="605" y="3236">0.0</text>
+<text x="20" y="3290">conditions/intervention.layer=6/seed=42</text>
+<text x="20" y="3308" fill="#64748b">complete</text>
+<rect x="600" y="3272" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="3284">0.405</text>
+<rect x="600" y="3290" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="3302">0.405</text>
+<rect x="600" y="3308" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="3320">0.405</text>
+<rect x="600" y="3326" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="3338">0.0</text>
+<rect x="600" y="3344" width="0" height="14" fill="#d97706"/>
+<text x="605" y="3356">0.0</text>
+<rect x="600" y="3362" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="3374">0.0</text>
+<rect x="600" y="3380" width="0" height="14" fill="#059669"/>
+<text x="605" y="3392">0.0</text>
+<rect x="600" y="3398" width="0" height="14" fill="#065f46"/>
+<text x="605" y="3410">0.0</text>
+<text x="20" y="3464">conditions/intervention.layer=6/seed=43</text>
+<text x="20" y="3482" fill="#64748b">complete</text>
+<rect x="600" y="3446" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="3458">0.405</text>
+<rect x="600" y="3464" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="3476">0.405</text>
+<rect x="600" y="3482" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="3494">0.405</text>
+<rect x="600" y="3500" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="3512">0.0</text>
+<rect x="600" y="3518" width="0" height="14" fill="#d97706"/>
+<text x="605" y="3530">0.0</text>
+<rect x="600" y="3536" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="3548">0.0</text>
+<rect x="600" y="3554" width="0" height="14" fill="#059669"/>
+<text x="605" y="3566">0.0</text>
+<rect x="600" y="3572" width="0" height="14" fill="#065f46"/>
+<text x="605" y="3584">0.0</text>
+<text x="20" y="3638">conditions/intervention.layer=6/seed=44</text>
+<text x="20" y="3656" fill="#64748b">complete</text>
+<rect x="600" y="3620" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="3632">0.405</text>
+<rect x="600" y="3638" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="3650">0.405</text>
+<rect x="600" y="3656" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="3668">0.405</text>
+<rect x="600" y="3674" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="3686">0.0</text>
+<rect x="600" y="3692" width="0" height="14" fill="#d97706"/>
+<text x="605" y="3704">0.0</text>
+<rect x="600" y="3710" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="3722">0.0</text>
+<rect x="600" y="3728" width="0" height="14" fill="#059669"/>
+<text x="605" y="3740">0.0</text>
+<rect x="600" y="3746" width="0" height="14" fill="#065f46"/>
+<text x="605" y="3758">0.0</text>
+<text x="20" y="3812">conditions/intervention.layer=7/seed=42</text>
+<text x="20" y="3830" fill="#64748b">complete</text>
+<rect x="600" y="3794" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="3806">0.405</text>
+<rect x="600" y="3812" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="3824">0.405</text>
+<rect x="600" y="3830" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="3842">0.405</text>
+<rect x="600" y="3848" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="3860">0.0</text>
+<rect x="600" y="3866" width="0" height="14" fill="#d97706"/>
+<text x="605" y="3878">0.0</text>
+<rect x="600" y="3884" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="3896">0.0</text>
+<rect x="600" y="3902" width="0" height="14" fill="#059669"/>
+<text x="605" y="3914">0.0</text>
+<rect x="600" y="3920" width="0" height="14" fill="#065f46"/>
+<text x="605" y="3932">0.0</text>
+<text x="20" y="3986">conditions/intervention.layer=7/seed=43</text>
+<text x="20" y="4004" fill="#64748b">complete</text>
+<rect x="600" y="3968" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="3980">0.405</text>
+<rect x="600" y="3986" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="3998">0.405</text>
+<rect x="600" y="4004" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="4016">0.405</text>
+<rect x="600" y="4022" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="4034">0.0</text>
+<rect x="600" y="4040" width="0" height="14" fill="#d97706"/>
+<text x="605" y="4052">0.0</text>
+<rect x="600" y="4058" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="4070">0.0</text>
+<rect x="600" y="4076" width="0" height="14" fill="#059669"/>
+<text x="605" y="4088">0.0</text>
+<rect x="600" y="4094" width="0" height="14" fill="#065f46"/>
+<text x="605" y="4106">0.0</text>
+<text x="20" y="4160">conditions/intervention.layer=7/seed=44</text>
+<text x="20" y="4178" fill="#64748b">complete</text>
+<rect x="600" y="4142" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="4154">0.405</text>
+<rect x="600" y="4160" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="4172">0.405</text>
+<rect x="600" y="4178" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="4190">0.405</text>
+<rect x="600" y="4196" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="4208">0.0</text>
+<rect x="600" y="4214" width="0" height="14" fill="#d97706"/>
+<text x="605" y="4226">0.0</text>
+<rect x="600" y="4232" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="4244">0.0</text>
+<rect x="600" y="4250" width="0" height="14" fill="#059669"/>
+<text x="605" y="4262">0.0</text>
+<rect x="600" y="4268" width="0" height="14" fill="#065f46"/>
+<text x="605" y="4280">0.0</text>
+<text x="20" y="4334">conditions/intervention.layer=8/seed=42</text>
+<text x="20" y="4352" fill="#64748b">complete</text>
+<rect x="600" y="4316" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="4328">0.405</text>
+<rect x="600" y="4334" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="4346">0.405</text>
+<rect x="600" y="4352" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="4364">0.405</text>
+<rect x="600" y="4370" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="4382">0.0</text>
+<rect x="600" y="4388" width="0" height="14" fill="#d97706"/>
+<text x="605" y="4400">0.0</text>
+<rect x="600" y="4406" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="4418">0.0</text>
+<rect x="600" y="4424" width="0" height="14" fill="#059669"/>
+<text x="605" y="4436">0.0</text>
+<rect x="600" y="4442" width="0" height="14" fill="#065f46"/>
+<text x="605" y="4454">0.0</text>
+<text x="20" y="4508">conditions/intervention.layer=8/seed=43</text>
+<text x="20" y="4526" fill="#64748b">complete</text>
+<rect x="600" y="4490" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="4502">0.405</text>
+<rect x="600" y="4508" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="4520">0.405</text>
+<rect x="600" y="4526" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="4538">0.405</text>
+<rect x="600" y="4544" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="4556">0.0</text>
+<rect x="600" y="4562" width="0" height="14" fill="#d97706"/>
+<text x="605" y="4574">0.0</text>
+<rect x="600" y="4580" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="4592">0.0</text>
+<rect x="600" y="4598" width="0" height="14" fill="#059669"/>
+<text x="605" y="4610">0.0</text>
+<rect x="600" y="4616" width="0" height="14" fill="#065f46"/>
+<text x="605" y="4628">0.0</text>
+<text x="20" y="4682">conditions/intervention.layer=8/seed=44</text>
+<text x="20" y="4700" fill="#64748b">complete</text>
+<rect x="600" y="4664" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="4676">0.405</text>
+<rect x="600" y="4682" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="4694">0.405</text>
+<rect x="600" y="4700" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="4712">0.405</text>
+<rect x="600" y="4718" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="4730">0.0</text>
+<rect x="600" y="4736" width="0" height="14" fill="#d97706"/>
+<text x="605" y="4748">0.0</text>
+<rect x="600" y="4754" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="4766">0.0</text>
+<rect x="600" y="4772" width="0" height="14" fill="#059669"/>
+<text x="605" y="4784">0.0</text>
+<rect x="600" y="4790" width="0" height="14" fill="#065f46"/>
+<text x="605" y="4802">0.0</text>
+<text x="20" y="4856">conditions/intervention.layer=9/seed=42</text>
+<text x="20" y="4874" fill="#64748b">complete</text>
+<rect x="600" y="4838" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="4850">0.405</text>
+<rect x="600" y="4856" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="4868">0.405</text>
+<rect x="600" y="4874" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="4886">0.405</text>
+<rect x="600" y="4892" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="4904">0.0</text>
+<rect x="600" y="4910" width="0" height="14" fill="#d97706"/>
+<text x="605" y="4922">0.0</text>
+<rect x="600" y="4928" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="4940">0.0</text>
+<rect x="600" y="4946" width="0" height="14" fill="#059669"/>
+<text x="605" y="4958">0.0</text>
+<rect x="600" y="4964" width="0" height="14" fill="#065f46"/>
+<text x="605" y="4976">0.0</text>
+<text x="20" y="5030">conditions/intervention.layer=9/seed=43</text>
+<text x="20" y="5048" fill="#64748b">complete</text>
+<rect x="600" y="5012" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="5024">0.405</text>
+<rect x="600" y="5030" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="5042">0.405</text>
+<rect x="600" y="5048" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="5060">0.405</text>
+<rect x="600" y="5066" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="5078">0.0</text>
+<rect x="600" y="5084" width="0" height="14" fill="#d97706"/>
+<text x="605" y="5096">0.0</text>
+<rect x="600" y="5102" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="5114">0.0</text>
+<rect x="600" y="5120" width="0" height="14" fill="#059669"/>
+<text x="605" y="5132">0.0</text>
+<rect x="600" y="5138" width="0" height="14" fill="#065f46"/>
+<text x="605" y="5150">0.0</text>
+<text x="20" y="5204">conditions/intervention.layer=9/seed=44</text>
+<text x="20" y="5222" fill="#64748b">complete</text>
+<rect x="600" y="5186" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="5198">0.405</text>
+<rect x="600" y="5204" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="5216">0.405</text>
+<rect x="600" y="5222" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="5234">0.405</text>
+<rect x="600" y="5240" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="5252">0.0</text>
+<rect x="600" y="5258" width="0" height="14" fill="#d97706"/>
+<text x="605" y="5270">0.0</text>
+<rect x="600" y="5276" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="5288">0.0</text>
+<rect x="600" y="5294" width="0" height="14" fill="#059669"/>
+<text x="605" y="5306">0.0</text>
+<rect x="600" y="5312" width="0" height="14" fill="#065f46"/>
+<text x="605" y="5324">0.0</text>
+<text x="20" y="5378">conditions/intervention.layer=10/seed=42</text>
+<text x="20" y="5396" fill="#64748b">complete</text>
+<rect x="600" y="5360" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="5372">0.405</text>
+<rect x="600" y="5378" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="5390">0.405</text>
+<rect x="600" y="5396" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="5408">0.405</text>
+<rect x="600" y="5414" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="5426">0.0</text>
+<rect x="600" y="5432" width="0" height="14" fill="#d97706"/>
+<text x="605" y="5444">0.0</text>
+<rect x="600" y="5450" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="5462">0.0</text>
+<rect x="600" y="5468" width="0" height="14" fill="#059669"/>
+<text x="605" y="5480">0.0</text>
+<rect x="600" y="5486" width="0" height="14" fill="#065f46"/>
+<text x="605" y="5498">0.0</text>
+<text x="20" y="5552">conditions/intervention.layer=10/seed=43</text>
+<text x="20" y="5570" fill="#64748b">complete</text>
+<rect x="600" y="5534" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="5546">0.405</text>
+<rect x="600" y="5552" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="5564">0.405</text>
+<rect x="600" y="5570" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="5582">0.405</text>
+<rect x="600" y="5588" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="5600">0.0</text>
+<rect x="600" y="5606" width="0" height="14" fill="#d97706"/>
+<text x="605" y="5618">0.0</text>
+<rect x="600" y="5624" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="5636">0.0</text>
+<rect x="600" y="5642" width="0" height="14" fill="#059669"/>
+<text x="605" y="5654">0.0</text>
+<rect x="600" y="5660" width="0" height="14" fill="#065f46"/>
+<text x="605" y="5672">0.0</text>
+<text x="20" y="5726">conditions/intervention.layer=10/seed=44</text>
+<text x="20" y="5744" fill="#64748b">complete</text>
+<rect x="600" y="5708" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="5720">0.405</text>
+<rect x="600" y="5726" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="5738">0.405</text>
+<rect x="600" y="5744" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="5756">0.405</text>
+<rect x="600" y="5762" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="5774">0.0</text>
+<rect x="600" y="5780" width="0" height="14" fill="#d97706"/>
+<text x="605" y="5792">0.0</text>
+<rect x="600" y="5798" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="5810">0.0</text>
+<rect x="600" y="5816" width="0" height="14" fill="#059669"/>
+<text x="605" y="5828">0.0</text>
+<rect x="600" y="5834" width="0" height="14" fill="#065f46"/>
+<text x="605" y="5846">0.0</text>
+<text x="20" y="5900">conditions/intervention.layer=11/seed=42</text>
+<text x="20" y="5918" fill="#64748b">complete</text>
+<rect x="600" y="5882" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="5894">0.405</text>
+<rect x="600" y="5900" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="5912">0.405</text>
+<rect x="600" y="5918" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="5930">0.405</text>
+<rect x="600" y="5936" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="5948">0.0</text>
+<rect x="600" y="5954" width="0" height="14" fill="#d97706"/>
+<text x="605" y="5966">0.0</text>
+<rect x="600" y="5972" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="5984">0.0</text>
+<rect x="600" y="5990" width="0" height="14" fill="#059669"/>
+<text x="605" y="6002">0.0</text>
+<rect x="600" y="6008" width="0" height="14" fill="#065f46"/>
+<text x="605" y="6020">0.0</text>
+<text x="20" y="6074">conditions/intervention.layer=11/seed=43</text>
+<text x="20" y="6092" fill="#64748b">complete</text>
+<rect x="600" y="6056" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="6068">0.405</text>
+<rect x="600" y="6074" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="6086">0.405</text>
+<rect x="600" y="6092" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="6104">0.405</text>
+<rect x="600" y="6110" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="6122">0.0</text>
+<rect x="600" y="6128" width="0" height="14" fill="#d97706"/>
+<text x="605" y="6140">0.0</text>
+<rect x="600" y="6146" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="6158">0.0</text>
+<rect x="600" y="6164" width="0" height="14" fill="#059669"/>
+<text x="605" y="6176">0.0</text>
+<rect x="600" y="6182" width="0" height="14" fill="#065f46"/>
+<text x="605" y="6194">0.0</text>
+<text x="20" y="6248">conditions/intervention.layer=11/seed=44</text>
+<text x="20" y="6266" fill="#64748b">complete</text>
+<rect x="600" y="6230" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="6242">0.405</text>
+<rect x="600" y="6248" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="6260">0.405</text>
+<rect x="600" y="6266" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="6278">0.405</text>
+<rect x="600" y="6284" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="6296">0.0</text>
+<rect x="600" y="6302" width="0" height="14" fill="#d97706"/>
+<text x="605" y="6314">0.0</text>
+<rect x="600" y="6320" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="6332">0.0</text>
+<rect x="600" y="6338" width="0" height="14" fill="#059669"/>
+<text x="605" y="6350">0.0</text>
+<rect x="600" y="6356" width="0" height="14" fill="#065f46"/>
+<text x="605" y="6368">0.0</text>
+<text x="20" y="6422">conditions/intervention.layer=12/seed=42</text>
+<text x="20" y="6440" fill="#64748b">complete</text>
+<rect x="600" y="6404" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="6416">0.405</text>
+<rect x="600" y="6422" width="217.5" height="14" fill="#2563eb"/>
+<text x="822.5" y="6434">0.435</text>
+<rect x="600" y="6440" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="6452">0.405</text>
+<rect x="600" y="6458" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="6470">0.0</text>
+<rect x="600" y="6476" width="55" height="14" fill="#d97706"/>
+<text x="660" y="6488">0.11</text>
+<rect x="600" y="6494" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="6506">0.0</text>
+<rect x="600" y="6512" width="35" height="14" fill="#059669"/>
+<text x="640" y="6524">0.07</text>
+<rect x="600" y="6530" width="0" height="14" fill="#065f46"/>
+<text x="605" y="6542">0.0</text>
+<text x="20" y="6596">conditions/intervention.layer=12/seed=43</text>
+<text x="20" y="6614" fill="#64748b">complete</text>
+<rect x="600" y="6578" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="6590">0.405</text>
+<rect x="600" y="6596" width="220" height="14" fill="#2563eb"/>
+<text x="825" y="6608">0.44</text>
+<rect x="600" y="6614" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="6626">0.405</text>
+<rect x="600" y="6632" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="6644">0.0</text>
+<rect x="600" y="6650" width="57.5" height="14" fill="#d97706"/>
+<text x="662.5" y="6662">0.115</text>
+<rect x="600" y="6668" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="6680">0.0</text>
+<rect x="600" y="6686" width="35" height="14" fill="#059669"/>
+<text x="640" y="6698">0.07</text>
+<rect x="600" y="6704" width="0" height="14" fill="#065f46"/>
+<text x="605" y="6716">0.0</text>
+<text x="20" y="6770">conditions/intervention.layer=12/seed=44</text>
+<text x="20" y="6788" fill="#64748b">complete</text>
+<rect x="600" y="6752" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="6764">0.405</text>
+<rect x="600" y="6770" width="222.5" height="14" fill="#2563eb"/>
+<text x="827.5" y="6782">0.445</text>
+<rect x="600" y="6788" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="6800">0.405</text>
+<rect x="600" y="6806" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="6818">0.0</text>
+<rect x="600" y="6824" width="35" height="14" fill="#d97706"/>
+<text x="640" y="6836">0.07</text>
+<rect x="600" y="6842" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="6854">0.0</text>
+<rect x="600" y="6860" width="40" height="14" fill="#059669"/>
+<text x="645" y="6872">0.08</text>
+<rect x="600" y="6878" width="0" height="14" fill="#065f46"/>
+<text x="605" y="6890">0.0</text>
+<text x="20" y="6944">conditions/intervention.layer=13/seed=42</text>
+<text x="20" y="6962" fill="#64748b">complete</text>
+<rect x="600" y="6926" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="6938">0.405</text>
+<rect x="600" y="6944" width="247.5" height="14" fill="#2563eb"/>
+<text x="852.5" y="6956">0.495</text>
+<rect x="600" y="6962" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="6974">0.405</text>
+<rect x="600" y="6980" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="6992">0.0</text>
+<rect x="600" y="6998" width="97.5" height="14" fill="#d97706"/>
+<text x="702.5" y="7010">0.195</text>
+<rect x="600" y="7016" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="7028">0.0</text>
+<rect x="600" y="7034" width="150" height="14" fill="#059669"/>
+<text x="755" y="7046">0.3</text>
+<rect x="600" y="7052" width="0" height="14" fill="#065f46"/>
+<text x="605" y="7064">0.0</text>
+<text x="20" y="7118">conditions/intervention.layer=13/seed=43</text>
+<text x="20" y="7136" fill="#64748b">complete</text>
+<rect x="600" y="7100" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="7112">0.405</text>
+<rect x="600" y="7118" width="245" height="14" fill="#2563eb"/>
+<text x="850" y="7130">0.49</text>
+<rect x="600" y="7136" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="7148">0.405</text>
+<rect x="600" y="7154" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="7166">0.0</text>
+<rect x="600" y="7172" width="97.5" height="14" fill="#d97706"/>
+<text x="702.5" y="7184">0.195</text>
+<rect x="600" y="7190" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="7202">0.0</text>
+<rect x="600" y="7208" width="150" height="14" fill="#059669"/>
+<text x="755" y="7220">0.3</text>
+<rect x="600" y="7226" width="0" height="14" fill="#065f46"/>
+<text x="605" y="7238">0.0</text>
+<text x="20" y="7292">conditions/intervention.layer=13/seed=44</text>
+<text x="20" y="7310" fill="#64748b">complete</text>
+<rect x="600" y="7274" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="7286">0.405</text>
+<rect x="600" y="7292" width="247.5" height="14" fill="#2563eb"/>
+<text x="852.5" y="7304">0.495</text>
+<rect x="600" y="7310" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="7322">0.405</text>
+<rect x="600" y="7328" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="7340">0.0</text>
+<rect x="600" y="7346" width="95" height="14" fill="#d97706"/>
+<text x="700" y="7358">0.19</text>
+<rect x="600" y="7364" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="7376">0.0</text>
+<rect x="600" y="7382" width="150" height="14" fill="#059669"/>
+<text x="755" y="7394">0.3</text>
+<rect x="600" y="7400" width="0" height="14" fill="#065f46"/>
+<text x="605" y="7412">0.0</text>
+<text x="20" y="7466">conditions/intervention.layer=14/seed=42</text>
+<text x="20" y="7484" fill="#64748b">complete</text>
+<rect x="600" y="7448" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="7460">0.405</text>
+<rect x="600" y="7466" width="265" height="14" fill="#2563eb"/>
+<text x="870" y="7478">0.53</text>
+<rect x="600" y="7484" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="7496">0.405</text>
+<rect x="600" y="7502" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="7514">0.0</text>
+<rect x="600" y="7520" width="145" height="14" fill="#d97706"/>
+<text x="750" y="7532">0.29</text>
+<rect x="600" y="7538" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="7550">0.0</text>
+<rect x="600" y="7556" width="235" height="14" fill="#059669"/>
+<text x="840" y="7568">0.47</text>
+<rect x="600" y="7574" width="0" height="14" fill="#065f46"/>
+<text x="605" y="7586">0.0</text>
+<text x="20" y="7640">conditions/intervention.layer=14/seed=43</text>
+<text x="20" y="7658" fill="#64748b">complete</text>
+<rect x="600" y="7622" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="7634">0.405</text>
+<rect x="600" y="7640" width="262.5" height="14" fill="#2563eb"/>
+<text x="867.5" y="7652">0.525</text>
+<rect x="600" y="7658" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="7670">0.405</text>
+<rect x="600" y="7676" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="7688">0.0</text>
+<rect x="600" y="7694" width="142.5" height="14" fill="#d97706"/>
+<text x="747.5" y="7706">0.285</text>
+<rect x="600" y="7712" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="7724">0.0</text>
+<rect x="600" y="7730" width="235" height="14" fill="#059669"/>
+<text x="840" y="7742">0.47</text>
+<rect x="600" y="7748" width="0" height="14" fill="#065f46"/>
+<text x="605" y="7760">0.0</text>
+<text x="20" y="7814">conditions/intervention.layer=14/seed=44</text>
+<text x="20" y="7832" fill="#64748b">complete</text>
+<rect x="600" y="7796" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="7808">0.405</text>
+<rect x="600" y="7814" width="262.5" height="14" fill="#2563eb"/>
+<text x="867.5" y="7826">0.525</text>
+<rect x="600" y="7832" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="7844">0.405</text>
+<rect x="600" y="7850" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="7862">0.0</text>
+<rect x="600" y="7868" width="142.5" height="14" fill="#d97706"/>
+<text x="747.5" y="7880">0.285</text>
+<rect x="600" y="7886" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="7898">0.0</text>
+<rect x="600" y="7904" width="240" height="14" fill="#059669"/>
+<text x="845" y="7916">0.48</text>
+<rect x="600" y="7922" width="0" height="14" fill="#065f46"/>
+<text x="605" y="7934">0.0</text>
+<text x="20" y="7988">conditions/intervention.layer=15/seed=42</text>
+<text x="20" y="8006" fill="#64748b">complete</text>
+<rect x="600" y="7970" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="7982">0.405</text>
+<rect x="600" y="7988" width="232.5" height="14" fill="#2563eb"/>
+<text x="837.5" y="8000">0.465</text>
+<rect x="600" y="8006" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="8018">0.405</text>
+<rect x="600" y="8024" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="8036">0.0</text>
+<rect x="600" y="8042" width="82.5" height="14" fill="#d97706"/>
+<text x="687.5" y="8054">0.165</text>
+<rect x="600" y="8060" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="8072">0.0</text>
+<rect x="600" y="8078" width="95" height="14" fill="#059669"/>
+<text x="700" y="8090">0.19</text>
+<rect x="600" y="8096" width="0" height="14" fill="#065f46"/>
+<text x="605" y="8108">0.0</text>
+<text x="20" y="8162">conditions/intervention.layer=15/seed=43</text>
+<text x="20" y="8180" fill="#64748b">complete</text>
+<rect x="600" y="8144" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="8156">0.405</text>
+<rect x="600" y="8162" width="235" height="14" fill="#2563eb"/>
+<text x="840" y="8174">0.47</text>
+<rect x="600" y="8180" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="8192">0.405</text>
+<rect x="600" y="8198" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="8210">0.0</text>
+<rect x="600" y="8216" width="82.5" height="14" fill="#d97706"/>
+<text x="687.5" y="8228">0.165</text>
+<rect x="600" y="8234" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="8246">0.0</text>
+<rect x="600" y="8252" width="95" height="14" fill="#059669"/>
+<text x="700" y="8264">0.19</text>
+<rect x="600" y="8270" width="0" height="14" fill="#065f46"/>
+<text x="605" y="8282">0.0</text>
+<text x="20" y="8336">conditions/intervention.layer=15/seed=44</text>
+<text x="20" y="8354" fill="#64748b">complete</text>
+<rect x="600" y="8318" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="8330">0.405</text>
+<rect x="600" y="8336" width="232.5" height="14" fill="#2563eb"/>
+<text x="837.5" y="8348">0.465</text>
+<rect x="600" y="8354" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="8366">0.405</text>
+<rect x="600" y="8372" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="8384">0.0</text>
+<rect x="600" y="8390" width="85" height="14" fill="#d97706"/>
+<text x="690" y="8402">0.17</text>
+<rect x="600" y="8408" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="8420">0.0</text>
+<rect x="600" y="8426" width="100" height="14" fill="#059669"/>
+<text x="705" y="8438">0.2</text>
+<rect x="600" y="8444" width="0" height="14" fill="#065f46"/>
+<text x="605" y="8456">0.0</text>
+<text x="20" y="8510">conditions/intervention.layer=16/seed=42</text>
+<text x="20" y="8528" fill="#64748b">complete</text>
+<rect x="600" y="8492" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="8504">0.405</text>
+<rect x="600" y="8510" width="235" height="14" fill="#2563eb"/>
+<text x="840" y="8522">0.47</text>
+<rect x="600" y="8528" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="8540">0.405</text>
+<rect x="600" y="8546" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="8558">0.0</text>
+<rect x="600" y="8564" width="72.5" height="14" fill="#d97706"/>
+<text x="677.5" y="8576">0.145</text>
+<rect x="600" y="8582" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="8594">0.0</text>
+<rect x="600" y="8600" width="100" height="14" fill="#059669"/>
+<text x="705" y="8612">0.2</text>
+<rect x="600" y="8618" width="0" height="14" fill="#065f46"/>
+<text x="605" y="8630">0.0</text>
+<text x="20" y="8684">conditions/intervention.layer=16/seed=43</text>
+<text x="20" y="8702" fill="#64748b">complete</text>
+<rect x="600" y="8666" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="8678">0.405</text>
+<rect x="600" y="8684" width="237.5" height="14" fill="#2563eb"/>
+<text x="842.5" y="8696">0.475</text>
+<rect x="600" y="8702" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="8714">0.405</text>
+<rect x="600" y="8720" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="8732">0.0</text>
+<rect x="600" y="8738" width="77.5" height="14" fill="#d97706"/>
+<text x="682.5" y="8750">0.155</text>
+<rect x="600" y="8756" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="8768">0.0</text>
+<rect x="600" y="8774" width="100" height="14" fill="#059669"/>
+<text x="705" y="8786">0.2</text>
+<rect x="600" y="8792" width="0" height="14" fill="#065f46"/>
+<text x="605" y="8804">0.0</text>
+<text x="20" y="8858">conditions/intervention.layer=16/seed=44</text>
+<text x="20" y="8876" fill="#64748b">complete</text>
+<rect x="600" y="8840" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="8852">0.405</text>
+<rect x="600" y="8858" width="235" height="14" fill="#2563eb"/>
+<text x="840" y="8870">0.47</text>
+<rect x="600" y="8876" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="8888">0.405</text>
+<rect x="600" y="8894" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="8906">0.0</text>
+<rect x="600" y="8912" width="75" height="14" fill="#d97706"/>
+<text x="680" y="8924">0.15</text>
+<rect x="600" y="8930" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="8942">0.0</text>
+<rect x="600" y="8948" width="100" height="14" fill="#059669"/>
+<text x="705" y="8960">0.2</text>
+<rect x="600" y="8966" width="0" height="14" fill="#065f46"/>
+<text x="605" y="8978">0.0</text>
+<text x="20" y="9032">conditions/intervention.layer=17/seed=42</text>
+<text x="20" y="9050" fill="#64748b">complete</text>
+<rect x="600" y="9014" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="9026">0.405</text>
+<rect x="600" y="9032" width="220" height="14" fill="#2563eb"/>
+<text x="825" y="9044">0.44</text>
+<rect x="600" y="9050" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="9062">0.405</text>
+<rect x="600" y="9068" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="9080">0.0</text>
+<rect x="600" y="9086" width="25" height="14" fill="#d97706"/>
+<text x="630" y="9098">0.05</text>
+<rect x="600" y="9104" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="9116">0.0</text>
+<rect x="600" y="9122" width="45" height="14" fill="#059669"/>
+<text x="650" y="9134">0.09</text>
+<rect x="600" y="9140" width="0" height="14" fill="#065f46"/>
+<text x="605" y="9152">0.0</text>
+<text x="20" y="9206">conditions/intervention.layer=17/seed=43</text>
+<text x="20" y="9224" fill="#64748b">complete</text>
+<rect x="600" y="9188" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="9200">0.405</text>
+<rect x="600" y="9206" width="217.5" height="14" fill="#2563eb"/>
+<text x="822.5" y="9218">0.435</text>
+<rect x="600" y="9224" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="9236">0.405</text>
+<rect x="600" y="9242" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="9254">0.0</text>
+<rect x="600" y="9260" width="27.5" height="14" fill="#d97706"/>
+<text x="632.5" y="9272">0.055</text>
+<rect x="600" y="9278" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="9290">0.0</text>
+<rect x="600" y="9296" width="45" height="14" fill="#059669"/>
+<text x="650" y="9308">0.09</text>
+<rect x="600" y="9314" width="0" height="14" fill="#065f46"/>
+<text x="605" y="9326">0.0</text>
+<text x="20" y="9380">conditions/intervention.layer=17/seed=44</text>
+<text x="20" y="9398" fill="#64748b">complete</text>
+<rect x="600" y="9362" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="9374">0.405</text>
+<rect x="600" y="9380" width="217.5" height="14" fill="#2563eb"/>
+<text x="822.5" y="9392">0.435</text>
+<rect x="600" y="9398" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="9410">0.405</text>
+<rect x="600" y="9416" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="9428">0.0</text>
+<rect x="600" y="9434" width="27.5" height="14" fill="#d97706"/>
+<text x="632.5" y="9446">0.055</text>
+<rect x="600" y="9452" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="9464">0.0</text>
+<rect x="600" y="9470" width="50" height="14" fill="#059669"/>
+<text x="655" y="9482">0.1</text>
+<rect x="600" y="9488" width="0" height="14" fill="#065f46"/>
+<text x="605" y="9500">0.0</text>
+<text x="20" y="9554">conditions/intervention.layer=18/seed=42</text>
+<text x="20" y="9572" fill="#64748b">complete</text>
+<rect x="600" y="9536" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="9548">0.405</text>
+<rect x="600" y="9554" width="210" height="14" fill="#2563eb"/>
+<text x="815" y="9566">0.42</text>
+<rect x="600" y="9572" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="9584">0.405</text>
+<rect x="600" y="9590" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="9602">0.0</text>
+<rect x="600" y="9608" width="7.5" height="14" fill="#d97706"/>
+<text x="612.5" y="9620">0.015</text>
+<rect x="600" y="9626" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="9638">0.0</text>
+<rect x="600" y="9644" width="30" height="14" fill="#059669"/>
+<text x="635" y="9656">0.06</text>
+<rect x="600" y="9662" width="0" height="14" fill="#065f46"/>
+<text x="605" y="9674">0.0</text>
+<text x="20" y="9728">conditions/intervention.layer=18/seed=43</text>
+<text x="20" y="9746" fill="#64748b">complete</text>
+<rect x="600" y="9710" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="9722">0.405</text>
+<rect x="600" y="9728" width="207.5" height="14" fill="#2563eb"/>
+<text x="812.5" y="9740">0.415</text>
+<rect x="600" y="9746" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="9758">0.405</text>
+<rect x="600" y="9764" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="9776">0.0</text>
+<rect x="600" y="9782" width="7.5" height="14" fill="#d97706"/>
+<text x="612.5" y="9794">0.015</text>
+<rect x="600" y="9800" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="9812">0.0</text>
+<rect x="600" y="9818" width="25" height="14" fill="#059669"/>
+<text x="630" y="9830">0.05</text>
+<rect x="600" y="9836" width="0" height="14" fill="#065f46"/>
+<text x="605" y="9848">0.0</text>
+<text x="20" y="9902">conditions/intervention.layer=18/seed=44</text>
+<text x="20" y="9920" fill="#64748b">complete</text>
+<rect x="600" y="9884" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="9896">0.405</text>
+<rect x="600" y="9902" width="210" height="14" fill="#2563eb"/>
+<text x="815" y="9914">0.42</text>
+<rect x="600" y="9920" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="9932">0.405</text>
+<rect x="600" y="9938" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="9950">0.0</text>
+<rect x="600" y="9956" width="10" height="14" fill="#d97706"/>
+<text x="615" y="9968">0.02</text>
+<rect x="600" y="9974" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="9986">0.0</text>
+<rect x="600" y="9992" width="25" height="14" fill="#059669"/>
+<text x="630" y="10004">0.05</text>
+<rect x="600" y="10010" width="0" height="14" fill="#065f46"/>
+<text x="605" y="10022">0.0</text>
+<text x="20" y="10076">conditions/intervention.layer=19/seed=42</text>
+<text x="20" y="10094" fill="#64748b">complete</text>
+<rect x="600" y="10058" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="10070">0.405</text>
+<rect x="600" y="10076" width="210" height="14" fill="#2563eb"/>
+<text x="815" y="10088">0.42</text>
+<rect x="600" y="10094" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="10106">0.405</text>
+<rect x="600" y="10112" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="10124">0.0</text>
+<rect x="600" y="10130" width="2.5" height="14" fill="#d97706"/>
+<text x="607.5" y="10142">0.005</text>
+<rect x="600" y="10148" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="10160">0.0</text>
+<rect x="600" y="10166" width="15" height="14" fill="#059669"/>
+<text x="620" y="10178">0.03</text>
+<rect x="600" y="10184" width="0" height="14" fill="#065f46"/>
+<text x="605" y="10196">0.0</text>
+<text x="20" y="10250">conditions/intervention.layer=19/seed=43</text>
+<text x="20" y="10268" fill="#64748b">complete</text>
+<rect x="600" y="10232" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="10244">0.405</text>
+<rect x="600" y="10250" width="207.5" height="14" fill="#2563eb"/>
+<text x="812.5" y="10262">0.415</text>
+<rect x="600" y="10268" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="10280">0.405</text>
+<rect x="600" y="10286" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="10298">0.0</text>
+<rect x="600" y="10304" width="2.5" height="14" fill="#d97706"/>
+<text x="607.5" y="10316">0.005</text>
+<rect x="600" y="10322" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="10334">0.0</text>
+<rect x="600" y="10340" width="15" height="14" fill="#059669"/>
+<text x="620" y="10352">0.03</text>
+<rect x="600" y="10358" width="0" height="14" fill="#065f46"/>
+<text x="605" y="10370">0.0</text>
+<text x="20" y="10424">conditions/intervention.layer=19/seed=44</text>
+<text x="20" y="10442" fill="#64748b">complete</text>
+<rect x="600" y="10406" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="10418">0.405</text>
+<rect x="600" y="10424" width="210" height="14" fill="#2563eb"/>
+<text x="815" y="10436">0.42</text>
+<rect x="600" y="10442" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="10454">0.405</text>
+<rect x="600" y="10460" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="10472">0.0</text>
+<rect x="600" y="10478" width="2.5" height="14" fill="#d97706"/>
+<text x="607.5" y="10490">0.005</text>
+<rect x="600" y="10496" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="10508">0.0</text>
+<rect x="600" y="10514" width="15" height="14" fill="#059669"/>
+<text x="620" y="10526">0.03</text>
+<rect x="600" y="10532" width="0" height="14" fill="#065f46"/>
+<text x="605" y="10544">0.0</text>
+<text x="20" y="10598">conditions/intervention.layer=20/seed=42</text>
+<text x="20" y="10616" fill="#64748b">complete</text>
+<rect x="600" y="10580" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="10592">0.405</text>
+<rect x="600" y="10598" width="205" height="14" fill="#2563eb"/>
+<text x="810" y="10610">0.41</text>
+<rect x="600" y="10616" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="10628">0.405</text>
+<rect x="600" y="10634" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="10646">0.0</text>
+<rect x="600" y="10652" width="0" height="14" fill="#d97706"/>
+<text x="605" y="10664">0.0</text>
+<rect x="600" y="10670" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="10682">0.0</text>
+<rect x="600" y="10688" width="5" height="14" fill="#059669"/>
+<text x="610" y="10700">0.01</text>
+<rect x="600" y="10706" width="0" height="14" fill="#065f46"/>
+<text x="605" y="10718">0.0</text>
+<text x="20" y="10772">conditions/intervention.layer=20/seed=43</text>
+<text x="20" y="10790" fill="#64748b">complete</text>
+<rect x="600" y="10754" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="10766">0.405</text>
+<rect x="600" y="10772" width="205" height="14" fill="#2563eb"/>
+<text x="810" y="10784">0.41</text>
+<rect x="600" y="10790" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="10802">0.405</text>
+<rect x="600" y="10808" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="10820">0.0</text>
+<rect x="600" y="10826" width="0" height="14" fill="#d97706"/>
+<text x="605" y="10838">0.0</text>
+<rect x="600" y="10844" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="10856">0.0</text>
+<rect x="600" y="10862" width="0" height="14" fill="#059669"/>
+<text x="605" y="10874">0.0</text>
+<rect x="600" y="10880" width="0" height="14" fill="#065f46"/>
+<text x="605" y="10892">0.0</text>
+<text x="20" y="10946">conditions/intervention.layer=20/seed=44</text>
+<text x="20" y="10964" fill="#64748b">complete</text>
+<rect x="600" y="10928" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="10940">0.405</text>
+<rect x="600" y="10946" width="205" height="14" fill="#2563eb"/>
+<text x="810" y="10958">0.41</text>
+<rect x="600" y="10964" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="10976">0.405</text>
+<rect x="600" y="10982" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="10994">0.0</text>
+<rect x="600" y="11000" width="0" height="14" fill="#d97706"/>
+<text x="605" y="11012">0.0</text>
+<rect x="600" y="11018" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="11030">0.0</text>
+<rect x="600" y="11036" width="5" height="14" fill="#059669"/>
+<text x="610" y="11048">0.01</text>
+<rect x="600" y="11054" width="0" height="14" fill="#065f46"/>
+<text x="605" y="11066">0.0</text>
+<text x="20" y="11120">conditions/intervention.layer=21/seed=42</text>
+<text x="20" y="11138" fill="#64748b">complete</text>
+<rect x="600" y="11102" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="11114">0.405</text>
+<rect x="600" y="11120" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="11132">0.405</text>
+<rect x="600" y="11138" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="11150">0.405</text>
+<rect x="600" y="11156" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="11168">0.0</text>
+<rect x="600" y="11174" width="0" height="14" fill="#d97706"/>
+<text x="605" y="11186">0.0</text>
+<rect x="600" y="11192" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="11204">0.0</text>
+<rect x="600" y="11210" width="0" height="14" fill="#059669"/>
+<text x="605" y="11222">0.0</text>
+<rect x="600" y="11228" width="0" height="14" fill="#065f46"/>
+<text x="605" y="11240">0.0</text>
+<text x="20" y="11294">conditions/intervention.layer=21/seed=43</text>
+<text x="20" y="11312" fill="#64748b">complete</text>
+<rect x="600" y="11276" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="11288">0.405</text>
+<rect x="600" y="11294" width="205" height="14" fill="#2563eb"/>
+<text x="810" y="11306">0.41</text>
+<rect x="600" y="11312" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="11324">0.405</text>
+<rect x="600" y="11330" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="11342">0.0</text>
+<rect x="600" y="11348" width="0" height="14" fill="#d97706"/>
+<text x="605" y="11360">0.0</text>
+<rect x="600" y="11366" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="11378">0.0</text>
+<rect x="600" y="11384" width="0" height="14" fill="#059669"/>
+<text x="605" y="11396">0.0</text>
+<rect x="600" y="11402" width="0" height="14" fill="#065f46"/>
+<text x="605" y="11414">0.0</text>
+<text x="20" y="11468">conditions/intervention.layer=21/seed=44</text>
+<text x="20" y="11486" fill="#64748b">complete</text>
+<rect x="600" y="11450" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="11462">0.405</text>
+<rect x="600" y="11468" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="11480">0.405</text>
+<rect x="600" y="11486" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="11498">0.405</text>
+<rect x="600" y="11504" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="11516">0.0</text>
+<rect x="600" y="11522" width="0" height="14" fill="#d97706"/>
+<text x="605" y="11534">0.0</text>
+<rect x="600" y="11540" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="11552">0.0</text>
+<rect x="600" y="11558" width="0" height="14" fill="#059669"/>
+<text x="605" y="11570">0.0</text>
+<rect x="600" y="11576" width="0" height="14" fill="#065f46"/>
+<text x="605" y="11588">0.0</text>
+<text x="20" y="11642">conditions/intervention.layer=22/seed=42</text>
+<text x="20" y="11660" fill="#64748b">complete</text>
+<rect x="600" y="11624" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="11636">0.405</text>
+<rect x="600" y="11642" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="11654">0.405</text>
+<rect x="600" y="11660" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="11672">0.405</text>
+<rect x="600" y="11678" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="11690">0.0</text>
+<rect x="600" y="11696" width="0" height="14" fill="#d97706"/>
+<text x="605" y="11708">0.0</text>
+<rect x="600" y="11714" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="11726">0.0</text>
+<rect x="600" y="11732" width="0" height="14" fill="#059669"/>
+<text x="605" y="11744">0.0</text>
+<rect x="600" y="11750" width="0" height="14" fill="#065f46"/>
+<text x="605" y="11762">0.0</text>
+<text x="20" y="11816">conditions/intervention.layer=22/seed=43</text>
+<text x="20" y="11834" fill="#64748b">complete</text>
+<rect x="600" y="11798" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="11810">0.405</text>
+<rect x="600" y="11816" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="11828">0.405</text>
+<rect x="600" y="11834" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="11846">0.405</text>
+<rect x="600" y="11852" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="11864">0.0</text>
+<rect x="600" y="11870" width="0" height="14" fill="#d97706"/>
+<text x="605" y="11882">0.0</text>
+<rect x="600" y="11888" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="11900">0.0</text>
+<rect x="600" y="11906" width="0" height="14" fill="#059669"/>
+<text x="605" y="11918">0.0</text>
+<rect x="600" y="11924" width="0" height="14" fill="#065f46"/>
+<text x="605" y="11936">0.0</text>
+<text x="20" y="11990">conditions/intervention.layer=22/seed=44</text>
+<text x="20" y="12008" fill="#64748b">complete</text>
+<rect x="600" y="11972" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="11984">0.405</text>
+<rect x="600" y="11990" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="12002">0.405</text>
+<rect x="600" y="12008" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="12020">0.405</text>
+<rect x="600" y="12026" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="12038">0.0</text>
+<rect x="600" y="12044" width="0" height="14" fill="#d97706"/>
+<text x="605" y="12056">0.0</text>
+<rect x="600" y="12062" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="12074">0.0</text>
+<rect x="600" y="12080" width="0" height="14" fill="#059669"/>
+<text x="605" y="12092">0.0</text>
+<rect x="600" y="12098" width="0" height="14" fill="#065f46"/>
+<text x="605" y="12110">0.0</text>
+<text x="20" y="12164">conditions/intervention.layer=23/seed=42</text>
+<text x="20" y="12182" fill="#64748b">complete</text>
+<rect x="600" y="12146" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="12158">0.405</text>
+<rect x="600" y="12164" width="207.5" height="14" fill="#2563eb"/>
+<text x="812.5" y="12176">0.415</text>
+<rect x="600" y="12182" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="12194">0.405</text>
+<rect x="600" y="12200" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="12212">0.0</text>
+<rect x="600" y="12218" width="0" height="14" fill="#d97706"/>
+<text x="605" y="12230">0.0</text>
+<rect x="600" y="12236" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="12248">0.0</text>
+<rect x="600" y="12254" width="0" height="14" fill="#059669"/>
+<text x="605" y="12266">0.0</text>
+<rect x="600" y="12272" width="0" height="14" fill="#065f46"/>
+<text x="605" y="12284">0.0</text>
+<text x="20" y="12338">conditions/intervention.layer=23/seed=43</text>
+<text x="20" y="12356" fill="#64748b">complete</text>
+<rect x="600" y="12320" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="12332">0.405</text>
+<rect x="600" y="12338" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="12350">0.405</text>
+<rect x="600" y="12356" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="12368">0.405</text>
+<rect x="600" y="12374" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="12386">0.0</text>
+<rect x="600" y="12392" width="0" height="14" fill="#d97706"/>
+<text x="605" y="12404">0.0</text>
+<rect x="600" y="12410" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="12422">0.0</text>
+<rect x="600" y="12428" width="0" height="14" fill="#059669"/>
+<text x="605" y="12440">0.0</text>
+<rect x="600" y="12446" width="0" height="14" fill="#065f46"/>
+<text x="605" y="12458">0.0</text>
+<text x="20" y="12512">conditions/intervention.layer=23/seed=44</text>
+<text x="20" y="12530" fill="#64748b">complete</text>
+<rect x="600" y="12494" width="202.5" height="14" fill="#94a3b8"/>
+<text x="807.5" y="12506">0.405</text>
+<rect x="600" y="12512" width="202.5" height="14" fill="#2563eb"/>
+<text x="807.5" y="12524">0.405</text>
+<rect x="600" y="12530" width="202.5" height="14" fill="#64748b"/>
+<text x="807.5" y="12542">0.405</text>
+<rect x="600" y="12548" width="0" height="14" fill="#c4b5fd"/>
+<text x="605" y="12560">0.0</text>
+<rect x="600" y="12566" width="0" height="14" fill="#d97706"/>
+<text x="605" y="12578">0.0</text>
+<rect x="600" y="12584" width="0" height="14" fill="#9333ea"/>
+<text x="605" y="12596">0.0</text>
+<rect x="600" y="12602" width="0" height="14" fill="#059669"/>
+<text x="605" y="12614">0.0</text>
+<rect x="600" y="12620" width="0" height="14" fill="#065f46"/>
+<text x="605" y="12632">0.0</text>
+</g>
+</svg>

@@ -1,0 +1,1084 @@
+{
+  "cleanup": {
+    "cached_activation_count": 0,
+    "hooks_after": {},
+    "hooks_before": {},
+    "status": "passed"
+  },
+  "frozen_weights_and_alignment": {
+    "alignment_changed": true,
+    "alignment_finite": true,
+    "changed_alignment_state_keys": [
+      "layer_9_comp_block_output_unit_pos_nunit_1#0/rotate_layer.parametrizations.weight.original"
+    ],
+    "model_gradients_present": false,
+    "model_sha256_after": "9d858dde56f55f3105160a2127bc38ba1d6fe31e455eebb7cf3543a65a681fd8",
+    "model_sha256_before": "9d858dde56f55f3105160a2127bc38ba1d6fe31e455eebb7cf3543a65a681fd8",
+    "model_weights_bit_identical": true,
+    "status": "passed"
+  },
+  "preflight": {
+    "frozen_model_weights": true,
+    "gradients": {
+      "alignment_gradient_norm": 0.06261798264168308,
+      "alignment_parameter_count": 8192,
+      "loss": 2.162778615951538,
+      "model_gradients_present": false,
+      "optimizer_steps": 0,
+      "status": "passed"
+    },
+    "hooks_after": {},
+    "hooks_before": {},
+    "identity_intervention": {
+      "argmax_matches": true,
+      "atol": 0.0001,
+      "full_vocabulary_shape": [
+        3,
+        50257
+      ],
+      "max_absolute_difference": 0.0,
+      "rtol": 0.0001,
+      "sample_ids": [
+        "train-0000",
+        "train-0002",
+        "train-0100"
+      ],
+      "source_rule": "each base serves as its own source at identical positions",
+      "status": "passed"
+    },
+    "model_sha256": "9d858dde56f55f3105160a2127bc38ba1d6fe31e455eebb7cf3543a65a681fd8",
+    "preflight_changes_alignment": false,
+    "saved_data_mixed_length_batching": {
+      "base_attention_mask": [
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "base_lengths": [
+        15,
+        19,
+        15
+      ],
+      "base_positions": [
+        14,
+        18,
+        14
+      ],
+      "base_readout": [
+        14,
+        18,
+        14
+      ],
+      "factual_logits": {
+        "argmax_matches": true,
+        "atol": 0.0001,
+        "full_vocabulary_shape": [
+          3,
+          50257
+        ],
+        "max_absolute_difference": 0.00016021728515625,
+        "rtol": 0.0001,
+        "status": "passed"
+      },
+      "intervened_logits": {
+        "argmax_matches": true,
+        "atol": 0.0001,
+        "full_vocabulary_shape": [
+          3,
+          50257
+        ],
+        "max_absolute_difference": 0.00014495849609375,
+        "rtol": 0.0001,
+        "status": "passed"
+      },
+      "intervention_location": "N",
+      "readout_location": "N",
+      "sample_ids": [
+        "train-0000",
+        "train-0002",
+        "train-0100"
+      ],
+      "source_attention_mask": [
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "source_lengths": [
+        15,
+        19,
+        15
+      ],
+      "source_positions": [
+        14,
+        18,
+        14
+      ],
+      "status": "passed"
+    },
+    "status": "passed",
+    "synthetic_unequal_length_batching": {
+      "checks": {
+        "N": {
+          "base_attention_mask": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ],
+          "base_lengths": [
+            18,
+            22
+          ],
+          "base_positions": [
+            17,
+            21
+          ],
+          "base_readout": [
+            17,
+            21
+          ],
+          "factual_logits": {
+            "argmax_matches": true,
+            "atol": 0.0001,
+            "full_vocabulary_shape": [
+              2,
+              50257
+            ],
+            "max_absolute_difference": 0.0001220703125,
+            "rtol": 0.0001,
+            "status": "passed"
+          },
+          "intervened_logits": {
+            "argmax_matches": true,
+            "atol": 0.0001,
+            "full_vocabulary_shape": [
+              2,
+              50257
+            ],
+            "max_absolute_difference": 0.00025177001953125,
+            "rtol": 0.0001,
+            "status": "passed"
+          },
+          "intervention_location": "N",
+          "readout_location": "N",
+          "sample_ids": [
+            "synthetic-unequal",
+            "synthetic-reverse"
+          ],
+          "source_attention_mask": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "source_lengths": [
+            22,
+            18
+          ],
+          "source_positions": [
+            21,
+            17
+          ],
+          "status": "passed"
+        },
+        "N-2": {
+          "base_attention_mask": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ],
+          "base_lengths": [
+            18,
+            22
+          ],
+          "base_positions": [
+            15,
+            19
+          ],
+          "base_readout": [
+            17,
+            21
+          ],
+          "factual_logits": {
+            "argmax_matches": true,
+            "atol": 0.0001,
+            "full_vocabulary_shape": [
+              2,
+              50257
+            ],
+            "max_absolute_difference": 0.0001220703125,
+            "rtol": 0.0001,
+            "status": "passed"
+          },
+          "intervened_logits": {
+            "argmax_matches": true,
+            "atol": 0.0001,
+            "full_vocabulary_shape": [
+              2,
+              50257
+            ],
+            "max_absolute_difference": 0.00018310546875,
+            "rtol": 0.0001,
+            "status": "passed"
+          },
+          "intervention_location": "N-2",
+          "readout_location": "N",
+          "sample_ids": [
+            "synthetic-unequal",
+            "synthetic-reverse"
+          ],
+          "source_attention_mask": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "source_lengths": [
+            22,
+            18
+          ],
+          "source_positions": [
+            19,
+            15
+          ],
+          "status": "passed"
+        }
+      },
+      "data_origin": "synthetic validation only; excluded from research dataset and metrics",
+      "trained": false
+    }
+  },
+  "saved_alignment_reload": {
+    "logits_bit_identical": true,
+    "sample_ids": [
+      "train-0000",
+      "train-0001"
+    ],
+    "status": "passed"
+  },
+  "trained_identity_and_batching": {
+    "frozen_model_weights": true,
+    "gradients": {
+      "alignment_gradient_norm": 0.15814645136293412,
+      "alignment_parameter_count": 8192,
+      "loss": 2.176069974899292,
+      "model_gradients_present": false,
+      "optimizer_steps": 0,
+      "status": "passed"
+    },
+    "hooks_after": {},
+    "hooks_before": {},
+    "identity_intervention": {
+      "argmax_matches": true,
+      "atol": 0.0001,
+      "full_vocabulary_shape": [
+        3,
+        50257
+      ],
+      "max_absolute_difference": 0.0,
+      "rtol": 0.0001,
+      "sample_ids": [
+        "train-0000",
+        "train-0002",
+        "train-0100"
+      ],
+      "source_rule": "each base serves as its own source at identical positions",
+      "status": "passed"
+    },
+    "model_sha256": "9d858dde56f55f3105160a2127bc38ba1d6fe31e455eebb7cf3543a65a681fd8",
+    "preflight_changes_alignment": false,
+    "saved_data_mixed_length_batching": {
+      "base_attention_mask": [
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "base_lengths": [
+        15,
+        19,
+        15
+      ],
+      "base_positions": [
+        14,
+        18,
+        14
+      ],
+      "base_readout": [
+        14,
+        18,
+        14
+      ],
+      "factual_logits": {
+        "argmax_matches": true,
+        "atol": 0.0001,
+        "full_vocabulary_shape": [
+          3,
+          50257
+        ],
+        "max_absolute_difference": 0.00016021728515625,
+        "rtol": 0.0001,
+        "status": "passed"
+      },
+      "intervened_logits": {
+        "argmax_matches": true,
+        "atol": 0.0001,
+        "full_vocabulary_shape": [
+          3,
+          50257
+        ],
+        "max_absolute_difference": 0.00014495849609375,
+        "rtol": 0.0001,
+        "status": "passed"
+      },
+      "intervention_location": "N",
+      "readout_location": "N",
+      "sample_ids": [
+        "train-0000",
+        "train-0002",
+        "train-0100"
+      ],
+      "source_attention_mask": [
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "source_lengths": [
+        15,
+        19,
+        15
+      ],
+      "source_positions": [
+        14,
+        18,
+        14
+      ],
+      "status": "passed"
+    },
+    "status": "passed",
+    "synthetic_unequal_length_batching": {
+      "checks": {
+        "N": {
+          "base_attention_mask": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ],
+          "base_lengths": [
+            18,
+            22
+          ],
+          "base_positions": [
+            17,
+            21
+          ],
+          "base_readout": [
+            17,
+            21
+          ],
+          "factual_logits": {
+            "argmax_matches": true,
+            "atol": 0.0001,
+            "full_vocabulary_shape": [
+              2,
+              50257
+            ],
+            "max_absolute_difference": 0.0001220703125,
+            "rtol": 0.0001,
+            "status": "passed"
+          },
+          "intervened_logits": {
+            "argmax_matches": true,
+            "atol": 0.0001,
+            "full_vocabulary_shape": [
+              2,
+              50257
+            ],
+            "max_absolute_difference": 0.00018310546875,
+            "rtol": 0.0001,
+            "status": "passed"
+          },
+          "intervention_location": "N",
+          "readout_location": "N",
+          "sample_ids": [
+            "synthetic-unequal",
+            "synthetic-reverse"
+          ],
+          "source_attention_mask": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "source_lengths": [
+            22,
+            18
+          ],
+          "source_positions": [
+            21,
+            17
+          ],
+          "status": "passed"
+        },
+        "N-2": {
+          "base_attention_mask": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ],
+          "base_lengths": [
+            18,
+            22
+          ],
+          "base_positions": [
+            15,
+            19
+          ],
+          "base_readout": [
+            17,
+            21
+          ],
+          "factual_logits": {
+            "argmax_matches": true,
+            "atol": 0.0001,
+            "full_vocabulary_shape": [
+              2,
+              50257
+            ],
+            "max_absolute_difference": 0.0001220703125,
+            "rtol": 0.0001,
+            "status": "passed"
+          },
+          "intervened_logits": {
+            "argmax_matches": true,
+            "atol": 0.0001,
+            "full_vocabulary_shape": [
+              2,
+              50257
+            ],
+            "max_absolute_difference": 0.000213623046875,
+            "rtol": 0.0001,
+            "status": "passed"
+          },
+          "intervention_location": "N-2",
+          "readout_location": "N",
+          "sample_ids": [
+            "synthetic-unequal",
+            "synthetic-reverse"
+          ],
+          "source_attention_mask": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "source_lengths": [
+            22,
+            18
+          ],
+          "source_positions": [
+            19,
+            15
+          ],
+          "status": "passed"
+        }
+      },
+      "data_origin": "synthetic validation only; excluded from research dataset and metrics",
+      "trained": false
+    }
+  }
+}

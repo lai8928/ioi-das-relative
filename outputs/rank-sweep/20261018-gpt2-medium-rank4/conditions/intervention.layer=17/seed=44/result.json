@@ -1,0 +1,423 @@
+{
+  "artifacts": {
+    "alignment.pt": "d8cbd8c4454e954cd4e2a3d97bbef6008ee982940f1ab7358aff27b27ec4468c",
+    "environment.json": "a40243dde4dbcc015b3d127bf9beed4bcc615e89cd98f0bc79ca9bc6f2238d7f",
+    "initial_alignment.pt": "85d3eef45ceaf954d27c2971c06f57ccbe249abb9ef2b7b4aaa2158ddc379657",
+    "initial_train_predictions.jsonl": "a0e534707c4730c3eb6dfd7f790c3628de20c8eb52d7ff111bf867167f03746a",
+    "initial_validation_predictions.jsonl": "dda3775e0402330eae45ac4cb1c79c5b364c6f391f05ff8a34603b960a268fb7",
+    "metrics.json": "65527e31b39787643d9996c730f4181c8d06b4115d1187788602ecbd86a5d0ee",
+    "train_predictions.jsonl": "8ae51d00fcde8c20aac8fd0804f4d27d121cda50190f48f6e500091d5c96a1b0",
+    "training.json": "5efdbcd61eefc8b907addb709fed0d15bc56817a2670d1b2ee9f88b0b715354c",
+    "training_steps.jsonl": "8e85c7947aea1daa009e1b1c5d476cab67b64b43e9ee7d4aa57266a782e6b783",
+    "validation.json": "90b404bacba1994acb1babdb8ca3b8d592d7626fe1005e19859fd2357e0ab1c3",
+    "validation_predictions.jsonl": "0ad23891295b2e1ac27eb15cbea256fce15f55ffb0c8ec76f75dc0b374b5b13b"
+  },
+  "completed_at_utc": "2026-10-18T17:32:35.256657+00:00",
+  "condition": {
+    "component": "block_output",
+    "intervention_location": "N",
+    "layer": 17,
+    "rank": 4,
+    "target_variable": "position"
+  },
+  "dataset_reused": true,
+  "datasets": {
+    "test": {
+      "generation": {
+        "generator_revision": "ioi-position-v1-ordered-symbols",
+        "generator_sha256": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+        "seed": 42,
+        "target_variable": "position",
+        "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+        "upstream_sha256": {
+          "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+          "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+          "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+          "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+          "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+          "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+          "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+        }
+      },
+      "manifest_path": "/data/homezvol0/ilingl/ioi-das-relative/data/generated/manifest.json",
+      "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+      "path": "/data/homezvol0/ilingl/ioi-das-relative/data/generated/test.jsonl",
+      "reference": "legacy_v1/test",
+      "sha256": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded"
+    },
+    "train": {
+      "generation": {
+        "generator_revision": "ioi-position-v1-ordered-symbols",
+        "generator_sha256": "58b6f59e4257dd42bcfba7921564003d788e5aee39941c10180d16a27992cad7",
+        "seed": 42,
+        "target_variable": "position",
+        "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+        "upstream_sha256": {
+          "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+          "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+          "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+          "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+          "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+          "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+          "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+        }
+      },
+      "manifest_path": "/data/homezvol0/ilingl/ioi-das-relative/data/generated/manifest.json",
+      "manifest_sha256": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+      "path": "/data/homezvol0/ilingl/ioi-das-relative/data/generated/train.jsonl",
+      "reference": "legacy_v1/train",
+      "sha256": "3867b316d469df4b4c2d80136324c8cda4e001c617c584c30703283ad75db346"
+    },
+    "validation": {
+      "generation": {
+        "builder_sha256": "d46149f81f4caa42dd5e1530303c293fac3232279c10862d8ffb434792c08537",
+        "generator_revision": "ioi-position-v1-ordered-symbols",
+        "generator_sha256": "33f29b8b5fb6fc3a41f95773e081f0b2215cd6c1a6f6126a39aaa66dd903e644",
+        "max_batches": 1000,
+        "name": "original_position",
+        "seed": 314159,
+        "source_split": "train",
+        "specification_sha256": "2062b78f2bb6de0fda4210a356a789da2f56b6d4498fc9c70fd6955720615c03",
+        "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+        "upstream_sha256": {
+          "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "pyproject.toml": "60de9d6dbd6ae5aadaff58bb5e4acd45d44fff9e4cd84d5ba32fc73bc92b9a78",
+          "tutorials/advanced_tutorials/IOI_with_DAS.ipynb": "2f85fe706cd81517073bb85642926d5988fec5b5c7ece865943d4ccadad99c19",
+          "tutorials/advanced_tutorials/tutorial_data/names.json": "d1b6093c3f5e9c2a9e3fcb1723ba6966cc5873727b0e247529c141e65cb22d96",
+          "tutorials/advanced_tutorials/tutorial_data/objects.json": "169a6909f1046ce692e3371d5ff7e354278f892c7d2d285a14fef36790dc0ef5",
+          "tutorials/advanced_tutorials/tutorial_data/places.json": "3cdbddb752cb3c01ca0526df7994306edea56bb8cd50e3373879bcb59de5bd57",
+          "tutorials/advanced_tutorials/tutorial_data/templates.json": "8fd1037215ec8b6d5cc56586abacf15fb04932e701b2ad583af84cfa3438a523",
+          "tutorials/advanced_tutorials/tutorial_ioi_utils.py": "a2773a4a34476e0cbd531cb4209d740e9540019291bdce838c60460a4c8fa90c"
+        }
+      },
+      "manifest_path": "/data/homezvol0/ilingl/ioi-das-relative/data/generated/val_indist_v1/manifest.json",
+      "manifest_sha256": "2c75e461b717bd16f0c8b0f3d5e8c528d7469775444d2cb9429a6e9a44900054",
+      "path": "/data/homezvol0/ilingl/ioi-das-relative/data/generated/val_indist_v1/validation.jsonl",
+      "reference": "val_indist_v1/validation",
+      "sha256": "f62945c14803c2d9b8832b736bf5dd0d79226ea2e5fa7727b5aaa32aa54ba8e5"
+    }
+  },
+  "elapsed_seconds": 33.01883859094232,
+  "gpu_peak_allocated_bytes": 1761949696,
+  "implementation_sha256": {
+    "__init__.py": "6b2cac83b6926f48e4fe131a7d60f0bce7544fe4be30aaf27fa16f9de2203c41",
+    "audit.py": "7c39d800080c6ba6ac091c9a7c02b8aad0bda4335ee9ff1265ad9fb94ebf3fd8",
+    "checks.py": "8c685dc8e6effeee57deb1512bc39a81e75c58f680df4c8f8a3b631dc47de7f1",
+    "cli.py": "411d9397e5a5426827890013779ca630de79b61cdae081d3503e55bea7a224db",
+    "config.py": "90ad7d6e8b29d497ddf97fa7c3c88d8a9cc89ee50810e4d2bda2d7029bc208f9",
+    "data.py": "2ad8e9efb94ae202814e4ab9fbc58e870fd172fef7efaab55e07c135204361ab",
+    "datasets.py": "bd6049a3093708caa0b629cc0307ebb3e770edc688ada6c827c1667280ffe231",
+    "environment.py": "fca413614bea036c4b58bffec5dcbdaecb3b9525ec37f2c92533a758fd32738f",
+    "evaluate.py": "3d57b417967d28b973d0f36673e37151b89801166dc1c210455f45f842161b88",
+    "experiment.py": "cc62c3569e07ca09b442beefbd29a5ed14ba01ad2bdd2e7b4f413dcb4b5c9474",
+    "intervention.py": "f10f960104e8f0e68cdf128b0ab96d13de858ae95a390762911e0bcf38ac42f1",
+    "models.py": "8abb9a26afd96067fd5360900b3fcadc688aaa727a95dcae0b1c87059acbfb92",
+    "pipeline.py": "1c4a8e6abb8e1ed1cd6f5785ea9646c4f2da970284a0659baa20df7812f0ab1b",
+    "positions.py": "b38c1d90ed96f77d9229d66f68d64a272681363d60657b10dc7e0f2136bc3078",
+    "report.py": "d01b7fb8bd3b2ae9774a8e5c56909a5c31900265371f0f8b3fc070b924992825",
+    "selection.py": "24043c028baad175916b53f993acbf907168797c211359cd3a161306c044f116",
+    "status.py": "8b5aaece017c3ad2ca354408fabc2af5bd5d05625239222ceed29c312328a635",
+    "tokenization.py": "65ed374f80c9f76f7f33b44281dce188655629d0be760fadffc2921c2bc8bb4d",
+    "train.py": "7ae06a7871fa9a9a427aacaf90065c9bda45419253c3fc531629cfc344ce543d",
+    "validation.py": "a544b5145d600551c454ebdd045a7e84c664cf8364f6714125c1e8ca2eedf512"
+  },
+  "language_model_weights_changed": false,
+  "metrics": {
+    "initial_train": {
+      "factual_accuracy": 0.76,
+      "factual_correct": 152,
+      "factual_total": 200,
+      "groups": {
+        "ABB->ABB": {
+          "iia": 0.78,
+          "iia_correct": 39,
+          "iia_total": 50,
+          "no_intervention_iia": 0.78,
+          "no_intervention_iia_correct": 39,
+          "no_intervention_iia_total": 50
+        },
+        "ABB->BAB": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->ABB": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->BAB": {
+          "iia": 0.84,
+          "iia_correct": 42,
+          "iia_total": 50,
+          "no_intervention_iia": 0.84,
+          "no_intervention_iia_correct": 42,
+          "no_intervention_iia_total": 50
+        },
+        "switch_required": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "unchanged_target": {
+          "iia": 0.81,
+          "iia_correct": 81,
+          "iia_total": 100,
+          "no_intervention_iia": 0.81,
+          "no_intervention_iia_correct": 81,
+          "no_intervention_iia_total": 100
+        }
+      },
+      "iia": 0.405,
+      "iia_correct": 81,
+      "iia_total": 200,
+      "mean_counterfactual_loss": 2.8337164756655695,
+      "mean_factual_loss": 1.2082404667139053,
+      "mean_target_logit": -74.31208240509034,
+      "no_intervention_iia": 0.405,
+      "no_intervention_iia_correct": 81,
+      "no_intervention_iia_total": 200,
+      "prediction_rule": "argmax_full_vocabulary"
+    },
+    "initial_validation": {
+      "factual_accuracy": 0.79,
+      "factual_correct": 158,
+      "factual_total": 200,
+      "groups": {
+        "ABB->ABB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "ABB->BAB": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "BAB->ABB": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "BAB->BAB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "switch_required": {
+          "iia": 0.0,
+          "iia_correct": 0,
+          "iia_total": 200,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 200
+        },
+        "unchanged_target": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        }
+      },
+      "iia": 0.0,
+      "iia_correct": 0,
+      "iia_total": 200,
+      "mean_counterfactual_loss": 4.456250150203704,
+      "mean_factual_loss": 1.1254733050614596,
+      "mean_target_logit": -75.7146106338501,
+      "no_intervention_iia": 0.0,
+      "no_intervention_iia_correct": 0,
+      "no_intervention_iia_total": 200,
+      "prediction_rule": "argmax_full_vocabulary"
+    },
+    "train": {
+      "factual_accuracy": 0.76,
+      "factual_correct": 152,
+      "factual_total": 200,
+      "groups": {
+        "ABB->ABB": {
+          "iia": 0.78,
+          "iia_correct": 39,
+          "iia_total": 50,
+          "no_intervention_iia": 0.78,
+          "no_intervention_iia_correct": 39,
+          "no_intervention_iia_total": 50
+        },
+        "ABB->BAB": {
+          "iia": 0.04,
+          "iia_correct": 2,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->ABB": {
+          "iia": 0.08,
+          "iia_correct": 4,
+          "iia_total": 50,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 50
+        },
+        "BAB->BAB": {
+          "iia": 0.84,
+          "iia_correct": 42,
+          "iia_total": 50,
+          "no_intervention_iia": 0.84,
+          "no_intervention_iia_correct": 42,
+          "no_intervention_iia_total": 50
+        },
+        "switch_required": {
+          "iia": 0.06,
+          "iia_correct": 6,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "unchanged_target": {
+          "iia": 0.81,
+          "iia_correct": 81,
+          "iia_total": 100,
+          "no_intervention_iia": 0.81,
+          "no_intervention_iia_correct": 81,
+          "no_intervention_iia_total": 100
+        }
+      },
+      "iia": 0.435,
+      "iia_correct": 87,
+      "iia_total": 200,
+      "mean_counterfactual_loss": 2.039644804894924,
+      "mean_factual_loss": 1.2082404667139053,
+      "mean_target_logit": -74.12440324783326,
+      "no_intervention_iia": 0.405,
+      "no_intervention_iia_correct": 81,
+      "no_intervention_iia_total": 200,
+      "prediction_rule": "argmax_full_vocabulary"
+    },
+    "validation": {
+      "factual_accuracy": 0.79,
+      "factual_correct": 158,
+      "factual_total": 200,
+      "groups": {
+        "ABB->ABB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "ABB->BAB": {
+          "iia": 0.04,
+          "iia_correct": 4,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "BAB->ABB": {
+          "iia": 0.07,
+          "iia_correct": 7,
+          "iia_total": 100,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 100
+        },
+        "BAB->BAB": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        },
+        "switch_required": {
+          "iia": 0.055,
+          "iia_correct": 11,
+          "iia_total": 200,
+          "no_intervention_iia": 0.0,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 200
+        },
+        "unchanged_target": {
+          "iia": null,
+          "iia_correct": 0,
+          "iia_total": 0,
+          "no_intervention_iia": null,
+          "no_intervention_iia_correct": 0,
+          "no_intervention_iia_total": 0
+        }
+      },
+      "iia": 0.055,
+      "iia_correct": 11,
+      "iia_total": 200,
+      "mean_counterfactual_loss": 2.875205666422844,
+      "mean_factual_loss": 1.1254733050614596,
+      "mean_target_logit": -75.47641414642334,
+      "no_intervention_iia": 0.0,
+      "no_intervention_iia_correct": 0,
+      "no_intervention_iia_total": 200,
+      "prediction_rule": "argmax_full_vocabulary"
+    }
+  },
+  "model": {
+    "attn_implementation": "eager",
+    "dtype": "float32",
+    "local_files_only": true,
+    "name": "gpt2-medium",
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da"
+  },
+  "model_metadata": {
+    "hidden_size": 1024,
+    "layer_count": 24,
+    "name": "gpt2-medium",
+    "parameter_count": 354823168,
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da"
+  },
+  "optimizer_steps": 100,
+  "original_dataset_counts": {
+    "train": 200,
+    "validation": 200
+  },
+  "resolved_config_sha256": "e624e827b97c5d4991735d61063f086d38647bf150ee926860702adeaec40b8f",
+  "run_dataset_counts": {
+    "train": 200,
+    "validation": 200
+  },
+  "run_kind": "full",
+  "seed": 44,
+  "status": "complete",
+  "tokenizer": {
+    "local_files_only": true,
+    "name": "gpt2-medium",
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da"
+  },
+  "upstream_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+  "validation_status": "passed"
+}

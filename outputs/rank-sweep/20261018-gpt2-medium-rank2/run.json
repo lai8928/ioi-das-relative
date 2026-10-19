@@ -1,0 +1,5754 @@
+{
+  "schema_version": 1,
+  "experiment_dir": "/data/homezvol0/ilingl/ioi-das-relative/outputs/rank-sweep/20261018-gpt2-medium-rank2",
+  "run_kind": "full",
+  "status": "complete",
+  "started_at_utc": "2026-10-18T17:02:07.807489+00:00",
+  "git": {
+    "commit": "0e448cb2da1edde08972d995bb6a26275fe298a6",
+    "clean_tree": false,
+    "protected_tree_clean": true
+  },
+  "command": [
+    "/data/homezvol0/ilingl/.conda/envs/ioi-das-v2/bin/python",
+    "-m",
+    "ioi_das.cli",
+    "run",
+    "--config",
+    "configs/rank-sweep/gpt2-medium-rank2.json"
+  ],
+  "config_source_sha256": "4a7c656d30b31d7d4f1b0880772335862574aaf3da32927b117fec74af53d1a8",
+  "resolved_config": {
+    "schema_version": 1,
+    "seed": 42,
+    "device": "cuda:0",
+    "cpu_threads": 8,
+    "evaluation_batch_size": 20,
+    "model": {
+      "name": "gpt2-medium",
+      "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+      "local_files_only": true,
+      "dtype": "float32",
+      "attn_implementation": "eager"
+    },
+    "tokenizer": {
+      "name": "gpt2-medium",
+      "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+      "local_files_only": true
+    },
+    "data": {
+      "train": "legacy_v1/train",
+      "test": "legacy_v1/test",
+      "validation": "val_indist_v1/validation"
+    },
+    "intervention": {
+      "target_variable": "position",
+      "component": "block_output",
+      "layer": 8,
+      "location": "N",
+      "rank": 2
+    },
+    "training": {
+      "epochs": 10,
+      "batch_size": 20,
+      "optimizer": "Adam",
+      "learning_rate": 0.01,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.0,
+      "schedule": "legacy_per_update_linearlr",
+      "scheduler": {
+        "name": "LinearLR",
+        "start_factor": 0.3333333333333333,
+        "end_factor": 0.1,
+        "total_iters": 10,
+        "step_interval": "batch"
+      }
+    },
+    "grid": {
+      "intervention.layer": "all",
+      "seed": [
+        42,
+        43,
+        44
+      ]
+    },
+    "task": "rank-sweep",
+    "name": "gpt2-medium-rank2",
+    "selection": {
+      "metric": "validation_iia",
+      "aggregate": "mean_over_seeds",
+      "tie_break": "lowest_layer",
+      "evaluate_after_lock": [
+        "test"
+      ]
+    }
+  },
+  "config_sha256": "70329bf54377bea1528e7e16f7349d501754f5e8ef7911f0e2c35678f7ad8d56",
+  "dataset_hashes": {
+    "legacy_v1/train": "3867b316d469df4b4c2d80136324c8cda4e001c617c584c30703283ad75db346",
+    "legacy_v1/manifest": "9f47c403b39c12b93f3d27d4e26416e081172914f276f9bc7fdcd1f6eb44653c",
+    "legacy_v1/test": "dd7e6de16f4ccb0e295086ba97d80abf8b6bcda01852f1ee8bb61ff3154f8ded",
+    "val_indist_v1/validation": "f62945c14803c2d9b8832b736bf5dd0d79226ea2e5fa7727b5aaa32aa54ba8e5",
+    "val_indist_v1/manifest": "2c75e461b717bd16f0c8b0f3d5e8c528d7469775444d2cb9429a6e9a44900054"
+  },
+  "implementation_sha256": {
+    "__init__.py": "6b2cac83b6926f48e4fe131a7d60f0bce7544fe4be30aaf27fa16f9de2203c41",
+    "audit.py": "7c39d800080c6ba6ac091c9a7c02b8aad0bda4335ee9ff1265ad9fb94ebf3fd8",
+    "checks.py": "8c685dc8e6effeee57deb1512bc39a81e75c58f680df4c8f8a3b631dc47de7f1",
+    "cli.py": "411d9397e5a5426827890013779ca630de79b61cdae081d3503e55bea7a224db",
+    "config.py": "90ad7d6e8b29d497ddf97fa7c3c88d8a9cc89ee50810e4d2bda2d7029bc208f9",
+    "data.py": "2ad8e9efb94ae202814e4ab9fbc58e870fd172fef7efaab55e07c135204361ab",
+    "datasets.py": "bd6049a3093708caa0b629cc0307ebb3e770edc688ada6c827c1667280ffe231",
+    "environment.py": "fca413614bea036c4b58bffec5dcbdaecb3b9525ec37f2c92533a758fd32738f",
+    "evaluate.py": "3d57b417967d28b973d0f36673e37151b89801166dc1c210455f45f842161b88",
+    "experiment.py": "cc62c3569e07ca09b442beefbd29a5ed14ba01ad2bdd2e7b4f413dcb4b5c9474",
+    "intervention.py": "f10f960104e8f0e68cdf128b0ab96d13de858ae95a390762911e0bcf38ac42f1",
+    "models.py": "8abb9a26afd96067fd5360900b3fcadc688aaa727a95dcae0b1c87059acbfb92",
+    "pipeline.py": "1c4a8e6abb8e1ed1cd6f5785ea9646c4f2da970284a0659baa20df7812f0ab1b",
+    "positions.py": "b38c1d90ed96f77d9229d66f68d64a272681363d60657b10dc7e0f2136bc3078",
+    "report.py": "d01b7fb8bd3b2ae9774a8e5c56909a5c31900265371f0f8b3fc070b924992825",
+    "selection.py": "24043c028baad175916b53f993acbf907168797c211359cd3a161306c044f116",
+    "status.py": "8b5aaece017c3ad2ca354408fabc2af5bd5d05625239222ceed29c312328a635",
+    "tokenization.py": "65ed374f80c9f76f7f33b44281dce188655629d0be760fadffc2921c2bc8bb4d",
+    "train.py": "7ae06a7871fa9a9a427aacaf90065c9bda45419253c3fc531629cfc344ce543d",
+    "validation.py": "a544b5145d600551c454ebdd045a7e84c664cf8364f6714125c1e8ca2eedf512"
+  },
+  "model": {
+    "name": "gpt2-medium",
+    "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+    "parameter_count": 354823168,
+    "layer_count": 24,
+    "hidden_size": 1024
+  },
+  "environment": {
+    "executable": "/data/homezvol0/ilingl/.conda/envs/ioi-das-v2/bin/python",
+    "python": "3.10.21",
+    "CUDA_VISIBLE_DEVICES": "0"
+  },
+  "conditions": [
+    {
+      "path": "conditions/intervention.layer=0/seed=42",
+      "axes": {
+        "intervention.layer": 0,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 0,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 35.86608412768692,
+      "result_sha256": "7fd3254bafb4ec8faa05dde606de7d92bf90026565a835b907665e0fc4d30f5f"
+    },
+    {
+      "path": "conditions/intervention.layer=0/seed=43",
+      "axes": {
+        "intervention.layer": 0,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 0,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 35.83117255708203,
+      "result_sha256": "08de73ca608c7485ae0218ec1817176ffb7c3a5da3fd3a0541f9b7f0676cecf6"
+    },
+    {
+      "path": "conditions/intervention.layer=0/seed=44",
+      "axes": {
+        "intervention.layer": 0,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 0,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 35.65951465442777,
+      "result_sha256": "14d915267720e797f0225264bf446ff6435ecd7026eeb5e93028535c3845db02"
+    },
+    {
+      "path": "conditions/intervention.layer=1/seed=42",
+      "axes": {
+        "intervention.layer": 1,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 1,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 35.00145642505959,
+      "result_sha256": "38f542b26c4e71531bcad12d829f7c33b7ec9065510ee1c29ce054bc5ee47b90"
+    },
+    {
+      "path": "conditions/intervention.layer=1/seed=43",
+      "axes": {
+        "intervention.layer": 1,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 1,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 35.355608300771564,
+      "result_sha256": "32f1f505b298a94ac8b1bd76571a3c18a86ae2a4c10d1686c6afd959983dcce8"
+    },
+    {
+      "path": "conditions/intervention.layer=1/seed=44",
+      "axes": {
+        "intervention.layer": 1,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 1,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 34.24532357091084,
+      "result_sha256": "2b361915fe341cbf4819468d689b19877f1566d4ff73791231837b6892571d30"
+    },
+    {
+      "path": "conditions/intervention.layer=2/seed=42",
+      "axes": {
+        "intervention.layer": 2,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 2,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 34.750656459946185,
+      "result_sha256": "9611422328adcb1cb2fa138315c37722c669e3a503df708f36df6f836ff6ae60"
+    },
+    {
+      "path": "conditions/intervention.layer=2/seed=43",
+      "axes": {
+        "intervention.layer": 2,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 2,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 34.61931398231536,
+      "result_sha256": "738d067b0d8badc869d8d8d6582da3a46d4d2d2d3037c837decc8dbec0a31419"
+    },
+    {
+      "path": "conditions/intervention.layer=2/seed=44",
+      "axes": {
+        "intervention.layer": 2,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 2,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 34.36032507382333,
+      "result_sha256": "b0b686905ff6adcc5fee96a3e701c71773b6776f8595edaae268a4b825c22c2f"
+    },
+    {
+      "path": "conditions/intervention.layer=3/seed=42",
+      "axes": {
+        "intervention.layer": 3,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 3,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 35.10712668299675,
+      "result_sha256": "e12ffe09240f9beb77a19862dc2d5a060be45f3a49d57547176843d33b165e8d"
+    },
+    {
+      "path": "conditions/intervention.layer=3/seed=43",
+      "axes": {
+        "intervention.layer": 3,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 3,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 35.085971501190215,
+      "result_sha256": "6eeb3375cd1350d64151bd70afe40665da33cd0b55c6981ed3ba7003a547ff6a"
+    },
+    {
+      "path": "conditions/intervention.layer=3/seed=44",
+      "axes": {
+        "intervention.layer": 3,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 3,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 34.83108759485185,
+      "result_sha256": "f7035f7f21f17836d9cd2bb757bca06888b2c82ef4ba5839a518cd62039863cb"
+    },
+    {
+      "path": "conditions/intervention.layer=4/seed=42",
+      "axes": {
+        "intervention.layer": 4,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 4,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 33.55818619020283,
+      "result_sha256": "4e9e6b883276c2d0e04f2077d0012465852ea1875928a44367544b3e62570d6f"
+    },
+    {
+      "path": "conditions/intervention.layer=4/seed=43",
+      "axes": {
+        "intervention.layer": 4,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 4,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 34.66896755201742,
+      "result_sha256": "2e6b680502497f8ee6feccb4dc4753eaa31c976c22b24cd3496f08967c2fd4ef"
+    },
+    {
+      "path": "conditions/intervention.layer=4/seed=44",
+      "axes": {
+        "intervention.layer": 4,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 4,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 34.3417714308016,
+      "result_sha256": "27c044caac9f702a90c465780243f2e5da9bf4c923cd2e14919d2d710f439deb"
+    },
+    {
+      "path": "conditions/intervention.layer=5/seed=42",
+      "axes": {
+        "intervention.layer": 5,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 5,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 34.68264474906027,
+      "result_sha256": "a7324180e947bab9aef5f9db36b6f0e0bf8792df842e3cc85e52f1f4a5c9adf2"
+    },
+    {
+      "path": "conditions/intervention.layer=5/seed=43",
+      "axes": {
+        "intervention.layer": 5,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 5,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 33.359406678937376,
+      "result_sha256": "03e6fd779dafee6c4a7e88b02f490c3ceec294059d8b751c4b65984421ce9901"
+    },
+    {
+      "path": "conditions/intervention.layer=5/seed=44",
+      "axes": {
+        "intervention.layer": 5,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 5,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 33.32827155990526,
+      "result_sha256": "a31619adcf49a1470a7e124ace620caa5ed6a98a4a31aaba562639c484fb9415"
+    },
+    {
+      "path": "conditions/intervention.layer=6/seed=42",
+      "axes": {
+        "intervention.layer": 6,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 6,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 34.14733887696639,
+      "result_sha256": "361153d95b38ce403bc113b8da105c207b04f611b0088cb3ac40f5a6eeaeef77"
+    },
+    {
+      "path": "conditions/intervention.layer=6/seed=43",
+      "axes": {
+        "intervention.layer": 6,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 6,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 33.22064894204959,
+      "result_sha256": "d5c199ed3014227a2216d4a97ec18ac9df9d83e8276117f414ad957ecc2d82df"
+    },
+    {
+      "path": "conditions/intervention.layer=6/seed=44",
+      "axes": {
+        "intervention.layer": 6,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 6,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 33.310073130298406,
+      "result_sha256": "5045de1e1df94e1a12b8cadc0c23f0385b601fee1619490c40fad3a1039f8cd4"
+    },
+    {
+      "path": "conditions/intervention.layer=7/seed=42",
+      "axes": {
+        "intervention.layer": 7,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 7,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.83555767824873,
+      "result_sha256": "c68a6c1f7eec69d20c528b00c36fcda737c5df85ae4cbcff9d8663162e8ecba1"
+    },
+    {
+      "path": "conditions/intervention.layer=7/seed=43",
+      "axes": {
+        "intervention.layer": 7,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 7,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 33.19869414623827,
+      "result_sha256": "2dfa5e01e163185e21b77b2351ce2bbf000c20922c901be2534a97ecc4df1496"
+    },
+    {
+      "path": "conditions/intervention.layer=7/seed=44",
+      "axes": {
+        "intervention.layer": 7,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 7,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 33.89284295681864,
+      "result_sha256": "6abf0e4063f95a7b343bb29e9d3d4d718c04d5b22bdb52ea2c92315425b759c4"
+    },
+    {
+      "path": "conditions/intervention.layer=8/seed=42",
+      "axes": {
+        "intervention.layer": 8,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 8,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 34.051645058207214,
+      "result_sha256": "aadd5babfcb83f526cbd8dac10de78bd2cc24614130e1b4d8c774e2ad6b58025"
+    },
+    {
+      "path": "conditions/intervention.layer=8/seed=43",
+      "axes": {
+        "intervention.layer": 8,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 8,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.74691798398271,
+      "result_sha256": "44e51ea6f4aae143420a852c939b61981676c8a0c44ff7fc8f004ed69b4708cf"
+    },
+    {
+      "path": "conditions/intervention.layer=8/seed=44",
+      "axes": {
+        "intervention.layer": 8,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 8,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 33.82080107321963,
+      "result_sha256": "2c992dbf921f0dcec3df0c6e0101454947835e0b0451dd48ab51df7806394edc"
+    },
+    {
+      "path": "conditions/intervention.layer=9/seed=42",
+      "axes": {
+        "intervention.layer": 9,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 9,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.549764309078455,
+      "result_sha256": "b6d25e5dfd049722b1a5c0e937a1890ef820f44bbed579bc90418825d86ea6ca"
+    },
+    {
+      "path": "conditions/intervention.layer=9/seed=43",
+      "axes": {
+        "intervention.layer": 9,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 9,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.84550625598058,
+      "result_sha256": "25186a0169206120a648b6abfbc73901114c8fb0e45d9b39901e52a0feedfee8"
+    },
+    {
+      "path": "conditions/intervention.layer=9/seed=44",
+      "axes": {
+        "intervention.layer": 9,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 9,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 33.74919003993273,
+      "result_sha256": "5c7313dcb50e4d4069e4d2ef752e5ba930761bf04494665bbc68c8b760aa630c"
+    },
+    {
+      "path": "conditions/intervention.layer=10/seed=42",
+      "axes": {
+        "intervention.layer": 10,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 10,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.28377534309402,
+      "result_sha256": "84c37d50ace54f70b56fbc508f1e7c4191982a96629b763b9cc77eb38f8d4fe6"
+    },
+    {
+      "path": "conditions/intervention.layer=10/seed=43",
+      "axes": {
+        "intervention.layer": 10,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 10,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.37415680103004,
+      "result_sha256": "6f5b5249ea7fc5e4b3c376d2fb697f9ab319fe4e71af0e06579027f0ccb449e5"
+    },
+    {
+      "path": "conditions/intervention.layer=10/seed=44",
+      "axes": {
+        "intervention.layer": 10,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 10,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.60168572003022,
+      "result_sha256": "6b14e55eed6a18a500639fa1cc7642f2799a5621fb2f057da2a24268f8b78228"
+    },
+    {
+      "path": "conditions/intervention.layer=11/seed=42",
+      "axes": {
+        "intervention.layer": 11,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 11,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.9580064881593,
+      "result_sha256": "aa6ede516b8fe25c94ed8c7deb1207a7afeba07a3b550b96ae10d2aec54222d3"
+    },
+    {
+      "path": "conditions/intervention.layer=11/seed=43",
+      "axes": {
+        "intervention.layer": 11,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 11,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 33.142315675038844,
+      "result_sha256": "c3b349e139df8a4e358ed46f737bc61701c1047184dc85c15f4638ef7cee06f2"
+    },
+    {
+      "path": "conditions/intervention.layer=11/seed=44",
+      "axes": {
+        "intervention.layer": 11,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 11,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.27239358611405,
+      "result_sha256": "91cb7088608b1f95fad8f29d912f2b75324a60673b6dca91b1f29ec3a8dc6b8d"
+    },
+    {
+      "path": "conditions/intervention.layer=12/seed=42",
+      "axes": {
+        "intervention.layer": 12,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 12,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.40988585213199,
+      "result_sha256": "75752c4b2203d65a9d570aa8dbf9ec7e0f54f3ed5eebb9a7088e5a2a0ea653d0"
+    },
+    {
+      "path": "conditions/intervention.layer=12/seed=43",
+      "axes": {
+        "intervention.layer": 12,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 12,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.049533842131495,
+      "result_sha256": "55d760b28ae00c5638e5f441e0a7d2a9ff8f3c74533c90a0783b0c13eb68e4e1"
+    },
+    {
+      "path": "conditions/intervention.layer=12/seed=44",
+      "axes": {
+        "intervention.layer": 12,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 12,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.96154196932912,
+      "result_sha256": "3323fad030b9eb8cfebdafab7c92fa0dfd1fc056c2e1c3da7de6ce141c83a13c"
+    },
+    {
+      "path": "conditions/intervention.layer=13/seed=42",
+      "axes": {
+        "intervention.layer": 13,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 13,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.59091165382415,
+      "result_sha256": "6791cf20ea33e305f55bf8e3e6b6399abca1ec9af2cf6fc1b35d13e183d2eabd"
+    },
+    {
+      "path": "conditions/intervention.layer=13/seed=43",
+      "axes": {
+        "intervention.layer": 13,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 13,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.08136578509584,
+      "result_sha256": "c9d8d9599ecd26a5c4c679ac99cb3caaecfcf9d32e0bd642699bcf8159c9cad6"
+    },
+    {
+      "path": "conditions/intervention.layer=13/seed=44",
+      "axes": {
+        "intervention.layer": 13,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 13,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.23342479206622,
+      "result_sha256": "90d7f28f389c5ee9765063f52906cdd6cccd2c11c797159b41959de0e289be61"
+    },
+    {
+      "path": "conditions/intervention.layer=14/seed=42",
+      "axes": {
+        "intervention.layer": 14,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 14,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.12427845178172,
+      "result_sha256": "890c92136d1d9a8098fc1a30100cd23c4f7ae4d02520f951dcbe2ccee5d297d4"
+    },
+    {
+      "path": "conditions/intervention.layer=14/seed=43",
+      "axes": {
+        "intervention.layer": 14,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 14,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.70150569593534,
+      "result_sha256": "cb2bad50bcce49334a02c97c027f4745946dfe2815f5e7fc1b7b21cb84e80355"
+    },
+    {
+      "path": "conditions/intervention.layer=14/seed=44",
+      "axes": {
+        "intervention.layer": 14,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 14,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.37306844210252,
+      "result_sha256": "e0d3db67efc23b47475aa5ba505752fede042c78eb63d8d59fec9afbc37c5215"
+    },
+    {
+      "path": "conditions/intervention.layer=15/seed=42",
+      "axes": {
+        "intervention.layer": 15,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 15,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.757745346985757,
+      "result_sha256": "4b2292907eafaf1510b2fde17f194d2b455a77983768617233aaa47e5b83720a"
+    },
+    {
+      "path": "conditions/intervention.layer=15/seed=43",
+      "axes": {
+        "intervention.layer": 15,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 15,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.485360343009233,
+      "result_sha256": "c6ea8331cd406d9460dcbad58dc6d27cba17198b04102b31d20311bc89ff07c0"
+    },
+    {
+      "path": "conditions/intervention.layer=15/seed=44",
+      "axes": {
+        "intervention.layer": 15,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 15,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.60565519891679,
+      "result_sha256": "396a6473a96485b4f23ffa71780c87d7790af032578a165e23f16c8c697c99ef"
+    },
+    {
+      "path": "conditions/intervention.layer=16/seed=42",
+      "axes": {
+        "intervention.layer": 16,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 16,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.27548208180815,
+      "result_sha256": "18cf80520324931c2b690b27d8cc6c3c23311715c53b213a1b39e39ab2500385"
+    },
+    {
+      "path": "conditions/intervention.layer=16/seed=43",
+      "axes": {
+        "intervention.layer": 16,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 16,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.31828278489411,
+      "result_sha256": "243dc646666a93dafb92f2a1f53cff63fac5dba22d742addb648c8caec7bf38c"
+    },
+    {
+      "path": "conditions/intervention.layer=16/seed=44",
+      "axes": {
+        "intervention.layer": 16,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 16,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.505356289912015,
+      "result_sha256": "f08c4c58a2616dc5bd10a9af24354e7af0536c47b21f205e11742348092e151c"
+    },
+    {
+      "path": "conditions/intervention.layer=17/seed=42",
+      "axes": {
+        "intervention.layer": 17,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 17,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.368611598853022,
+      "result_sha256": "4c598b342d6857ef2cae57edf617ac2b7a7535140aa2ca9bcf9e350a11c04b40"
+    },
+    {
+      "path": "conditions/intervention.layer=17/seed=43",
+      "axes": {
+        "intervention.layer": 17,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 17,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.015273683238775,
+      "result_sha256": "f232792445f65bb925788e0458b7ff1c9bd1f196418129629638923e9a15feb2"
+    },
+    {
+      "path": "conditions/intervention.layer=17/seed=44",
+      "axes": {
+        "intervention.layer": 17,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 17,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.302027916070074,
+      "result_sha256": "67c75b5cf1b7050adcb6aa2c4a5bf201c7cb718e02c4cd771fb71d2a511ea2de"
+    },
+    {
+      "path": "conditions/intervention.layer=18/seed=42",
+      "axes": {
+        "intervention.layer": 18,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 18,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.088678845204413,
+      "result_sha256": "b38557716a1c5cbc22bf937109353f70be87f454111f05195bc773a43e71b7be"
+    },
+    {
+      "path": "conditions/intervention.layer=18/seed=43",
+      "axes": {
+        "intervention.layer": 18,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 18,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.019925152882934,
+      "result_sha256": "ac3b37b53f50bb3837406b4b61413ff414c8fd51656cd56dc1505f44f3520d43"
+    },
+    {
+      "path": "conditions/intervention.layer=18/seed=44",
+      "axes": {
+        "intervention.layer": 18,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 18,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.059594734106213,
+      "result_sha256": "8190a410549ca292524b6d4146c55aa0f1fd0acb7cc7d65c283d671dfcde147c"
+    },
+    {
+      "path": "conditions/intervention.layer=19/seed=42",
+      "axes": {
+        "intervention.layer": 19,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 19,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.792166743427515,
+      "result_sha256": "db2eded08b47bab192da6ba6739b1d1e26fa724fff44f775275eab2bbb749321"
+    },
+    {
+      "path": "conditions/intervention.layer=19/seed=43",
+      "axes": {
+        "intervention.layer": 19,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 19,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.923282485920936,
+      "result_sha256": "d8107b1acdeef70ffa9074b2705c6080b88a9401b5fbd46e022ef90ea566c436"
+    },
+    {
+      "path": "conditions/intervention.layer=19/seed=44",
+      "axes": {
+        "intervention.layer": 19,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 19,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 32.04334129579365,
+      "result_sha256": "a6aaa1bc445f03444aa65dbb6a14cd926b1a3145715fe54586cf338179a31fef"
+    },
+    {
+      "path": "conditions/intervention.layer=20/seed=42",
+      "axes": {
+        "intervention.layer": 20,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 20,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.689716116990894,
+      "result_sha256": "e9fec3380ad452aeb2270bba26f45fd9fa0c1ce64a0b7b8399b5c5edadc763e5"
+    },
+    {
+      "path": "conditions/intervention.layer=20/seed=43",
+      "axes": {
+        "intervention.layer": 20,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 20,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.56880485638976,
+      "result_sha256": "dd8556dbec39792f2d1ee44562ea605dd8d24cf2f9edb51eee6cb2b3bf6d9404"
+    },
+    {
+      "path": "conditions/intervention.layer=20/seed=44",
+      "axes": {
+        "intervention.layer": 20,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 20,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.849229333922267,
+      "result_sha256": "9ea4c34116108737e3804e6742ec8a1fa058397b47f84055e64adb26aee8034a"
+    },
+    {
+      "path": "conditions/intervention.layer=21/seed=42",
+      "axes": {
+        "intervention.layer": 21,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 21,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 31.2736311792396,
+      "result_sha256": "8dd82fd6f56c21f45d26a20ed275ed9a822ee5da73b967ba8184a28f4992a781"
+    },
+    {
+      "path": "conditions/intervention.layer=21/seed=43",
+      "axes": {
+        "intervention.layer": 21,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 21,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.39289950579405,
+      "result_sha256": "fd693c848aad1c1bc07f95f890414621a16ba0ca3736042808875f782b5a5399"
+    },
+    {
+      "path": "conditions/intervention.layer=21/seed=44",
+      "axes": {
+        "intervention.layer": 21,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 21,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.51204606005922,
+      "result_sha256": "8ec9ffc6893cb76591e7c0f64c02831232c12ab5ec3107f6ca7bb07c4fa8d4ea"
+    },
+    {
+      "path": "conditions/intervention.layer=22/seed=42",
+      "axes": {
+        "intervention.layer": 22,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 22,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.179101874120533,
+      "result_sha256": "b1bea40b0ff80123439c7358891d26fdfbf96ed00c4e21091d65fc35ff283225"
+    },
+    {
+      "path": "conditions/intervention.layer=22/seed=43",
+      "axes": {
+        "intervention.layer": 22,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 22,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.321080568712205,
+      "result_sha256": "ea920043ae47d54ae03bde24ad1db7958349c96788f381a59e2e0c97710c5665"
+    },
+    {
+      "path": "conditions/intervention.layer=22/seed=44",
+      "axes": {
+        "intervention.layer": 22,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 22,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.13528399216011,
+      "result_sha256": "e7f2c959c0effa25369ab44dab27dbb86d952aa77ed72f657895be8ecbb5fda9"
+    },
+    {
+      "path": "conditions/intervention.layer=23/seed=42",
+      "axes": {
+        "intervention.layer": 23,
+        "seed": 42
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 42,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 23,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 29.80360301071778,
+      "result_sha256": "39848319823f2c3388b51ee1c13d1a9c7b0700c54fd903cdcb641b4967bcffcc"
+    },
+    {
+      "path": "conditions/intervention.layer=23/seed=43",
+      "axes": {
+        "intervention.layer": 23,
+        "seed": 43
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 43,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 23,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.40523388981819,
+      "result_sha256": "6caef62ceec05b76cb5aadda918418159bc6f861278b9e47f801a6fb606212b9"
+    },
+    {
+      "path": "conditions/intervention.layer=23/seed=44",
+      "axes": {
+        "intervention.layer": 23,
+        "seed": 44
+      },
+      "resolved_config": {
+        "schema_version": 1,
+        "seed": 44,
+        "device": "cuda:0",
+        "cpu_threads": 8,
+        "evaluation_batch_size": 20,
+        "model": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true,
+          "dtype": "float32",
+          "attn_implementation": "eager"
+        },
+        "tokenizer": {
+          "name": "gpt2-medium",
+          "revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+          "local_files_only": true
+        },
+        "data": {
+          "train": "legacy_v1/train",
+          "test": "legacy_v1/test",
+          "validation": "val_indist_v1/validation"
+        },
+        "intervention": {
+          "target_variable": "position",
+          "component": "block_output",
+          "layer": 23,
+          "location": "N",
+          "rank": 2
+        },
+        "training": {
+          "epochs": 10,
+          "batch_size": 20,
+          "optimizer": "Adam",
+          "learning_rate": 0.01,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.0,
+          "schedule": "legacy_per_update_linearlr",
+          "scheduler": {
+            "name": "LinearLR",
+            "start_factor": 0.3333333333333333,
+            "end_factor": 0.1,
+            "total_iters": 10,
+            "step_interval": "batch"
+          }
+        },
+        "task": "rank-sweep",
+        "name": "gpt2-medium-rank2",
+        "selection": {
+          "metric": "validation_iia",
+          "aggregate": "mean_over_seeds",
+          "tie_break": "lowest_layer",
+          "evaluate_after_lock": [
+            "test"
+          ]
+        }
+      },
+      "status": "complete",
+      "elapsed_seconds": 30.710280084982514,
+      "result_sha256": "18d9dbd736a42110fb792adb2c950f3dbe999d43de028e27e5f7ba28d3682726"
+    }
+  ],
+  "post_lock": [
+    {
+      "path": "post_lock/intervention.layer=0/seed=42",
+      "condition_path": "conditions/intervention.layer=0/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 4.896205598022789,
+      "result_sha256": "078708369188d52b2eca72b1e80437b38489d6e5f1907e59223d1d35b5fb3798"
+    },
+    {
+      "path": "post_lock/intervention.layer=0/seed=43",
+      "condition_path": "conditions/intervention.layer=0/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.2714367881417274,
+      "result_sha256": "2502a8a7e20a1d80beb208d32b18d5b198dd35e01bb9280eed4da2d205f59a2a"
+    },
+    {
+      "path": "post_lock/intervention.layer=0/seed=44",
+      "condition_path": "conditions/intervention.layer=0/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.564700013026595,
+      "result_sha256": "f8883952577ce12dc8f9dd7bbf5c7560cc1a0ccecad067add24026c75b74c72b"
+    },
+    {
+      "path": "post_lock/intervention.layer=1/seed=42",
+      "condition_path": "conditions/intervention.layer=1/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.605009728111327,
+      "result_sha256": "30bf978c7dfb97067907cb6547be97f35a59ec40df50773753836463fb74b290"
+    },
+    {
+      "path": "post_lock/intervention.layer=1/seed=43",
+      "condition_path": "conditions/intervention.layer=1/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.200977381784469,
+      "result_sha256": "1ff13de9f107cb61f3723b54a6cb82bde82aed842bf7ec82d3094949a9c1c271"
+    },
+    {
+      "path": "post_lock/intervention.layer=1/seed=44",
+      "condition_path": "conditions/intervention.layer=1/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.160675033926964,
+      "result_sha256": "97600529329a7169a7aa85fe67c6b156cc4ce7eae828a2af3edf76d5a25a7f50"
+    },
+    {
+      "path": "post_lock/intervention.layer=2/seed=42",
+      "condition_path": "conditions/intervention.layer=2/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 6.552602437790483,
+      "result_sha256": "f3a8692038d48edf1dfb00198e68eb5239473662701a44be03b27bfd8d4ec37b"
+    },
+    {
+      "path": "post_lock/intervention.layer=2/seed=43",
+      "condition_path": "conditions/intervention.layer=2/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 4.852177031803876,
+      "result_sha256": "b5ab458a62afd57da99e9b8253926a6d3903f462e789f27beb390be712bbfdf5"
+    },
+    {
+      "path": "post_lock/intervention.layer=2/seed=44",
+      "condition_path": "conditions/intervention.layer=2/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 4.917265467811376,
+      "result_sha256": "88a5a07dbdc03d80d8d97fa98d87d7e84604f8f25434f931dce6a1a271889b3c"
+    },
+    {
+      "path": "post_lock/intervention.layer=3/seed=42",
+      "condition_path": "conditions/intervention.layer=3/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 4.997024265117943,
+      "result_sha256": "ec259197397747af482ca744fd448d0c2a9d7efea57a38d68da4e748ac2d436a"
+    },
+    {
+      "path": "post_lock/intervention.layer=3/seed=43",
+      "condition_path": "conditions/intervention.layer=3/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.339806706178933,
+      "result_sha256": "1f07148d2a087b77f2de03064b8f266657f734d538baa06162fa8470c03bdef3"
+    },
+    {
+      "path": "post_lock/intervention.layer=3/seed=44",
+      "condition_path": "conditions/intervention.layer=3/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.115608004853129,
+      "result_sha256": "87042f873d02a215f26ae9f5f8f9227b09b128c6caa6cf208bb5404a696cde89"
+    },
+    {
+      "path": "post_lock/intervention.layer=4/seed=42",
+      "condition_path": "conditions/intervention.layer=4/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 6.125953869894147,
+      "result_sha256": "ae73258f64d3ef8e88e6f4348a84eff0fe401239ce4cfeff272ef1698303ec70"
+    },
+    {
+      "path": "post_lock/intervention.layer=4/seed=43",
+      "condition_path": "conditions/intervention.layer=4/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.6694411197677255,
+      "result_sha256": "1dd3efe2d947796a900dbbcd18fb0c2cab874d5c5bf6a915a53634dee7e9a113"
+    },
+    {
+      "path": "post_lock/intervention.layer=4/seed=44",
+      "condition_path": "conditions/intervention.layer=4/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.145552085246891,
+      "result_sha256": "8c41a144b8772e6b98067b3cd64a56871c47518d5732eb3a73cf79788b763492"
+    },
+    {
+      "path": "post_lock/intervention.layer=5/seed=42",
+      "condition_path": "conditions/intervention.layer=5/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.0390041982755065,
+      "result_sha256": "2d2f2974d584817ae50293324ba1803a741d97df8dcaf0cf1b9f1fa8715613c0"
+    },
+    {
+      "path": "post_lock/intervention.layer=5/seed=43",
+      "condition_path": "conditions/intervention.layer=5/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 6.163678464945406,
+      "result_sha256": "0a626b9d01d1afe1b0cd77b15ea3a981fd32ebc6458ec6956a43d7074b9a44ec"
+    },
+    {
+      "path": "post_lock/intervention.layer=5/seed=44",
+      "condition_path": "conditions/intervention.layer=5/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.004160913173109,
+      "result_sha256": "80cf1c32e8d81e6fbeb7c91ceea4fe2546e3e73c0bef529d3d4995c6028e8080"
+    },
+    {
+      "path": "post_lock/intervention.layer=6/seed=42",
+      "condition_path": "conditions/intervention.layer=6/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 6.2551200347952545,
+      "result_sha256": "bec2eaaa0830555eb3f7f41e6bf7239dbb8f9f00fbcb99d89204a98321391684"
+    },
+    {
+      "path": "post_lock/intervention.layer=6/seed=43",
+      "condition_path": "conditions/intervention.layer=6/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.207063113804907,
+      "result_sha256": "d34af4739bc9265c7bf1c3ed34309961fd3f69668aac2440ee3c51b66af4d158"
+    },
+    {
+      "path": "post_lock/intervention.layer=6/seed=44",
+      "condition_path": "conditions/intervention.layer=6/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 4.975324535742402,
+      "result_sha256": "3dc8dc0396a4d3d2312c96b45ab48cb2bf27ca0efb7f4f02c8507b95a37fe4db"
+    },
+    {
+      "path": "post_lock/intervention.layer=7/seed=42",
+      "condition_path": "conditions/intervention.layer=7/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.724902650341392,
+      "result_sha256": "4aa294a70abf0c9665908cacbab2379aa429420345e4be3bbaf7f49f53dc4fce"
+    },
+    {
+      "path": "post_lock/intervention.layer=7/seed=43",
+      "condition_path": "conditions/intervention.layer=7/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.218211889266968,
+      "result_sha256": "88cc120c415b4ac61e1d9a08e670220b3682a140c1b2c329a0859026082201a9"
+    },
+    {
+      "path": "post_lock/intervention.layer=7/seed=44",
+      "condition_path": "conditions/intervention.layer=7/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.315840824972838,
+      "result_sha256": "d240de6eea56630b4d190c899cac997be0b625e1023f02a45125db9f890b21b6"
+    },
+    {
+      "path": "post_lock/intervention.layer=8/seed=42",
+      "condition_path": "conditions/intervention.layer=8/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.632155943196267,
+      "result_sha256": "e561e6082ed11cb842703a9490d20bb8b64e002999ca67ecbd7443754bd2c8c6"
+    },
+    {
+      "path": "post_lock/intervention.layer=8/seed=43",
+      "condition_path": "conditions/intervention.layer=8/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.451834809966385,
+      "result_sha256": "cafe1182ab6209a84fa1c1b912ef33563f75afa226d23aa8efa93bdb98c5f0ca"
+    },
+    {
+      "path": "post_lock/intervention.layer=8/seed=44",
+      "condition_path": "conditions/intervention.layer=8/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 6.368749648798257,
+      "result_sha256": "6c43bf358cfe4607e0de3b3363465e92533bdc593d4c632f70ba973a5c19398f"
+    },
+    {
+      "path": "post_lock/intervention.layer=9/seed=42",
+      "condition_path": "conditions/intervention.layer=9/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.854432928841561,
+      "result_sha256": "b9d695b2cf6388eba6ecbfa0aa9d5f399824e2284a59a7f6200047911c68a054"
+    },
+    {
+      "path": "post_lock/intervention.layer=9/seed=43",
+      "condition_path": "conditions/intervention.layer=9/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.1815677410922945,
+      "result_sha256": "7f9e203919dc43babf37963569e46a0e049ecc70842872ea153b0f7216fcf43e"
+    },
+    {
+      "path": "post_lock/intervention.layer=9/seed=44",
+      "condition_path": "conditions/intervention.layer=9/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 6.218130064196885,
+      "result_sha256": "0f164da0281c3d46b4ed941225d13d9b0218ef203c87bac19fd90e7bff9a7e87"
+    },
+    {
+      "path": "post_lock/intervention.layer=10/seed=42",
+      "condition_path": "conditions/intervention.layer=10/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.17624168517068,
+      "result_sha256": "08215e1aa0cb1f5cd799db63cbed3a22c25349b7b0a0d05cb4eafcb6cffc90e9"
+    },
+    {
+      "path": "post_lock/intervention.layer=10/seed=43",
+      "condition_path": "conditions/intervention.layer=10/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.0273467022925615,
+      "result_sha256": "dea8abe560402226ab5aa9fdafce2d940ec565132204cc4e715d8db403b950ff"
+    },
+    {
+      "path": "post_lock/intervention.layer=10/seed=44",
+      "condition_path": "conditions/intervention.layer=10/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.017072556074709,
+      "result_sha256": "82318bbb5c33cb3564422a1acd52d855bfcdfea0725db1aec4e9277e7567916d"
+    },
+    {
+      "path": "post_lock/intervention.layer=11/seed=42",
+      "condition_path": "conditions/intervention.layer=11/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.222528368700296,
+      "result_sha256": "ab913a329071f5ece321995a357d8b98522521c7ac7e7276a61b51cef7cf7fd0"
+    },
+    {
+      "path": "post_lock/intervention.layer=11/seed=43",
+      "condition_path": "conditions/intervention.layer=11/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 4.935846492648125,
+      "result_sha256": "485a35e2934758d962891b84b15717bf87f37e249e7161a9e6aafb20d8dcf20e"
+    },
+    {
+      "path": "post_lock/intervention.layer=11/seed=44",
+      "condition_path": "conditions/intervention.layer=11/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.668493617326021,
+      "result_sha256": "74739aa3d1b53f09acb82afe2ddcfa291b72a456f2f666a3ce62dadaa0662505"
+    },
+    {
+      "path": "post_lock/intervention.layer=12/seed=42",
+      "condition_path": "conditions/intervention.layer=12/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.710059089120477,
+      "result_sha256": "47e0e4556200abb5cd5ef8a6889e6f68d80e1011c7b58c6c4198e2ab2e6af5f6"
+    },
+    {
+      "path": "post_lock/intervention.layer=12/seed=43",
+      "condition_path": "conditions/intervention.layer=12/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.791254475712776,
+      "result_sha256": "80630762478e24b5f2574e2c699f2fbcedfa5cc0863914108236dbbc276bcc29"
+    },
+    {
+      "path": "post_lock/intervention.layer=12/seed=44",
+      "condition_path": "conditions/intervention.layer=12/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 6.398108123801649,
+      "result_sha256": "a38c4eabc798c201f808157b7a202c779f332935050bddd7011f1af59ab93ec4"
+    },
+    {
+      "path": "post_lock/intervention.layer=13/seed=42",
+      "condition_path": "conditions/intervention.layer=13/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 6.183252421673387,
+      "result_sha256": "0162cf3deeb1448fbdc28a0616f671638ea825ddeb57f384f73c97d8166fd01d"
+    },
+    {
+      "path": "post_lock/intervention.layer=13/seed=43",
+      "condition_path": "conditions/intervention.layer=13/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.162405272945762,
+      "result_sha256": "3d5d7478c76645d8e853c44007973a3a8e6a9eb97acd9ef55748be074ab05348"
+    },
+    {
+      "path": "post_lock/intervention.layer=13/seed=44",
+      "condition_path": "conditions/intervention.layer=13/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.926574687007815,
+      "result_sha256": "f50f309f115990dd4a4d3300c0b175718f063b8ff5094750c6003a92ea6930a3"
+    },
+    {
+      "path": "post_lock/intervention.layer=14/seed=42",
+      "condition_path": "conditions/intervention.layer=14/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 6.187315498013049,
+      "result_sha256": "200ab17a3db1479fdcbd55f03deb9e23d73ad51fc2d5e72211e74aac4d04c5ba"
+    },
+    {
+      "path": "post_lock/intervention.layer=14/seed=43",
+      "condition_path": "conditions/intervention.layer=14/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.609143775422126,
+      "result_sha256": "6667ced273c239dff06ed26f70979304818b743d2e7e6270556dcc283a502674"
+    },
+    {
+      "path": "post_lock/intervention.layer=14/seed=44",
+      "condition_path": "conditions/intervention.layer=14/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.788928547874093,
+      "result_sha256": "5358c1662aab41e0c1f0792811790f081bfabc95eebc8e424e8299205e5c10b4"
+    },
+    {
+      "path": "post_lock/intervention.layer=15/seed=42",
+      "condition_path": "conditions/intervention.layer=15/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 6.093521246686578,
+      "result_sha256": "e6033d379cd32aeb642dd93f247761abf19c12202eff2e3859f283cf561f382b"
+    },
+    {
+      "path": "post_lock/intervention.layer=15/seed=43",
+      "condition_path": "conditions/intervention.layer=15/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.497813926078379,
+      "result_sha256": "0ac82948ee665453b492506a8ae57990677c254372f56ff469996f1432f8a8cd"
+    },
+    {
+      "path": "post_lock/intervention.layer=15/seed=44",
+      "condition_path": "conditions/intervention.layer=15/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.026660627219826,
+      "result_sha256": "40da53d7bc6f8f310dc873c5aa54528b5c075eb7d7749f0cc2a583d993b84911"
+    },
+    {
+      "path": "post_lock/intervention.layer=16/seed=42",
+      "condition_path": "conditions/intervention.layer=16/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.0988287893123925,
+      "result_sha256": "49ce629fb154b614262614e602fcf99d9a1c5f5e6137c17fc9a669705db822da"
+    },
+    {
+      "path": "post_lock/intervention.layer=16/seed=43",
+      "condition_path": "conditions/intervention.layer=16/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.022854814771563,
+      "result_sha256": "fe8f4fae20fe386ff7fe82525b77cdaa25b8657ff38c28dff93105e3871b5b06"
+    },
+    {
+      "path": "post_lock/intervention.layer=16/seed=44",
+      "condition_path": "conditions/intervention.layer=16/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.17194482171908,
+      "result_sha256": "51b64839e180ad3dd6f47d629b218ffa6bfb8c823b2fc3e777fafd5065aec870"
+    },
+    {
+      "path": "post_lock/intervention.layer=17/seed=42",
+      "condition_path": "conditions/intervention.layer=17/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.876053512096405,
+      "result_sha256": "cd34a7a631a86485c0e961b1f7d3c1217588d4f594def860658e944d674a6c96"
+    },
+    {
+      "path": "post_lock/intervention.layer=17/seed=43",
+      "condition_path": "conditions/intervention.layer=17/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.084219085983932,
+      "result_sha256": "0557176f30103beedb0ca1997fb2ec12171499a48e0bb498ed0f3ccd5011aaad"
+    },
+    {
+      "path": "post_lock/intervention.layer=17/seed=44",
+      "condition_path": "conditions/intervention.layer=17/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.872137616854161,
+      "result_sha256": "b047c520decd172d41948221fd9f7e71870634e6aac3cc27ffe9bd0a8a2b7883"
+    },
+    {
+      "path": "post_lock/intervention.layer=18/seed=42",
+      "condition_path": "conditions/intervention.layer=18/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.117219978012145,
+      "result_sha256": "b33ee73009ff3b1cad9051e82f6fc84edf844a20fb20a29c4a112f7e956220cc"
+    },
+    {
+      "path": "post_lock/intervention.layer=18/seed=43",
+      "condition_path": "conditions/intervention.layer=18/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.270809662993997,
+      "result_sha256": "4f2a0f3b268f89aad4ef96ab168fe9c398ffa1998ff264321fd6fa883211f710"
+    },
+    {
+      "path": "post_lock/intervention.layer=18/seed=44",
+      "condition_path": "conditions/intervention.layer=18/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.341105232015252,
+      "result_sha256": "6ba4855196bbfb680849ccc6713d4483fccb94c35d356310c980bcfe0a93e27b"
+    },
+    {
+      "path": "post_lock/intervention.layer=19/seed=42",
+      "condition_path": "conditions/intervention.layer=19/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.418412410188466,
+      "result_sha256": "05483ac7a08e3d5954405e9116e66645e8501ae9eb551d872d87bfea16947c48"
+    },
+    {
+      "path": "post_lock/intervention.layer=19/seed=43",
+      "condition_path": "conditions/intervention.layer=19/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.445537165272981,
+      "result_sha256": "04ae108bf39d66081bbeb7434ba4a33e282ae51d0435feddf8ca17c15f85a82d"
+    },
+    {
+      "path": "post_lock/intervention.layer=19/seed=44",
+      "condition_path": "conditions/intervention.layer=19/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.1627880819141865,
+      "result_sha256": "9df687af677586cb3c046945a4ad3ab5c4a83b1e430b6444e7f6650a27f297ad"
+    },
+    {
+      "path": "post_lock/intervention.layer=20/seed=42",
+      "condition_path": "conditions/intervention.layer=20/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 4.89743533404544,
+      "result_sha256": "ad1cf6a1ba78672685162e3d8884dd55ed1d61b242b305ce463ce43bc93856ef"
+    },
+    {
+      "path": "post_lock/intervention.layer=20/seed=43",
+      "condition_path": "conditions/intervention.layer=20/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.083145794924349,
+      "result_sha256": "a0f7d876555cbec7bf0a2ba7e963831c08af009aabb3072c77cd7934f0cfa558"
+    },
+    {
+      "path": "post_lock/intervention.layer=20/seed=44",
+      "condition_path": "conditions/intervention.layer=20/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 5.398046087939292,
+      "result_sha256": "bc0e735f34597b378055164aa1f6767fdfbed7b93c7a17ed5ccb23382baddd03"
+    },
+    {
+      "path": "post_lock/intervention.layer=21/seed=42",
+      "condition_path": "conditions/intervention.layer=21/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.021388500928879,
+      "result_sha256": "9c8b6d799605438710278356bbbd4c7c3d53184aa41538ecb2f35aa517fb47ec"
+    },
+    {
+      "path": "post_lock/intervention.layer=21/seed=43",
+      "condition_path": "conditions/intervention.layer=21/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.0367771768942475,
+      "result_sha256": "1d483463590763fa1cb3d4dfbb79c948c727cb55b846f3013086bf2958c78699"
+    },
+    {
+      "path": "post_lock/intervention.layer=21/seed=44",
+      "condition_path": "conditions/intervention.layer=21/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 4.939919501077384,
+      "result_sha256": "f9b36c6bfe7ecaae3bb4790c95eabeeefd00e27eb27912e6bc5cf6e9b540d1ba"
+    },
+    {
+      "path": "post_lock/intervention.layer=22/seed=42",
+      "condition_path": "conditions/intervention.layer=22/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 5.232982345856726,
+      "result_sha256": "b9e1aa1f4c0b76e1767a60be2c5614c273489eac4e5fc5a4bd848aa5242fa0c5"
+    },
+    {
+      "path": "post_lock/intervention.layer=22/seed=43",
+      "condition_path": "conditions/intervention.layer=22/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 4.935570494271815,
+      "result_sha256": "c7505f3c1c79a2777b4015557f360f07c31ba46afe48bd1ec02c3ae832192318"
+    },
+    {
+      "path": "post_lock/intervention.layer=22/seed=44",
+      "condition_path": "conditions/intervention.layer=22/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 4.878385210875422,
+      "result_sha256": "7b63f012279d43a2b759fd43dace14d750a0f0fd478e599b55593f74df4d345e"
+    },
+    {
+      "path": "post_lock/intervention.layer=23/seed=42",
+      "condition_path": "conditions/intervention.layer=23/seed=42",
+      "status": "complete",
+      "elapsed_seconds": 4.9233925910666585,
+      "result_sha256": "67d28bd62426808f33a541069888af5b6601ffe69bae9ecab1477dab0b25add0"
+    },
+    {
+      "path": "post_lock/intervention.layer=23/seed=43",
+      "condition_path": "conditions/intervention.layer=23/seed=43",
+      "status": "complete",
+      "elapsed_seconds": 5.456076771952212,
+      "result_sha256": "808ee710d4f8cb708cf260cbed4a0839445b10647e0b90add5298865842514a3"
+    },
+    {
+      "path": "post_lock/intervention.layer=23/seed=44",
+      "condition_path": "conditions/intervention.layer=23/seed=44",
+      "status": "complete",
+      "elapsed_seconds": 6.027868675999343,
+      "result_sha256": "9aba54f92bc812ee9ea1ae2d6ccfe672d41244f4b0e8fb67d4d3e09721462ac4"
+    }
+  ],
+  "selection_sha256": "630147efa0d530f3fba599ac656243e8cd46acfafe381a972eb8333ed179f699",
+  "ended_at_utc": "2026-10-18T17:48:06.820102+00:00"
+}
