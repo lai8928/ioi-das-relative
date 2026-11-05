@@ -204,3 +204,124 @@ def test_training_grid_does_not_reselect_the_layer():
     with pytest.raises(ConfigError, match="cannot mix training datasets"):
         load_config(ROOT / "configs/layer-sweep/gpt2-small.json",
                     ['grid={"data.train":["legacy_v1/train"]}'])
+
+
+@pytest.mark.parametrize("component,head", [
+    ("block_output", None), ("attention_output", None), ("mlp_output", None),
+    ("head_attention_value_output", 0), ("head_query_output", 0),
+    ("head_key_output", 0), ("head_value_output", 0),
+])
+def test_schema_accepts_each_component_without_inserting_defaults(component, head):
+    overrides = [f"intervention.component={json.dumps(component)}"]
+    if head is not None:
+        overrides.append(f"intervention.head={head}")
+    config = load_config(REFERENCE, overrides)
+    assert config["intervention"]["component"] == component
+    if head is None:
+        assert "head" not in config["intervention"]
+    else:
+        assert config["intervention"]["head"] == head
+    assert "site_size" not in config["intervention"]
+
+
+@pytest.mark.parametrize("component", [
+    "head_attention_value_output", "head_query_output", "head_key_output", "head_value_output",
+])
+def test_head_components_require_a_head_and_name_the_component(component):
+    with pytest.raises(ConfigError, match=component + r".*requires intervention.head"):
+        load_config(REFERENCE, [f"intervention.component={json.dumps(component)}"])
+
+
+@pytest.mark.parametrize("component", ["block_output", "attention_output", "mlp_output"])
+def test_non_head_components_reject_head_and_name_the_component(component):
+    with pytest.raises(ConfigError, match=component + r".*does not accept intervention.head"):
+        load_config(REFERENCE, [f"intervention.component={json.dumps(component)}",
+                                "intervention.head=0"])
+
+
+@pytest.mark.parametrize("head", [-1, 0.5, True, "all"])
+def test_schema_rejects_negative_or_non_integer_heads(head):
+    with pytest.raises(ConfigError, match=r"intervention.head"):
+        load_config(REFERENCE, ['intervention.component="head_query_output"',
+                                f"intervention.head={json.dumps(head)}"])
+
+
+@pytest.mark.parametrize("component", ["mlp_activation", "attention_weight", "block_input"])
+def test_schema_rejects_components_outside_the_supported_sites(component):
+    with pytest.raises(ConfigError, match=r"intervention.component"):
+        load_config(REFERENCE, [f"intervention.component={json.dumps(component)}"])
+
+
+def test_grid_component_choices_obey_the_head_rule(tmp_path):
+    with pytest.raises(ConfigError, match=r"head_key_output.*requires intervention.head"):
+        load_config(write_experiment(tmp_path, grid={"intervention.component": ["head_key_output"]}))
+    with pytest.raises(ConfigError, match=r"mlp_output.*does not accept intervention.head"):
+        load_config(write_experiment(tmp_path,
+            intervention={"component": "head_key_output", "head": 0},
+            grid={"intervention.component": ["mlp_output"]}))
+
+
+@pytest.mark.parametrize("path,expected_sha256", [
+    ("configs/base.json",
+     "0ad42b6bacd5f3729fc361b578b6af119644f03852f683de334eff38d658d9a7"),
+    ("configs/data-scale/gpt2-medium-rank1-n1000.json",
+     "ac195951575466f840992d473dc567078d88ae85ac67ac7d88bb3008978a8789"),
+    ("configs/data-scale/gpt2-medium-rank1-n200-updates2500.json",
+     "1dca2d448d03047b86cae8fc2f449ffabcf7dce13924a6b6cc40c628f2630b37"),
+    ("configs/data-scale/gpt2-medium-rank1-n200.json",
+     "f30aae6955882bab67a2f327c88bfc5abbd504c9938e53d13f075ea6aa43b79c"),
+    ("configs/data-scale/gpt2-medium-rank1-n5000.json",
+     "3c5c50fd04ac1d773e034e4ee999ab2341873773df21e96a79d6a49e6c2f1aa8"),
+    ("configs/data-scale/gpt2-medium-rank2-n1000.json",
+     "33a8725d2958e3b1242cc6e62fd796bd419c9a0b8d7ab7cefc45862323efd18a"),
+    ("configs/data-scale/gpt2-medium-rank2-n200-updates2500.json",
+     "42b32580de93fa1042e59db9ffcb935d4ba28ee936f07968991e2abda60387a9"),
+    ("configs/data-scale/gpt2-medium-rank2-n200.json",
+     "51f35a1a9f263639a57057fb509b0c614bac32afc7394f7920bf5b6f981d1ed5"),
+    ("configs/data-scale/gpt2-medium-rank2-n5000.json",
+     "e56086bfe91dbf36f99b6c822fe568b6a3eaed7a928dfcb6cb4d84911c622245"),
+    ("configs/data-scale/gpt2-medium-rank4-n1000.json",
+     "f2ae35155dbf1020351d496b085eff7c6434eb800dfe98835598ea7bf9bc3a0c"),
+    ("configs/data-scale/gpt2-medium-rank4-n200-updates2500.json",
+     "e98ba1281d2cdd2755405d33cb39f0289eb23a7c7b95bd5f5cb8ce65261e152d"),
+    ("configs/data-scale/gpt2-medium-rank4-n200.json",
+     "a4b008a8b41c5dd0f87587395d21c39b59a7d211e711819f3c29d2da9aa65b33"),
+    ("configs/data-scale/gpt2-medium-rank4-n5000.json",
+     "22da0fddf30c402665129b46ae75afaaa26ff13450bab99cf45c85a853f38d21"),
+    ("configs/data-scale/gpt2-medium-rank8-n1000.json",
+     "305a5fbd319fe3cdb3b02b68c3aa54ac399acebb5cdd39a1c9a191adfeeb9077"),
+    ("configs/data-scale/gpt2-medium-rank8-n200-updates2500.json",
+     "f2676202cf43ee599deee7021a4e1d3892cdb719bb878220a66bd0eabdb185f2"),
+    ("configs/data-scale/gpt2-medium-rank8-n200.json",
+     "84b2b843965bfb2cbd4b4ecc0729b1bf32d60295e8aa71bc833fddbaec25b801"),
+    ("configs/data-scale/gpt2-medium-rank8-n5000.json",
+     "bfa05eb03ca731db27aa0b6ce3ab78e2771b9958cbcda9a83245756ac4742d4c"),
+    ("configs/data-scale/gpt2-small-layer8-placeholder-equal-epochs.json",
+     "f84c7e7aa3b1149f72e5db49b9747212ab8e9a38cadbcc78a20319aa3dcae306"),
+    ("configs/data-scale/gpt2-small-layer8-placeholder-equal-updates.json",
+     "6848c5955455504db861b4048591e9d05e1ff00ec30c1235123f5a185dcc5bbd"),
+    ("configs/layer-sweep/gpt2-small.json",
+     "30a4e9eb983fbabff7d7bb0cc792549fe18312d03988bfdb737870fb821a882c"),
+    ("configs/model-scale/gpt2-medium.json",
+     "76a6dd7f8883de36b61191952947bf13489f70180dbcea7f60b1159cda8334de"),
+    ("configs/rank-sweep/gpt2-medium-rank1.json",
+     "20400c7ef7325f81fc7b7cde4f01d0473eedb0c742647ccce27f2105b30d9813"),
+    ("configs/rank-sweep/gpt2-medium-rank2.json",
+     "70329bf54377bea1528e7e16f7349d501754f5e8ef7911f0e2c35678f7ad8d56"),
+    ("configs/rank-sweep/gpt2-medium-rank4.json",
+     "e5c88d0a0c0724677e70cbda94261d158155b6cf596820d8ce3a8cd9a69470aa"),
+    ("configs/rank-sweep/gpt2-medium-rank8.json",
+     "b43cb81d4cc7160528817ebb285d56c50904841ef58741aacc26a37d53a9f8c9"),
+    ("configs/rank-sweep/gpt2-small-rank1.json",
+     "b8488ab716e549c314f6a4d5fd73fca1e3465ae8556577bca182f188cb9ff38d"),
+    ("configs/rank-sweep/gpt2-small-rank2.json",
+     "2635ae43e807a1497b045f633cce5330b0925a5945f91263d5c03f24824d835d"),
+    ("configs/rank-sweep/gpt2-small-rank4.json",
+     "2a6505c7e3140fdcbbccd565f585bc5d807083290baafcdce53d3703394f359a"),
+    ("configs/rank-sweep/gpt2-small-rank8.json",
+     "699f71415a26c2d266cab2f9835c3881c6a25439d5c50f7f31a5ff7282a9680e"),
+    ("configs/single-condition-das/layer8-seed42.json",
+     "f9c74ce47dc4ac9a94c090a533d6628544e0cdf93fb5a5ae850f898243015f5b"),
+])
+def test_existing_resolved_config_hashes_stay_unchanged(path, expected_sha256):
+    assert load_config(ROOT / path).sha256 == expected_sha256

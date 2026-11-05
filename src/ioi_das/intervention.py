@@ -11,6 +11,7 @@ from pyvene import (
     RepresentationConfig,
 )
 
+from .components import COMPONENTS, validate_site
 from .data import PairRecord
 from .models import require_cached_model, validate_model
 from .positions import resolve_pair_positions
@@ -117,22 +118,26 @@ class ScopedIntervenableModel(IntervenableModel):
             self._owned_hook_handles.clear()
 
 
-def build_intervention(model: Any, layer: int = 8,
-                       rank: int = 1) -> ScopedIntervenableModel:
-    """Create one block_output intervention with per-example token gathering."""
+def build_intervention(model: Any, layer: int = 8, rank: int = 1,
+                       component: str = "block_output",
+                       head: int | None = None) -> ScopedIntervenableModel:
+    """Create one activation-site intervention with independent token gathering."""
     if not 0 <= layer < model.config.n_layer:
         raise ValueError(f"Layer {layer} is outside 0..{model.config.n_layer - 1}.")
-    if not 1 <= rank <= model.config.n_embd:
-        raise ValueError(f"Rank {rank} is outside 1..{model.config.n_embd}.")
+    site_size = validate_site(component, head, rank, model.config.n_embd, model.config.n_head)
+    unit = COMPONENTS[component].unit
     config = IntervenableConfig(
         representations=[RepresentationConfig(
-            layer=layer, component="block_output", unit="pos",
+            layer=layer, component=component, unit=unit,
             max_number_of_units=1, low_rank_dimension=rank,
         )],
         intervention_types=LowRankRotatedSpaceIntervention,
         mode="parallel",
     )
     intervenable = ScopedIntervenableModel(config, model)
+    intervenable.unit = unit
+    intervenable.head = head
+    intervenable.site_size = site_size
     intervenable.set_device(next(model.parameters()).device, set_model=False)
     intervenable.disable_model_gradients()
     return intervenable
@@ -157,12 +162,13 @@ def intervention_forward(intervenable: ScopedIntervenableModel,
     to propagate gradients from the readout through the learned intervention.
     The location tensor contract is side/intervention/example/unit.
     """
-    locations = {
-        "sources->base": (
-            [[[position] for position in batch.source_positions]],
-            [[[position] for position in batch.base_positions]],
-        )
-    }
+    source_positions = [[position] for position in batch.source_positions]
+    base_positions = [[position] for position in batch.base_positions]
+    if intervenable.unit == "h.pos":
+        heads = [[intervenable.head] for _ in batch.pairs]
+        source_positions = [heads, source_positions]
+        base_positions = [heads, base_positions]
+    locations = {"sources->base": ([source_positions], [base_positions])}
     try:
         _, outputs = intervenable(
             batch.base_inputs, [batch.source_inputs], unit_locations=locations,

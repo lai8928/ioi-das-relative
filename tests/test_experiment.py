@@ -27,6 +27,7 @@ class _Alignment(torch.nn.Module):
 class _ScopedFixture:
     def __init__(self, model, state):
         self.interventions = {"fixture": _Alignment()}
+        self.site_size = 1
         self.activations = {"fixture": object()}
         self.full_intervention_outputs = [object()]
         self.handle = model.register_forward_hook(lambda *args: None)
@@ -54,8 +55,9 @@ def checkpoint_runtime(tmp_path, monkeypatch):
         state["loads"].append((args, kwargs))
         return model
 
-    def build(model_argument, layer, rank):
+    def build(model_argument, layer, rank, *, component, head):
         assert model_argument is model
+        assert component == "block_output" and head is None
         assert validation.hook_snapshot(model) == original_hooks
         wrapper = _ScopedFixture(model, state)
         state["wrappers"].append(wrapper)
@@ -252,6 +254,10 @@ def test_initial_train_and_validation_finish_before_training(checkpoint_runtime,
         evaluation_batch_size=1, dataset_metadata={}, provenance={"commit": "fixture"},
         config_sha256="fixture", evaluation_splits=("train", "validation"))
     assert result["status"] == "complete"
+    saved = torch.load(output / "alignment.pt", weights_only=True)
+    assert result["condition"] == saved["condition"] == {
+        "layer": 8, "component": "block_output", "rank": 1, "head": None,
+        "site_size": 1, "target_variable": "position", "intervention_location": "N"}
     assert result["model_metadata"] == {
         "name": config["model"]["name"], "revision": config["model"]["revision"],
         "parameter_count": 1, "layer_count": 12, "hidden_size": 1}

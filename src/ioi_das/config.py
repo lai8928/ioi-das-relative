@@ -11,6 +11,7 @@ from typing import Any
 
 from jsonschema import Draft202012Validator
 
+from .components import COMPONENTS
 from .models import validate_model
 
 
@@ -146,6 +147,15 @@ def _project_root(path: Path) -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def _validate_component(intervention: dict[str, Any]) -> None:
+    component = intervention["component"]
+    if COMPONENTS[component].unit == "h.pos":
+        if "head" not in intervention:
+            raise ConfigError(f"Component {component!r} requires intervention.head; choose one head index.")
+    elif "head" in intervention:
+        raise ConfigError(f"Component {component!r} does not accept intervention.head; remove that setting.")
+
+
 def _validate_grid(values: dict[str, Any], validator: Draft202012Validator) -> None:
     for path, choices in values.get("grid", {}).items():
         target: Any = values
@@ -166,6 +176,7 @@ def _validate_grid(values: dict[str, Any], validator: Draft202012Validator) -> N
             if error:
                 raise ConfigError(f"Grid axis {path!r} has invalid value {choice!r}: "
                                   f"{error.message}; choose a schema-valid value.")
+            _validate_component(candidate["intervention"])
 
 
 def validate_config(values: Mapping[str, Any], project_root: Path | None = None) -> None:
@@ -176,8 +187,12 @@ def validate_config(values: Mapping[str, Any], project_root: Path | None = None)
     plain = _plain(values)
     error = next(validator.iter_errors(plain), None)
     if error:
-        location = ".".join(str(key) for key in error.absolute_path) or "<root>"
+        path = list(error.absolute_path)
+        location = ".".join(str(key) for key in path) or "<root>"
+        if path and path[0] == "intervention" and isinstance(plain.get("intervention"), dict):
+            location += f" for component {plain['intervention'].get('component')!r}"
         raise ConfigError(f"Invalid configuration at {location}: {error.message}; fix the setting.")
+    _validate_component(plain["intervention"])
     if validate_model(plain["model"]["name"], plain["model"]["revision"]) != \
             validate_model(plain["tokenizer"]["name"], plain["tokenizer"]["revision"]) or \
             plain["model"]["revision"] != plain["tokenizer"]["revision"]:

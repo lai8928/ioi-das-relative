@@ -38,7 +38,7 @@ def run_condition(
     target_variable: str, location: str, seed: int, device_name: str,
     cpu_threads: int, evaluation_batch_size: int, dataset_metadata: dict,
     provenance: dict, config_sha256: str, evaluation_splits: tuple[str, ...],
-    smoke: bool = False,
+    smoke: bool = False, head: int | None = None,
 ) -> dict[str, Any]:
     """Save one freshly initialized alignment and all exact evaluation evidence."""
     import torch
@@ -100,7 +100,7 @@ def run_condition(
         original_hooks = hook_snapshot(model)
         # Upstream seeds alignment after the already-created model, before DAS.
         set_seed(seed)
-        intervenable = build_intervention(model, layer, rank)
+        intervenable = build_intervention(model, layer, rank, component=component, head=head)
         initial_alignment = alignment_state(intervenable)
         torch.save({"interventions": initial_alignment}, output / "initial_alignment.pt")
         validation["preflight"] = run_preflight_validation(
@@ -140,6 +140,7 @@ def run_condition(
         checkpoint = {
             "schema_version": 1,
             "condition": {"layer": layer, "component": component, "rank": rank,
+                          "head": head, "site_size": intervenable.site_size,
                           "target_variable": target_variable, "intervention_location": location},
             "model": model_options, "interventions": state,
             "effective_projection": {key: intervention.rotate_layer.weight.detach().cpu().clone()
@@ -245,6 +246,7 @@ def evaluate_checkpoint(
     device_name: str, cpu_threads: int, evaluation_batch_size: int,
     selection_path: Path, selection_sha256: str, checkpoint_sha256: str,
     dataset_metadata: dict, runtime: EvaluationRuntime | None = None,
+    component: str = "block_output", head: int | None = None,
 ) -> dict[str, Any]:
     """Evaluate a saved alignment only after verifying its immutable selection lock."""
     if not selection_path.is_file() or sha256_file(selection_path) != selection_sha256:
@@ -271,7 +273,7 @@ def evaluate_checkpoint(
         intervenable = None
         try:
             try:
-                intervenable = build_intervention(model, layer, rank)
+                intervenable = build_intervention(model, layer, rank, component=component, head=head)
                 checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=True)
                 for key, intervention in intervenable.interventions.items():
                     intervention.load_state_dict(checkpoint["interventions"][key])
