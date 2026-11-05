@@ -46,25 +46,67 @@ Updated: 2026-11-05 · Cycle since: [2026-11-02](meetings/2026-11-02.md)
 
 ## intervention-sites
 
-- Goal: besides `block_output`, which activations at the last token N
-  support the POSITION swap: the attention branch output, the MLP branch
-  output, or single attention heads? GPT-2 Small first. Decided
-  2026-10-19, confirmed 2026-11-02.
-- State: not started. Briefs written 2026-11-05:
+- Goal: besides `block_output`, do the attention or MLP branch outputs at
+  N support the POSITION swap, and which single heads carry it, through
+  their output (Z), query, key, or value? GPT-2 Small first. Decided
+  2026-10-19, confirmed 2026-11-02; staged into steps 0–2 on 2026-11-05
+  (PLAN).
+- Step 0, full-vector patch map (2026-11-05; RTX 2080 Ti; `val_indist_v1`,
+  200 pairs; fixed weights, no training;
+  `scripts/adhoc/20261105-full-patch-map.py`, whose `--csv` option writes
+  the full per-site table, not kept in the repository). Each site's whole
+  activation at its token location is replaced with the source's
+  (`VanillaIntervention`). No intervention: IIA 0/200, IO top-1 195/200.
+  Counts are IIA out of 200.
+
+  | Site | Layers 0–6 | 7 | 8 | 9 | 10 | 11 |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | `block_output` at N | 0 | 17 | 140 | 70 | 1 | 0 |
+  | `attention_output` at N | 0 | 10 | 50 | 0 | 0 | 1 |
+  | `mlp_output` at N | 0 | 0 | 0 | 0 | 0 | 0 |
+
+  | Head | Z at N | Q at N | K at S2 | V at S2 |
+  | --- | --- | --- | --- | --- |
+  | 7.3 | 1 | 0 | 0 | 1 |
+  | 7.9 | 1 | 0 | 0 | 2 |
+  | 8.6 | 14 | 0 | 0 | 13 |
+  | 8.10 | 4 | 0 | 0 | 4 |
+  | 9.9 | 0 | 3 | 0 | 0 |
+  | 10.0 | 0 | 1 | 0 | 0 |
+  | the other 138 heads | 0 | 0 | 0 | 0 |
+
+  - The `block_output` row reproduces the earlier hook-based script
+    (`scripts/adhoc/20261019-medium-ceiling.py small`: 17 / 140 / 70 / 1),
+    so the pyvene full patch and the hook agree.
+  - Every head with an effect on Z or V is an S-inhibition head of Wang et
+    al. (2022), and for each of them V at S2 gives about what Z at N gives,
+    consistent with these heads reading the signal at S2. The name movers
+    act only through Q, weakly.
+  - Single heads are weak: the best (8.6) reaches 14/200, all of layer 8's
+    attention 50/200, and the layer-8 residual 140/200. The signal is
+    spread over heads and over layers 7–8, so single-head DAS is expected
+    to stay low; read it against these counts.
+  - Names-only counts (logit S > logit IO) are a few pairs higher, for
+    example 149 for `block_output` layer 8, 59 for `attention_output`
+    layer 8, and 17 for 8.6's Z.
+- State: step 0 done (above). Step 1:
   [intervention-components](briefs/2026-11-05-intervention-components.md)
-  (open) and
+  (open; reduced on 2026-11-05 to choosing the site, with Q, K, V added).
   [grouped-selection-report](briefs/2026-11-05-grouped-selection-report.md)
-  (open). The configs follow after both merges.
+  is deferred until the step-2 results are read.
 - Feasibility (2026-11-05, CPU, fixed weights; GPT-2 Small layer 8, head 6,
   first 8 validation pairs;
-  `scripts/adhoc/20261105-intervention-site-probe.py`): pyvene 0.1.8
-  intervenes on `attention_output`, `mlp_output`, `mlp_activation`, and one
-  head (`head_attention_value_output`, unit `h.pos`). At every site a full
+  `scripts/adhoc/20261105-intervention-site-probe.py` and
+  `scripts/adhoc/20261105-head-qkv-probe.py`): pyvene 0.1.8 (transformers
+  4.57.6) intervenes on `attention_output`, `mlp_output`, `mlp_activation`,
+  and one head's Z, Q, K, or V (unit `h.pos`). At every site a full
   replacement (`VanillaIntervention`) equals a manual forward-hook patch
   exactly (max |diff| 0); rank-1 identity reproduces the factual logits bit
-  for bit; alignment gradients are nonzero; rotation sizes are 768 / 768 /
-  3072 / 64. A full-rank rotation differs from the exact patch by up to
-  6e-5.
+  for bit; DAS gradients are nonzero and no GPT-2 parameter gets one;
+  rotation sizes are 768 / 768 / 3072 / 64. Q at N changes only that
+  head's attention row at N, K at S2 only that head's attention, and V at
+  S2 no attention probability. A full-rank rotation differs from the exact
+  patch by up to 6e-5.
 - Facts that shape the reading (checked 2026-11-05):
   - In all 200 `val_indist_v1` and all 100 legacy test pairs, base and
     source use the same two names and have the same factual answer; only
@@ -275,5 +317,5 @@ legacy_v1` in `outputs/data-audit/20261015-legacy_v1/`.
 env PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 /home/ilingl/.conda/envs/ioi-das-v2/bin/python -B -m pytest -q
 ```
 
-Last result on `main` (2026-11-05, with the intervention-site probe script):
+Last result on `main` (2026-11-05, with the three new adhoc scripts):
 282 passed, 1 skipped (opt-in GPU regression), 305 subtests.
