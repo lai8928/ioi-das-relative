@@ -1,0 +1,9 @@
+{
+  "extends": "../base.json",
+  "task": "intervention-sites",
+  "name": "gpt2-small-l8h6-k",
+  "data": {"validation": "val_indist_v1/validation"},
+  "intervention": {"component": "head_key_output", "layer": 8, "head": 6, "location": "S2"},
+  "grid": {"seed": [42, 43, 44]},
+  "selection": {"metric": "validation_iia", "aggregate": "mean_over_seeds", "tie_break": "lowest_layer", "evaluate_after_lock": ["test"]}
+}

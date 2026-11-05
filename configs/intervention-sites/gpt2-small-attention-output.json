@@ -1,0 +1,9 @@
+{
+  "extends": "../base.json",
+  "task": "intervention-sites",
+  "name": "gpt2-small-attention-output",
+  "data": {"validation": "val_indist_v1/validation"},
+  "intervention": {"component": "attention_output"},
+  "grid": {"intervention.layer": "all", "seed": [42, 43, 44]},
+  "selection": {"metric": "validation_iia", "aggregate": "mean_over_seeds", "tie_break": "lowest_layer", "evaluate_after_lock": ["test"]}
+}

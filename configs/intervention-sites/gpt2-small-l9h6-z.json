@@ -1,0 +1,9 @@
+{
+  "extends": "../base.json",
+  "task": "intervention-sites",
+  "name": "gpt2-small-l9h6-z",
+  "data": {"validation": "val_indist_v1/validation"},
+  "intervention": {"component": "head_attention_value_output", "layer": 9, "head": 6, "location": "N"},
+  "grid": {"seed": [42, 43, 44]},
+  "selection": {"metric": "validation_iia", "aggregate": "mean_over_seeds", "tie_break": "lowest_layer", "evaluate_after_lock": ["test"]}
+}
