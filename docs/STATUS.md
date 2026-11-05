@@ -39,6 +39,15 @@ Updated: 2026-11-05 · Cycle since: [2026-11-02](meetings/2026-11-02.md)
   to `epochs`; `data.train` as a grid axis.
 - The loader and training-size merges were approved by the user; evidence
   is in the merge commit bodies.
+- Intervention sites (`b2c3b8e`, from
+  [intervention-components](briefs/2026-11-05-intervention-components.md)):
+  `intervention.component` selects `block_output`, `attention_output`,
+  `mlp_output`, or one head's Z, Q, K, V with `intervention.head`. Written
+  by Codex; reviewed by Claude Code (386 tests, GPU regression, six smoke
+  runs, reports identical to `main`). Head and rank bounds are checked per
+  condition, not at grid expansion. Regenerating reports changes 18 older
+  saved runs (12 data-audit, 6 from 2026-10-15) on `main` as well; their
+  saved files are left as they are.
 - Second machine: UCI HPC3 (Slurm, partition `free-gpu`, NVIDIA A30, driver
   580). Environment matches the lock file (`doctor` passed with no
   differences); full test suite, all dataset audits, `doctor --require-gpu`,
@@ -89,9 +98,11 @@ Updated: 2026-11-05 · Cycle since: [2026-11-02](meetings/2026-11-02.md)
   - Names-only counts (logit S > logit IO) are a few pairs higher, for
     example 149 for `block_output` layer 8, 59 for `attention_output`
     layer 8, and 17 for 8.6's Z.
-- State: step 0 done (above). Step 1:
+- State: step 0 done (above). Step 1 merged:
   [intervention-components](briefs/2026-11-05-intervention-components.md)
-  (open; reduced on 2026-11-05 to choosing the site, with Q, K, V added).
+  (`b2c3b8e`, reviewed by Claude Code with independent CPU and GPU
+  reruns; see Infrastructure). Step 2: 26 configs in
+  `configs/intervention-sites/` (144 conditions), running.
   [grouped-selection-report](briefs/2026-11-05-grouped-selection-report.md)
   is deferred until the step-2 results are read.
 - Feasibility (2026-11-05, CPU, fixed weights; GPT-2 Small layer 8, head 6,

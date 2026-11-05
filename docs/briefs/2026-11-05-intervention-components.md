@@ -2,7 +2,7 @@
 
 - Branch: `feat/intervention-components`
 - Task: `intervention-sites`
-- Status: open
+- Status: merged 2026-11-05 (`b2c3b8e`); evidence in the body of `6d3ea9a`
 - Written: 2026-11-05, from [meeting 2026-11-02](../meetings/2026-11-02.md).
   Scope reduced the same day, before any implementation: the full-patch
   baseline and `mlp_activation` moved to PLAN Deferred; Q, K, and V were
@@ -143,8 +143,10 @@ selection, and reports stay as they are.
      `intervention.head=6` (location N);
    - `head_key_output` and `head_value_output` with `intervention.head=6`
      and `intervention.location="S2"`.
-4. `ioi-das report` on every existing run leaves `git diff --stat outputs/`
-   empty.
+4. `ioi-das report` on every existing run regenerates the same files as on
+   `main`. (Corrected at review: 18 older runs, 12 of them data-audit,
+   already differ from their saved reports when regenerated on `main`, so
+   "leaves `git diff --stat outputs/` empty" cannot hold.)
 
 Put the commands and results of items 2–4 in the merge commit body; do not
 commit those run directories. If no GPU is available where you work, say

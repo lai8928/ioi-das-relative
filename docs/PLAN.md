@@ -106,8 +106,8 @@ results.
   `scripts/adhoc/20261105-head-qkv-probe.py`, 2026-11-05).
 - [x] Step 0 (`scripts/adhoc/20261105-full-patch-map.py`, 2026-11-05).
 - [x] Brief intervention-components, reduced to sites only (2026-11-05).
-- [ ] Codex implements intervention-components on its branch; Claude Code
-  reviews it.
+- [x] Codex implements intervention-components on its branch; Claude Code
+  reviews it (merged 2026-11-05, `b2c3b8e`).
 - [ ] Write the step-2 configs, run them, and update STATUS.
 - [ ] Consolidate results for the next meeting.
 
