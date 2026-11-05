@@ -108,7 +108,7 @@ results.
 - [x] Brief intervention-components, reduced to sites only (2026-11-05).
 - [x] Codex implements intervention-components on its branch; Claude Code
   reviews it (merged 2026-11-05, `b2c3b8e`).
-- [ ] Write the step-2 configs, run them, and update STATUS.
+- [x] Write the step-2 configs, run them, and update STATUS (2026-11-05).
 - [ ] Consolidate results for the next meeting.
 
 ## Deferred

@@ -1,0 +1,93 @@
+{
+  "epoch_results": [
+    {
+      "accuracy": 0.47,
+      "correct": 94,
+      "epoch": 1,
+      "mean_loss": 2.3842823266983033,
+      "total": 200
+    },
+    {
+      "accuracy": 0.475,
+      "correct": 95,
+      "epoch": 2,
+      "mean_loss": 2.325916254520416,
+      "total": 200
+    },
+    {
+      "accuracy": 0.475,
+      "correct": 95,
+      "epoch": 3,
+      "mean_loss": 2.2672742128372194,
+      "total": 200
+    },
+    {
+      "accuracy": 0.475,
+      "correct": 95,
+      "epoch": 4,
+      "mean_loss": 2.197766900062561,
+      "total": 200
+    },
+    {
+      "accuracy": 0.475,
+      "correct": 95,
+      "epoch": 5,
+      "mean_loss": 2.1323485493659975,
+      "total": 200
+    },
+    {
+      "accuracy": 0.48,
+      "correct": 96,
+      "epoch": 6,
+      "mean_loss": 2.071985161304474,
+      "total": 200
+    },
+    {
+      "accuracy": 0.48,
+      "correct": 96,
+      "epoch": 7,
+      "mean_loss": 2.0204524874687193,
+      "total": 200
+    },
+    {
+      "accuracy": 0.48,
+      "correct": 96,
+      "epoch": 8,
+      "mean_loss": 1.9773643493652344,
+      "total": 200
+    },
+    {
+      "accuracy": 0.485,
+      "correct": 97,
+      "epoch": 9,
+      "mean_loss": 1.9415377140045167,
+      "total": 200
+    },
+    {
+      "accuracy": 0.49,
+      "correct": 98,
+      "epoch": 10,
+      "mean_loss": 1.9123790979385376,
+      "total": 200
+    }
+  ],
+  "epochs": 10,
+  "final_learning_rate": 0.0010000000000000002,
+  "first_step_loss": 2.6570675373077393,
+  "initial_effective_learning_rate": 0.003333333333333333,
+  "last_step_loss": 1.7113233804702759,
+  "model_training_mode": false,
+  "optimizer": "Adam",
+  "optimizer_steps": 100,
+  "presentations": 2000,
+  "run_kind": "full",
+  "scheduler": {
+    "end_factor": 0.1,
+    "name": "LinearLR",
+    "start_factor": 0.3333333333333333,
+    "step_interval": "batch",
+    "total_iters": 10
+  },
+  "shuffle": "NumPy RandomState(seed), MT19937; same permutation algorithm as upstream",
+  "training_pair_count": 200
+}

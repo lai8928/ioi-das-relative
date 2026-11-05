@@ -101,8 +101,53 @@ Updated: 2026-11-05 · Cycle since: [2026-11-02](meetings/2026-11-02.md)
 - State: step 0 done (above). Step 1 merged:
   [intervention-components](briefs/2026-11-05-intervention-components.md)
   (`b2c3b8e`, reviewed by Claude Code with independent CPU and GPU
-  reruns; see Infrastructure). Step 2: 26 configs in
-  `configs/intervention-sites/` (144 conditions), running.
+  reruns; see Infrastructure). Step 2 done (below).
+- Step 2, DAS runs (2026-11-05; six local RTX 2080 Ti, source `831d2d9`,
+  protected tree clean; 26 configs in `configs/intervention-sites/`,
+  144/144 conditions plus post-lock test; median 40 s per condition).
+  Rank 1, legacy training data, 10 epochs, seeds 42/43/44. Counts are means
+  over seeds (validation out of 200, test out of 100); seed SD ≤ 1.2.
+  Untrained-alignment validation IIA is 0 at every site. Table:
+  `scripts/adhoc/20261105-site-das-summary.py` (pass the step-0 `--csv`
+  table for the full-patch column).
+
+  | Site | Layer | DAS validation | Full patch (step 0) | Test (descriptive) | Train, switch-required |
+  | --- | --- | --- | --- | --- | --- |
+  | `attention_output` at N | 7 | 23.0 | 10 | 8.0 | 9% |
+  | `attention_output` at N | **8** (selected) | **87.3** | 50 | 37.3 | 38% |
+  | `mlp_output` at N | every layer | ≤ 1 | 0 | 0 | ≤ 2% |
+  | `block_output` at N (layer sweep) | 8 | 166 | 140 | 79 | |
+
+  Other `attention_output` layers: 0. Heads (every other site, including
+  all K and the control head 9.6, gives 0–1):
+
+  | Head | Site | DAS validation | Full patch | Test |
+  | --- | --- | --- | --- | --- |
+  | 8.6 | V at S2 | 9.0 | 13 | 3.3 |
+  | 8.6 | Z at N | 7.7 | 14 | 3.3 |
+  | 8.10 | V at S2 | 3.7 | 4 | 0.0 |
+  | 8.10 | Z at N | 3.0 | 4 | 0.7 |
+  | 9.9 | Q at N | 3.7 | 3 | 0.0 |
+  | 7.9 | Z at N / V at S2 | 1.0 / 1.0 | 1 / 2 | 0 |
+  | 7.3 | Z at N / V at S2 | 0.7 / 0.0 | 1 / 1 | 0 |
+
+  - The MLP at N carries nothing; the signal at N is written by attention
+    in layers 7–8.
+  - No single head carries much (best 8.6: 9/200), while layer 8's
+    attention as a whole reaches 87/200 with DAS and 50/200 as a full
+    patch; the four S-inhibition heads' full patches of Z sum to 20. The
+    signal is spread over heads.
+  - Heads show no sign of the subspace illusion: DAS stays at or below the
+    full patch, the control 9.6 stays at 0, and the untrained baseline is 0.
+    `attention_output` does: DAS 87 vs full patch 50 (as `block_output`,
+    166 vs 140), so the branch-level DAS numbers need caution.
+  - For 8.6 and 8.10, V at S2 gives about what Z at N gives, while K at S2
+    and Q at N give 0: these heads pass the signal through what they read
+    at S2, not through where they look.
+  - Train ≈ validation (attention layer 8: 38% vs 44% of switch-required
+    pairs), so overfitting does not limit these numbers.
+- Evidence: `outputs/intervention-sites/20261105-gpt2-small-*` (26 runs:
+  `summary.md`, `selection.json`, `layer_summary.csv`, `figures/`).
   [grouped-selection-report](briefs/2026-11-05-grouped-selection-report.md)
   is deferred until the step-2 results are read.
 - Feasibility (2026-11-05, CPU, fixed weights; GPT-2 Small layer 8, head 6,
