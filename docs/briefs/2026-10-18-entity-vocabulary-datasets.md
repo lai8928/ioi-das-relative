@@ -2,8 +2,8 @@
 
 - Branch: `feat/entity-vocabulary-datasets`
 - Task: `object-names`
-- Status: open — blocked on the decisions below; do not start until they
-  are filled in
+- Status: dropped 2026-11-05 (task object-names dropped; see the
+  [2026-11-02 Amendment](../meetings/2026-11-02.md))
 - Written: 2026-10-18, from [meeting 2026-10-15](../meetings/2026-10-15.md)
 - Depends on: none
 

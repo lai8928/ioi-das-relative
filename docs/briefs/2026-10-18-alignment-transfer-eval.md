@@ -2,7 +2,8 @@
 
 - Branch: `feat/alignment-transfer-eval`
 - Task: `object-names`
-- Status: open
+- Status: dropped 2026-11-05 (task object-names dropped; see the
+  [2026-11-02 Amendment](../meetings/2026-11-02.md))
 - Written: 2026-10-18, from [meeting 2026-10-15](../meetings/2026-10-15.md)
 - Depends on: none (the object-noun datasets come from
   [entity-vocabulary-datasets](2026-10-18-entity-vocabulary-datasets.md);

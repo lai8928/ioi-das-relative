@@ -2,7 +2,9 @@
 
 - Branch: `feat/grouped-selection-compare`
 - Task: `rank-sweep`
-- Status: open
+- Status: dropped 2026-11-05 (task rank-sweep closed). Selection and report
+  move to [grouped-selection-report](2026-11-05-grouped-selection-report.md);
+  the comparison command is deferred (PLAN).
 - Written: 2026-10-18, from [meeting 2026-10-15](../meetings/2026-10-15.md)
 - Depends on: none
 

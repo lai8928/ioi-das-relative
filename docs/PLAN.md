@@ -1,125 +1,140 @@
 # Current plan
 
-- Based on: [2026-10-15 meeting](meetings/2026-10-15.md)
-- Period: 2026-10-15 → next meeting (date not set).
+- Based on: [2026-11-02 meeting](meetings/2026-11-02.md). The direction was
+  concluded on [2026-10-19](meetings/2026-10-19.md) and confirmed on
+  2026-11-02; rank-sweep, data-scale, and object-names were closed on
+  2026-11-05 (Amendment in the 2026-11-02 file).
+- Period: 2026-11-02 → next meeting (date not set).
 - Next meeting brief: not created yet.
 
 ## Questions this cycle
 
-1. Does the DAS subspace rank (1 / 2 / 4 / 8) change IIA on GPT-2 Medium and
-   GPT-2 Small, and is any difference due to rank or to optimization?
-2. With object nouns in place of person names, does GPT-2 still solve IOI,
-   and does the POSITION alignment still apply?
-3. Does a larger training set raise GPT-2 Medium's IIA at any rank, and is
-   any gain due to more data or to more updates?
+1. Besides the residual stream after a layer (`block_output`), which
+   activations at the last token N support the POSITION swap: the
+   attention branch output, the MLP branch output, or single attention
+   heads? How do their layer profiles compare with `block_output`?
+2. In GPT-2 Small, which heads carry the POSITION signal at N, and do they
+   match the IOI circuit of Wang et al. (2022)?
 
 ## This cycle
 
-### rank-sweep: DAS rank 1 / 2 / 4 / 8
+### intervention-sites: DAS on attention, MLP, and head outputs
 
-- Try (sweep): rank 1 / 2 / 4 / 8 × seeds 42 / 43 / 44, otherwise the
-  layer-sweep protocol (N, block_output, legacy training data,
-  `val_indist_v1` selection, test after the lock). GPT-2 Medium all 24
-  layers (widened from 12–16 on 2026-10-18; see the meeting amendment);
-  GPT-2 Small layers 6–10 (peak 8 ± 2) as the reference. The best
-  layer is selected per rank on validation. All runs on HPC3 (A30), so every
-  rank shares one GPU type; rank 1 repeats existing results as a check.
-  - Runs as one config per model and rank
-    (`configs/rank-sweep/gpt2-{medium,small}-rank{1,2,4,8}.json`), with no
-    code change. One config with a rank grid axis is not usable yet:
-    selection groups by layer only and fails after all training ("Duplicate
-    seed 42 for layer 12"), and the report would average ranks together.
-  - [x] GPT-2 Medium, all four ranks (2026-10-19; see STATUS).
-  - [ ] GPT-2 Small, all four ranks.
-- Try (optimization check): at the layer each model's earlier sweep
-  selected (Medium 14, Small 8), rank 1 / 2 / 4 / 8 × learning rate ×
-  budget × 3 seeds. Proposed values: learning rate 0.01 / 0.03 / 0.1 (the
-  legacy schedule multiplies it by 0.1 after update 10), 10 / 40 epochs.
-  Pick each rank's best setting on validation, then compare ranks at their
-  own best setting.
-- Evidence to bring: validation IIA by layer, one curve per rank, Small and
-  Medium side by side; a table with each rank's untrained-alignment
-  baseline; post-lock test IIA (descriptive); the optimization check.
-- Caveat: a higher rank gives the optimizer more freedom to find a subspace
-  that changes the output without being the one the model uses (Makelov et
-  al. 2023). Read every rank against its baseline, on validation and test.
-- Depends on: brief
-  [grouped-selection-compare](briefs/2026-10-18-grouped-selection-compare.md)
-  (selection within groups of grid values, cross-run comparison) for the
-  optimization check and the side-by-side figure. The sweep itself does not
-  wait for it.
+- Sites (pyvene 0.1.8 names; GPT-2 Small dimensions):
 
-### data-scale: training-set size × rank on GPT-2 Medium
+  | Site | `intervention.component` | Dimension | What it is |
+  | --- | --- | --- | --- |
+  | Residual after layer l | `block_output` | 768 | Current site; reference |
+  | Attention branch | `attention_output` | 768 | Sum of all heads after W_O, added to the residual |
+  | MLP branch | `mlp_output` | 768 | MLP output, added to the residual |
+  | Head h of layer l | `head_attention_value_output`, `intervention.head` | 64 | Head output z_h before W_O (the `c_proj` input) |
 
-Added 2026-10-19 (see the meeting amendment).
-
-- Try (main): nested `train_n200_v1` / `train_n1000_v1` / `train_n5000_v1`
-  × rank 1 / 2 / 4 / 8 × layers 11–20 × seeds 42 / 43 / 44. Training is
-  10 epochs (equal epochs, so 100 / 500 / 2,500 updates); everything else
-  follows the rank sweep. The best layer is selected per run on validation
-  before test. Layers 11–20 cover every layer where any rank had nonzero IIA
-  (12–19), plus one layer of margin on each side.
-- Try (control): `train_n200_v1` at layer 14 for 2,500 updates, every rank.
-  Against the main runs at layer 14, this separates data from updates:
-  - n200 at 2,500 vs. n5000 at 2,500 updates: same updates, 25× the data;
-  - n200 at 100 vs. n200 at 2,500 updates: same data, 25× the updates.
-- Configs: `configs/data-scale/gpt2-medium-rank{1,2,4,8}-n{200,1000,5000}.json`
-  (30 conditions each) and `…-n200-updates2500.json` (3 each). One config
-  per rank and size, for the same selection reason as the rank sweep.
-- All on HPC3 (A30), so results compare directly with the rank sweep. The
-  legacy-data rank sweep is a reference point but is not nested with these
-  sets; compare sizes within `train_n*_v1`.
-- Evidence to bring: validation IIA vs. training size, one line per rank,
-  at the selected layer and by layer; the control comparison at layer 14;
-  train IIA (switch-required pairs) to judge fit.
-
-### object-names: object nouns in place of person names
-
-- Try:
-  1. Fix the design: object vocabulary (single-token answers, disjoint from
-     the template objects ring, kiss, bone, basketball, computer, necklace,
-     drink, snack), train/test halves, article handling; templates, places,
-     patterns, and the counterfactual rule unchanged.
-  2. Build, audit, and register object-noun datasets (train, validation,
-     test) the same way as the name datasets.
-  3. Behavior check: factual IOI accuracy of GPT-2 Small and Medium on object
-     prompts vs. name prompts. If the model does not solve IOI with objects,
-     IIA on them cannot be interpreted.
-  4. DAS: (a) evaluate the name-trained alignment (Small layer 8, Medium
-     layer 14, rank 1) on object data with fixed weights, to test whether the
-     same role-swap mechanism carries over; (b) train new alignments on
-     object data at the same layers.
-- Evidence to bring: example prompts; names vs. objects table (factual
-  accuracy, IIA); representative successes and failures from saved
-  per-example predictions.
-- Depends on: the design decisions in step 1; briefs
-  [entity-vocabulary-datasets](briefs/2026-10-18-entity-vocabulary-datasets.md)
-  (blocked on those decisions) and
-  [alignment-transfer-eval](briefs/2026-10-18-alignment-transfer-eval.md).
+- Settings for both runs: GPT-2 Small, token location N, rank 1, legacy
+  training data, 10 epochs, seeds 42 / 43 / 44, selection on
+  `val_indist_v1`, test after the lock. This is the layer-sweep protocol
+  with only the site changed. Every condition also records the full-vector
+  patch at its site (the whole activation at N replaced with the source's,
+  no training) next to the untrained-alignment and no-intervention
+  baselines; on test only after the lock.
+- Try (components): `block_output` / `attention_output` / `mlp_output` ×
+  layers 0–11 × 3 seeds = 108 conditions in one config, best layer chosen
+  per component. `block_output` repeats the layer sweep inside the same
+  run: it must reproduce `outputs/layer-sweep/20261015-gpt2-small` bit for
+  bit (raw alignment tensors and predictions, as in the GPU regression),
+  and it puts the reference in the same tables and figures.
+- Try (heads): all 144 heads (12 layers × 12 heads) × 3 seeds = 432
+  conditions in one config, best (layer, head) chosen on validation.
+- Where: the local RTX 2080 Ti GPUs, the GPU type of the layer-sweep
+  reference, so the `block_output` repeat can match bit for bit. At the
+  layer sweep's median of 35 s per condition: about 1.1 h for components
+  and 4.2 h for heads on one GPU. Check GPU use before launching.
+- Configs: `configs/intervention-sites/gpt2-small-components.json` and
+  `configs/intervention-sites/gpt2-small-heads.json`, written by Claude
+  Code after both briefs below merge.
+- Reading the results:
+  - Base and source share both names and the factual answer in every
+    validation and test pair; only the order differs. The counterfactual
+    (the base subject) is neither prompt's own answer. A head that only
+    carries which name to say (for example the name mover heads 9.6, 9.9,
+    10.0 of Wang et al.) should stay near 0 even though it matters for
+    IOI. IIA here measures whether a site carries the subject-position
+    signal, not whether the site matters.
+  - Expected from Wang et al.: S-inhibition heads (7.3, 7.9, 8.6, 8.10) at
+    N. `block_output` peaks at layers 7–9.
+  - `attention_output` and `mlp_output` are one layer's increment;
+    `block_output` is the sum of everything written so far. If the signal
+    is written over layers 7 and 8, swapping one layer's branch may give
+    less than `block_output` at layer 8.
+  - Several heads may share the signal, so a low single-head IIA does not
+    rule out a role.
+  - In 64 dimensions a random direction overlaps a fixed one more (cos² ≈
+    1/64 vs 1/768), so the untrained-alignment baseline may be above 0.
+  - The head site is z_h before W_O. Low-rank DAS there is not the same as
+    on the head's 768-dimensional write z_h·W_O^h; only the full patch is
+    identical.
+  - With 200 validation pairs, one IIA has a standard error of up to 0.035,
+    and the best of 144 heads is biased upward; the post-lock test is the
+    check.
+- Evidence to bring: validation IIA by layer for the three components (one
+  curve each, with untrained, no-intervention, and full-patch baselines); a
+  layer × head map of validation IIA next to the full-patch map; the
+  selected sites with post-lock test IIA (descriptive); train IIA on
+  switch-required pairs to judge fit; the comparison with the Wang et al.
+  heads; the `block_output` reproduction check.
+- Depends on: briefs
+  [intervention-components](briefs/2026-11-05-intervention-components.md)
+  (the sites, the head index, the full-patch baseline) and then
+  [grouped-selection-report](briefs/2026-11-05-grouped-selection-report.md)
+  (selection per component or over layer and head, reports that keep these
+  axes apart, the layer × head map). If the second is late, the components
+  can run as one config per component with today's selection, without the
+  shared figure; the heads need it.
 
 ## Other work
 
-- [x] Write the briefs above for Codex (2026-10-18).
-- [ ] Codex implements grouped-selection-compare and alignment-transfer-eval;
-  entity-vocabulary-datasets waits for the design decisions.
-- [ ] Consolidate results for the next meeting: settings recorded per run,
-  unified IIA figures across conditions, supported conclusions, uncertain
-  observations, and questions for next time.
+- [x] Record the 2026-10-19 and 2026-11-02 meetings; close rank-sweep,
+  data-scale, and object-names (2026-11-05).
+- [x] Check the sites in pyvene 0.1.8
+  (`scripts/adhoc/20261105-intervention-site-probe.py`, 2026-11-05).
+- [x] Write the briefs for Codex (2026-11-05).
+- [ ] Codex implements intervention-components, then
+  grouped-selection-report.
+- [ ] Write the two configs, run them, and update STATUS.
+- [ ] Consolidate results for the next meeting.
 
 ## Deferred
 
-- data-scale on GPT-2 Small at layer 8 (the `placeholder` configs): still
-  waits for the budget decision. The Medium runs above may settle it.
+- GPT-2 Medium (24 layers, 16 heads per layer): 72 component and 1,152 head
+  conditions, about 11 A30 hours at 33 s each. After the Small results are
+  read.
+- `mlp_activation` (3072 / 4096 dimensions). Supported by the
+  intervention-components brief, but running it waits for a storage
+  decision: each saved alignment holds the d × d orthogonal base (38 MB for
+  Small, 67 MB for Medium), saved twice per condition although training
+  does not change it, so 36 Small conditions add about 2.7 GB and 72 Medium
+  conditions about 9.7 GB. It is also the site where Makelov et al. (2023)
+  show the subspace illusion.
+- Other token locations (S2, IO, S1, N − k), for heads that act there (for
+  example duplicate-token and induction heads at S2). Config only once
+  heads are supported.
+- Several heads swapped together through one joint subspace (a separate
+  capability).
+- Q / K / V, `attention_input`, `mlp_input` (what a branch reads).
+- A learning-rate check per site (activations differ in scale).
+- A cross-run comparison command (from the dropped
+  grouped-selection-compare brief), for Small vs Medium.
 - Phase 2 figure guide: explain each figure, field, and comparison.
 - Earlier M4/M5 protocol drafts remain on branch `m3-complete-20261015` for
   reference only.
 
 ## Open questions
 
-- Attention-head swapping (candidate task `head-patching`): replace one
-  head's output at N with its output on the source, starting with GPT-2
-  Small's 144 heads, and measure IIA per head. Method and timing undecided.
-- Larger data: same distribution first, or unseen names or templates first?
-- Test other token positions (N-1, N-2, name tokens) at the peak layers?
+- Should the full-vector patch become a standard reference for every task
+  (a PROTOCOL change)? This cycle records it for intervention-sites only.
+- Report a names-only score (S vs IO) next to the full-vocabulary argmax?
+- How much to trust Medium's 0.3 at `block_output`, given that DAS exceeds
+  the full-residual patch there (the checks of Makelov et al.)?
+- "gave a bone to" prompts: Medium prefers " the". Report per object, or
+  change the templates (a protocol decision)?
 - Is a 200-pair in-distribution validation set enough?
 - May results from different GPU types be compared directly?

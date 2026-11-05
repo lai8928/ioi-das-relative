@@ -1,6 +1,6 @@
 # Status
 
-Updated: 2026-10-19 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
+Updated: 2026-11-05 · Cycle since: [2026-11-02](meetings/2026-11-02.md)
 
 ## Tasks
 
@@ -10,9 +10,10 @@ Updated: 2026-10-19 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
 | `single-condition-das` | One DAS run: GPT-2 Small, layer 8, N, rank 1 | done | 2026-10-12 | Phase 2 |
 | `layer-sweep` | Every layer at the last token, GPT-2 Small | done | 2026-10-15 | M3 / A |
 | `model-scale` | Same protocol on a larger GPT-2 | done | 2026-10-15 | M4 / B |
-| `data-scale` | Larger training sets | active | 2026-10-19 | M5 / C |
-| `rank-sweep` | DAS rank 1/2/4/8, GPT-2 Medium and Small, with an optimization check | active | 2026-10-15 | |
-| `object-names` | Object nouns in place of person names: behavior and DAS | active | 2026-10-15 | |
+| `data-scale` | Larger training sets | done | 2026-11-05 | M5 / C |
+| `rank-sweep` | DAS rank 1/2/4/8, GPT-2 Medium and Small, with an optimization check | done | 2026-11-05 | |
+| `object-names` | Object nouns in place of person names: behavior and DAS | dropped | 2026-11-05 | |
+| `intervention-sites` | DAS at other activations: attention and MLP outputs, single attention heads | active | 2026-10-19 | |
 
 ## Infrastructure
 
@@ -43,101 +44,95 @@ Updated: 2026-10-19 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
   differences); full test suite, all dataset audits, `doctor --require-gpu`,
   and a Medium smoke passed there on `c578921`.
 
-## model-scale
+## intervention-sites
 
-- Goal: rerun the layer-sweep protocol on GPT-2 Medium (24 layers).
-  Done; the follow-up (rank, learning rate, budget) is task `rank-sweep`.
-- State: full run complete (`f833245`), 72/72 conditions plus 72/72
-  post-lock, on HPC3 (one A30, Slurm job 58157400, 46 min, mean 33 s per
-  condition). Source `c578921`, `protected_tree_clean=true` (`clean_tree`
-  false only because of untracked check outputs). Config
-  `configs/model-scale/gpt2-medium.json`, SHA-256 `76a6dd7f…8334de`.
-- Result: layer 14 selected on validation (`val_indist_v1`) before test.
-
-  | Layer | 0–11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20–23 |
-  | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-  | Validation (mean of 3 seeds) | 0.00 | 0.10 | 0.18 | **0.28** | 0.17 | 0.15 | 0.04 | 0.01 | 0.01 | 0.00 |
-  | Test (descriptive) | 0.00 | 0.07 | 0.29 | **0.47** | 0.19 | 0.20 | 0.10 | 0.06 | 0.03 | 0.00–0.01 |
-  | Train | 0.41 | 0.44 | 0.49 | 0.53 | 0.47 | 0.47 | 0.44 | 0.41 | 0.42 | 0.41 |
-
-  Seed SD ≤ 0.03 everywhere. Baselines: untrained-alignment and
-  no-intervention validation IIA are 0 at every layer; train IIA has a 0.41
-  floor from same-pattern pairs (81/200). Same shape as GPT-2 Small (one
-  mid-depth peak; relative depth 14/24 = 0.58 vs 8/12 = 0.67), but a much
-  lower peak (0.28 vs 0.83), and train IIA at the peak is only 0.53: the
-  alignment barely fits its own training data. Rank, learning rate, and
-  budget were kept from GPT-2 Small and have not been varied.
-- Evidence: `outputs/model-scale/20261015-gpt2-medium/` (`summary.md`,
-  `selection.json`, `layer_summary.csv`, `figures/`).
-- Cross-GPU check (not in the repository): on HPC3, the opt-in GPU
-  regression (`layer8-seed42`, GPT-2 Small, Slurm job 58156709) reproduced
-  every per-epoch and final IIA count of the RTX 2080 Ti reference (train
-  173/200, test 79/100) but failed the exact-float check: losses differ at
-  about 1e-6 (initial counterfactual loss 2.4105420 vs 2.4105425).
-  Output kept on HPC3 under `~/hpc3-checks/`.
-
-## rank-sweep
-
-- Goal: does DAS rank 1/2/4/8 change IIA (GPT-2 Medium all 24 layers,
-  GPT-2 Small layers 6–10), and is any difference due to optimization?
-- State: GPT-2 Medium done, 4 × 72/72 conditions plus post-lock test, on
-  HPC3 (one A30 per rank, Slurm jobs 58223841–58223844, 46–48 min each,
-  median 33 s per condition). Source `0e448cb`, `clean_tree=true`. Results
-  commit `77da9d3`. GPT-2 Small rank configs not run yet. One config per
-  rank, because selection groups by layer only.
-- Result (Medium): rank barely changes anything. Every rank selects layer
-  14 on validation. At layer 14 (mean of 3 seeds):
-
-  | Rank | Validation | Test (descriptive) | Train | Train, switch-required pairs |
-  | --- | --- | --- | --- | --- |
-  | 1 | 0.283 | 0.470 | 0.528 | 0.247 |
-  | 2 | 0.287 | 0.473 | 0.527 | 0.243 |
-  | 4 | 0.277 | 0.467 | 0.532 | 0.253 |
-  | 8 | **0.295** | 0.477 | 0.537 | 0.263 |
-
-  The by-layer profile is the same for every rank: validation 0 at layers
-  0–11 and 20–23, and nonzero at 12–19 (layer 12: 0.10–0.12; 17:
-  0.05–0.06; 19: ≤ 0.01). Validation seed SD ≤ 0.03. Untrained-alignment
-  and no-intervention validation IIA are 0 at every layer for every rank.
-  Even rank 8 fits only 26% of its own switch-required training pairs, so
-  the subspace dimension is not what limits Medium at this learning rate
-  and budget.
-- Reproduction: rank 1 matches `outputs/model-scale/20261015-gpt2-medium`
-  bit for bit (same A30 type). All 288 compared artifact hashes are
-  identical (alignment, initial alignment, train and validation
-  predictions).
-- Evidence: `outputs/rank-sweep/20261018-gpt2-medium-rank{1,2,4,8}/`
-  (`summary.md`, `selection.json`, `layer_summary.csv`, `figures/`).
-- Why rank does not help: see the 2026-10-19 analysis under data-scale
-  (one useful direction at layer 14; the full-residual patch at N reaches
-  only 0.105).
-- Next: the GPT-2 Small rank configs. The optimization check and the
-  side-by-side figure wait for
-  [grouped-selection-compare](briefs/2026-10-18-grouped-selection-compare.md).
-
-## object-names
-
-- Goal: object nouns in place of person names; compare behavior and DAS.
-- State: not started. Briefs written 2026-10-18:
-  [alignment-transfer-eval](briefs/2026-10-18-alignment-transfer-eval.md)
+- Goal: besides `block_output`, which activations at the last token N
+  support the POSITION swap: the attention branch output, the MLP branch
+  output, or single attention heads? GPT-2 Small first. Decided
+  2026-10-19, confirmed 2026-11-02.
+- State: not started. Briefs written 2026-11-05:
+  [intervention-components](briefs/2026-11-05-intervention-components.md)
   (open) and
-  [entity-vocabulary-datasets](briefs/2026-10-18-entity-vocabulary-datasets.md)
-  (blocked on vocabulary, determiner, and matched-source decisions).
+  [grouped-selection-report](briefs/2026-11-05-grouped-selection-report.md)
+  (open). The configs follow after both merges.
+- Feasibility (2026-11-05, CPU, fixed weights; GPT-2 Small layer 8, head 6,
+  first 8 validation pairs;
+  `scripts/adhoc/20261105-intervention-site-probe.py`): pyvene 0.1.8
+  intervenes on `attention_output`, `mlp_output`, `mlp_activation`, and one
+  head (`head_attention_value_output`, unit `h.pos`). At every site a full
+  replacement (`VanillaIntervention`) equals a manual forward-hook patch
+  exactly (max |diff| 0); rank-1 identity reproduces the factual logits bit
+  for bit; alignment gradients are nonzero; rotation sizes are 768 / 768 /
+  3072 / 64. A full-rank rotation differs from the exact patch by up to
+  6e-5.
+- Facts that shape the reading (checked 2026-11-05):
+  - In all 200 `val_indist_v1` and all 100 legacy test pairs, base and
+    source use the same two names and have the same factual answer; only
+    the name order differs. The counterfactual answer (the base subject) is
+    neither prompt's own answer. A head that only carries which name to say
+    has nearly the same output on base and source, so its IIA stays low
+    even if it matters for IOI.
+  - Each saved alignment holds the d × d orthogonal base of torch's
+    parametrization, identical before and after training (layer-sweep
+    layer 8, seed 42: 768 × 768, 2.4 MB per file, saved in both
+    `initial_alignment.pt` and `alignment.pt`). For a head it is 64 × 64;
+    for `mlp_activation` 3072 × 3072 (38 MB) or 4096 × 4096 (67 MB).
+  - The layer-sweep reference ran on an RTX 2080 Ti; HPC3 A30 reruns match
+    its IIA counts but not its exact floats (see model-scale).
 
-## data-scale
+## Closed tasks
 
-- Goal: IIA versus training size. Resumed 2026-10-19 on GPT-2 Medium,
-  crossed with rank (see the 2026-10-15 meeting amendment and PLAN).
-- State: 10 of 16 configs complete on HPC3 (one A30 per job, Slurm jobs
-  58242123–58242137, 2026-10-19), source `43a0d06`, results commit
-  `4cad294`. Main configs: 30/30 conditions plus post-lock test; controls:
-  3/3.
-  - Complete: rank 1 n200 / n5000 / control; rank 2 n5000; rank 4 all
-    three sizes and control; rank 8 n1000 / n5000.
-  - Not run (cancelled 2026-10-19 at the user's request): rank 1 n1000,
-    rank 2 n200 / n1000, rank 8 n200, and the rank 2 / rank 8 controls.
-    `4cad294` contains partial directories for the first four (0–1 of 30
-    conditions); the user decides whether to remove them.
+### rank-sweep (done 2026-11-05)
+
+Closed by the user's decision (2026-11-02 Amendment) with only the GPT-2
+Medium part run. Not run: the GPT-2 Small ranks
+(`configs/rank-sweep/gpt2-small-rank{1,2,4,8}.json`) and the learning-rate /
+budget check; brief
+[grouped-selection-compare](briefs/2026-10-18-grouped-selection-compare.md)
+was dropped.
+
+GPT-2 Medium, rank 1 / 2 / 4 / 8 × all 24 layers × seeds 42/43/44: 4 × 72/72
+conditions plus post-lock test, on HPC3 (one A30 per rank, Slurm jobs
+58223841–58223844, 46–48 min each, median 33 s per condition). Source
+`0e448cb`, `clean_tree=true`. Results commit `77da9d3`. Rank barely changes
+anything. Every rank selects layer 14 on validation. At layer 14 (mean of 3
+seeds):
+
+| Rank | Validation | Test (descriptive) | Train | Train, switch-required pairs |
+| --- | --- | --- | --- | --- |
+| 1 | 0.283 | 0.470 | 0.528 | 0.247 |
+| 2 | 0.287 | 0.473 | 0.527 | 0.243 |
+| 4 | 0.277 | 0.467 | 0.532 | 0.253 |
+| 8 | **0.295** | 0.477 | 0.537 | 0.263 |
+
+The by-layer profile is the same for every rank: validation 0 at layers
+0–11 and 20–23, and nonzero at 12–19 (layer 12: 0.10–0.12; 17: 0.05–0.06;
+19: ≤ 0.01). Validation seed SD ≤ 0.03. Untrained-alignment and
+no-intervention validation IIA are 0 at every layer for every rank. Even
+rank 8 fits only 26% of its own switch-required training pairs, so the
+subspace dimension is not what limits Medium at this learning rate and
+budget. Rank 1 matches `outputs/model-scale/20261015-gpt2-medium` bit for
+bit (same A30 type): all 288 compared artifact hashes are identical
+(alignment, initial alignment, train and validation predictions). Why rank
+does not help: see data-scale below. Evidence:
+`outputs/rank-sweep/20261018-gpt2-medium-rank{1,2,4,8}/` (`summary.md`,
+`selection.json`, `layer_summary.csv`, `figures/`).
+
+### data-scale (done 2026-11-05)
+
+Closed by the user's decision (2026-11-02 Amendment) with 10 of 16 GPT-2
+Medium configs complete. Not run: rank 1 n1000, rank 2 n200 / n1000, rank 8
+n200, and the rank 2 / rank 8 controls (cancelled 2026-10-19 at the user's
+request; `4cad294` contains partial directories with 0–1 of 30 conditions
+for the first four), and the GPT-2 Small layer-8 configs (`placeholder` in
+their names).
+
+- Runs: HPC3, one A30 per job, Slurm jobs 58242123–58242137, 2026-10-19;
+  source `43a0d06`, results commit `4cad294`. Main configs: 30/30
+  conditions (layers 11–20 × 3 seeds, 10 epochs) plus post-lock test;
+  controls: 3/3 (layer 14, 2,500 updates). Complete: rank 1 n200 / n5000 /
+  control; rank 2 n5000; rank 4 all three sizes and control; rank 8 n1000 /
+  n5000.
 - Result: every complete run selects layer 14 on validation. At layer 14
   (mean of 3 seeds ± seed SD):
 
@@ -198,10 +193,46 @@ Updated: 2026-10-19 · Cycle since: [2026-10-15](meetings/2026-10-15.md)
   runs: `summary.md`, `selection.json`, `layer_summary.csv`, `figures/`).
 - Datasets: `train_pool_v1` and nested `train_n200_v1` / `train_n1000_v1` /
   `train_n5000_v1`, built and audited in `c578921`.
-- The GPT-2 Small layer-8 configs (`placeholder` in their names) stay
-  paused until the budget question is settled.
 
-## Closed tasks
+### object-names (dropped 2026-11-05)
+
+Never started; dropped by the user's decision (2026-11-02 Amendment). Its
+briefs [alignment-transfer-eval](briefs/2026-10-18-alignment-transfer-eval.md)
+and
+[entity-vocabulary-datasets](briefs/2026-10-18-entity-vocabulary-datasets.md)
+are dropped.
+
+### model-scale (done 2026-10-15)
+
+- Goal: rerun the layer-sweep protocol on GPT-2 Medium (24 layers).
+  The follow-up (rank, learning rate, budget) was task `rank-sweep`.
+- State: full run complete (`f833245`), 72/72 conditions plus 72/72
+  post-lock, on HPC3 (one A30, Slurm job 58157400, 46 min, mean 33 s per
+  condition). Source `c578921`, `protected_tree_clean=true` (`clean_tree`
+  false only because of untracked check outputs). Config
+  `configs/model-scale/gpt2-medium.json`, SHA-256 `76a6dd7f…8334de`.
+- Result: layer 14 selected on validation (`val_indist_v1`) before test.
+
+  | Layer | 0–11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20–23 |
+  | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+  | Validation (mean of 3 seeds) | 0.00 | 0.10 | 0.18 | **0.28** | 0.17 | 0.15 | 0.04 | 0.01 | 0.01 | 0.00 |
+  | Test (descriptive) | 0.00 | 0.07 | 0.29 | **0.47** | 0.19 | 0.20 | 0.10 | 0.06 | 0.03 | 0.00–0.01 |
+  | Train | 0.41 | 0.44 | 0.49 | 0.53 | 0.47 | 0.47 | 0.44 | 0.41 | 0.42 | 0.41 |
+
+  Seed SD ≤ 0.03 everywhere. Baselines: untrained-alignment and
+  no-intervention validation IIA are 0 at every layer; train IIA has a 0.41
+  floor from same-pattern pairs (81/200). Same shape as GPT-2 Small (one
+  mid-depth peak; relative depth 14/24 = 0.58 vs 8/12 = 0.67), but a much
+  lower peak (0.28 vs 0.83), and train IIA at the peak is only 0.53: the
+  alignment barely fits its own training data.
+- Evidence: `outputs/model-scale/20261015-gpt2-medium/` (`summary.md`,
+  `selection.json`, `layer_summary.csv`, `figures/`).
+- Cross-GPU check (not in the repository): on HPC3, the opt-in GPU
+  regression (`layer8-seed42`, GPT-2 Small, Slurm job 58156709) reproduced
+  every per-epoch and final IIA count of the RTX 2080 Ti reference (train
+  173/200, test 79/100) but failed the exact-float check: losses differ at
+  about 1e-6 (initial counterfactual loss 2.4105420 vs 2.4105425).
+  Output kept on HPC3 under `~/hpc3-checks/`.
 
 ### layer-sweep (done 2026-10-15)
 
@@ -244,5 +275,5 @@ legacy_v1` in `outputs/data-audit/20261015-legacy_v1/`.
 env PYTHONPATH=src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 /home/ilingl/.conda/envs/ioi-das-v2/bin/python -B -m pytest -q
 ```
 
-Last result on `main` (2026-10-19, with the data-scale Medium configs): 282
-passed, 1 skipped (opt-in GPU regression), 305 subtests.
+Last result on `main` (2026-11-05, with the intervention-site probe script):
+282 passed, 1 skipped (opt-in GPU regression), 305 subtests.
