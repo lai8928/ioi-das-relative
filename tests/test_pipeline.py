@@ -314,11 +314,23 @@ def selection_runtime(runtime, monkeypatch):
             "evaluate": evaluate_locked, "runtime_loads": runtime_loads}
 
 
-def test_all_conditions_finish_before_lock_and_every_checkpoint_is_evaluated(selection_runtime, monkeypatch):
+@pytest.mark.parametrize("component,head", [
+    ("block_output", None), ("attention_output", None), ("mlp_output", None),
+    ("head_attention_value_output", 6), ("head_query_output", 6),
+    ("head_key_output", 6), ("head_value_output", 6),
+])
+def test_all_conditions_finish_before_lock_and_every_checkpoint_is_evaluated(
+        selection_runtime, monkeypatch, component, head):
     primary_snapshots = {}
     original = selection_runtime["evaluate"]
+    original_train = selection_runtime["train"]
+
+    def train(output, pairs, **options):
+        assert (options["component"], options["head"]) == (component, head)
+        return original_train(output, pairs, **options)
 
     def evaluate(output, checkpoint, **options):
+        assert (options["component"], options["head"]) == (component, head)
         primary = output.parents[2] / "conditions"
         if not primary_snapshots:
             primary_snapshots.update(_snapshot(primary))
@@ -326,8 +338,14 @@ def test_all_conditions_finish_before_lock_and_every_checkpoint_is_evaluated(sel
         assert _snapshot(primary) == primary_snapshots
         return result
 
+    monkeypatch.setattr(pipeline, "run_condition", train)
     monkeypatch.setattr(pipeline, "evaluate_checkpoint", evaluate)
-    result = pipeline.run_experiment(selection_runtime["config"])
+    overrides = [f'intervention.component="{component}"']
+    if head is not None:
+        overrides.append(f"intervention.head={head}")
+    config = replace(load_config(ROOT / "configs/layer-sweep/gpt2-small.json", overrides),
+                     project_root=selection_runtime["config"].project_root)
+    result = pipeline.run_experiment(config)
     assert result["status"] == "complete"
     assert len(result["conditions"]) == len(result["post_lock"]) == 36
     assert all(row["status"] == "complete" for row in result["conditions"] + result["post_lock"])
