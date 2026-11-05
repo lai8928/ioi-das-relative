@@ -2,11 +2,13 @@
 
 - Branch: `feat/grouped-selection-report`
 - Task: `intervention-sites`
-- Status: open
+- Status: open — deferred: do not start until the first intervention-sites
+  results are read and PLAN moves this brief to "This cycle"
 - Written: 2026-11-05, from [meeting 2026-11-02](../meetings/2026-11-02.md)
 - Depends on: [intervention-components](2026-11-05-intervention-components.md)
-  (the `intervention.component` and `intervention.head` axes and the
-  full-patch metrics)
+  (the `intervention.component` and `intervention.head` axes). The
+  full-patch metrics mentioned below exist only once a later brief adds
+  them.
 
 ## Goal
 
