@@ -110,6 +110,9 @@ results.
   reviews it (merged 2026-11-05, `b2c3b8e`).
 - [x] Write the step-2 configs, run them, and update STATUS (2026-11-05).
 - [ ] Consolidate results for the next meeting.
+- [x] Import the Notion research log into `docs/README.md`, `docs/notes/`,
+  `docs/reports/`, and `docs/progress/` at the professor's request
+  (2026-11-16 Amendment in the 2026-11-02 file).
 
 ## Deferred
 

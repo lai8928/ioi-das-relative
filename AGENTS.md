@@ -57,6 +57,10 @@ authorizes work.
   | `docs/CONVENTIONS.md` | How code, configs, scripts, outputs, and commits are written | Rare; changed by Claude Code, cited in the commit |
   | `docs/briefs/YYYY-MM-DD-<slug>.md` | One code change for Codex: goal, scope, acceptance | New file per change, from `docs/templates/brief.md`; update its Status line when merged or dropped |
   | `data/registry.json` | Which datasets exist and what they are for | Append a row per new dataset |
+  | `docs/README.md` | Where a reader starts: project overview, reading order, task summary | Its task table is updated together with STATUS |
+  | `docs/notes/<topic>.md` | Background and method notes on papers and tutorials | New file per topic; edited in place |
+  | `docs/reports/YYYY-MM-DD-<task-id>.md` | What one experiment found: setup, figures, conclusions, reproducibility | New file per completed experiment; afterwards only appended Amendments |
+  | `docs/progress/YYYY-MM-DD.md` | Progress report written for the advisor before a meeting | New file per report, only when the user asks; never rewritten |
 
 - Never create `PLAN_v2.md`, `STATUS_old.md`, `NEXT_*.md`, or other new
   document types. History lives in git, `docs/meetings/`, and `docs/archive/`.
@@ -73,9 +77,13 @@ authorizes work.
   before starting work.
 - Mid-cycle change of direction: append a dated Amendment with the reason to
   the latest meeting file, then rewrite PLAN.
-- Notion mirror: the repository is the source of truth. The private Notion
-  page "IOI DAS Relative · 研究進度 Research Log" holds a Chinese and an English
-  version of each meeting note. Sync to Notion only when the user asks.
+- Notion mirror: the repository is the source of truth. `docs/README.md`,
+  `docs/notes/`, `docs/reports/`, and `docs/progress/` were imported on
+  2026-11-16 from the Notion page "UCI & Research lai › LLM_fractionation"
+  and are maintained here; the Chinese versions and the private progress
+  tracker stay in Notion. The private Notion page "IOI DAS Relative · 研究進度
+  Research Log" holds a Chinese and an English version of each meeting note.
+  Sync to Notion only when the user asks.
 
 ## Code and configuration
 

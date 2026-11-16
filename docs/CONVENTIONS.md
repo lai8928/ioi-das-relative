@@ -1,7 +1,7 @@
 # Engineering conventions
 
-How code, configs, scripts, outputs, and git history are written in this
-project. Scientific rules are in [PROTOCOL.md](PROTOCOL.md). Rules marked
+How code, configs, scripts, outputs, git history, and reader-facing documents
+are written in this project. Scientific rules are in [PROTOCOL.md](PROTOCOL.md). Rules marked
 **(tested)** are enforced by `tests/test_conventions.py` once that test
 exists; the rest are checked in review.
 
@@ -164,3 +164,42 @@ Scope is a task ID or module name, for example
 
 `main` must always pass the test suite. Push only with the user's
 authorization.
+
+## 8. Reader-facing documents
+
+`docs/README.md`, `docs/notes/`, `docs/reports/`, and `docs/progress/` are
+written for the advisor and other readers and are meant to be read on
+GitHub. Their ownership and update modes are in `AGENTS.md`.
+
+```
+docs/
+  README.md                               entry point: overview, reading order, task table
+  notes/<topic>.md                        background and method notes
+  notes/figures/<topic>/figN-<slug>.png
+  reports/YYYY-MM-DD-<task-id>.md         one completed experiment
+  reports/figures/<report>/figN-<slug>.png
+  progress/YYYY-MM-DD.md                  progress report before a meeting
+  progress/figures/<date>/figN-<slug>.png
+```
+
+- GitHub-flavored Markdown in English. Math goes in `$$` blocks, diagrams in
+  `mermaid` code blocks, and highlighted remarks in `> [!NOTE]` alerts.
+  Prose need not be hard-wrapped.
+- Figures are PNG files under `figures/<document stem>/`, numbered in order
+  of appearance, each followed by an italic caption line. New figures are
+  drawn from saved outputs only, and the report names the script or command
+  that drew them.
+- Links between documents and to repository paths are relative, so they work
+  on GitHub and in a clone. Commit SHAs stay as code spans.
+- A report covers one completed experiment. It usually has the sections
+  Research question, Setup, Results, Conclusions, Limitations, Next steps,
+  and Reproducibility (configs, output directories, source and results
+  commits, exact command). Every number comes from saved outputs; smoke
+  runs, descriptive test numbers, and numbers reported by other authors are
+  labelled as such. Once committed, a report changes only through an
+  appended `## Amendments` section.
+- Notes may be revised in place; git keeps the history. A note states what
+  was understood when it was written; it does not claim results that were
+  not run in this project.
+- The task table in `docs/README.md` restates the STATUS task table for
+  readers, with links to reports; update both together.

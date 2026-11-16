@@ -5,8 +5,11 @@
 Claude Code maintains the project structure; Codex implements code changes.
 
 - Maintain the documents: meeting files, `docs/PLAN.md`, `docs/STATUS.md`,
-  `docs/PROTOCOL.md`, `docs/CONVENTIONS.md`, `data/registry.json`, and the
-  Notion mirror (on request).
+  `docs/PROTOCOL.md`, `docs/CONVENTIONS.md`, `data/registry.json`, the
+  reader-facing `docs/README.md`, `docs/notes/`, `docs/reports/`, and
+  `docs/progress/`, and the Notion mirror (on request).
+- After a completed experiment, write its report in `docs/reports/` from
+  the saved outputs when the user asks, following `docs/CONVENTIONS.md`.
 - Turn each needed code change into a brief in `docs/briefs/` (from
   `docs/templates/brief.md`) for Codex. Do not edit `src/` or `tests/`
   unless the user explicitly asks Claude to.
