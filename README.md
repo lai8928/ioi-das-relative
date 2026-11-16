@@ -7,10 +7,37 @@ position where the intervention is applied. Positions are resolved per
 example (`N`, `N-1`, `GOAL_NAME`, …), so prompts keep their original variable
 lengths.
 
+## Research overview
+
+The question is whether an interpretable causal variable of the IOI task,
+the position of the repeated subject (POSITION), aligns with a subspace of
+GPT-2's internal activations, and how intervention success changes across
+layers, model sizes, subspace ranks, training-data sizes, and intervention
+sites. Findings so far, at the last token (N), with rank-1 DAS unless noted:
+
+- **GPT-2 Small:** POSITION can be swapped only at layers 7–9 of the
+  residual stream, best at layer 8 (validation IIA 0.83, descriptive test
+  0.79); all baselines are 0.
+- **GPT-2 Medium:** the same single mid-depth peak, at layer 14, but only
+  validation IIA 0.28. Neither rank 1–8 nor 200–5000 training pairs lifts
+  it above about 0.32.
+- **Intervention sites (GPT-2 Small):** the signal is written by attention
+  in layers 7–8 (attention output at layer 8: 0.44); the MLP output gives 0
+  at every layer. No single head exceeds 0.05; the heads that matter are
+  the S-inhibition heads of Wang et al. (2022), through their value at S2.
+
+**Start here:** [docs/README.md](docs/README.md) gives the reading order:
+background and method notes, then the experiment reports, then the
+progress reports and meeting notes.
+
 ## Where to look
 
 | Question | File |
 | --- | --- |
+| Where should a reader start? | [docs/README.md](docs/README.md) |
+| Background and method notes (DAS, IOI circuit, pyvene tutorials) | [docs/notes/](docs/notes/) |
+| What did each experiment find? | [docs/reports/](docs/reports/) |
+| What was reported to the professor before a meeting? | [docs/progress/](docs/progress/) |
 | What are we doing until the next meeting? | [docs/PLAN.md](docs/PLAN.md) |
 | What is done, and where is the evidence? | [docs/STATUS.md](docs/STATUS.md) |
 | Which rules does every experiment follow? | [docs/PROTOCOL.md](docs/PROTOCOL.md) |
@@ -27,7 +54,8 @@ lengths.
 ```
 configs/            experiment configs (legacy: audit.json, phase2.json)
 data/generated/     saved datasets, registered in data/registry.json
-docs/               plan, status, protocol, conventions, meetings, briefs, archive
+docs/               reader entry point, notes, reports, progress reports, plan,
+                    status, protocol, conventions, meetings, briefs, archive
 notebooks/          saved-result walkthroughs (no training by default)
 outputs/            immutable experiment outputs
 scripts/            thin wrappers and notebook rendering
@@ -185,14 +213,6 @@ back into the same path here and commit it here. Preserve the saved config,
 run records, hashes, checkpoints, and report together. Keep partial or failed
 run directories as evidence; completed outputs remain unchanged.
 
-## Credits
-
-Eight upstream files are preserved unchanged under `vendor/pyvene_upstream/`
-from Stanford pyvene commit `9e333904dcf9e597ca76170010d17f4d4580de8d`
-(Apache 2.0). Dataset-generation code is adapted from
-[activation-patching-illusion](https://github.com/amakelov/activation-patching-illusion),
-as upstream credits. See [docs/UPSTREAM.md](docs/UPSTREAM.md).
-
 ## Training-size datasets and budgets
 
 Build each version once, in this order, then audit all four with `data audit`:
@@ -204,13 +224,12 @@ the four pairings. Manifests record capacity, external overlap checks,
 source hashes, and subset nesting. Validation and descriptive test remain
 `val_indist_v1/validation` and `legacy_v1/test`.
 
-The two configs in `configs/data-scale/` fix layer 8 before the experiment,
-using the prior layer-sweep choice. They do not select a new layer per size.
-Their names contain `placeholder-equal-epochs` (10 epochs) or
-`placeholder-equal-updates` (100 optimizer updates); these are provisional
-budgets for later advisor review, not full-run results.
-Both configs compare the three train references and seeds 42/43/44. To check
-the complete configured grid with one bounded training pass per condition:
+`configs/data-scale/` holds the GPT-2 Medium rank × training-size configs
+whose results are in STATUS and the
+[data-scale report](docs/reports/2026-10-19-data-scale.md); the task closed
+on 2026-11-05. The two `gpt2-small-layer8-placeholder-*` configs (layer 8
+fixed; 10 epochs or 100 optimizer updates) were never run. To check a data
+grid with one bounded training pass per condition:
 
 ```bash
 $PY -B -m ioi_das.cli run --config configs/data-scale/gpt2-small-layer8-placeholder-equal-epochs.json --smoke
@@ -230,3 +249,11 @@ partway through a shuffled pass. Smoke limits either budget to its first pass.
 Only `data.train` may vary in a data grid. Every condition records the train
 reference and SHA-256, while validation/test references stay fixed. Reports
 keep each train dataset's seed means and SD separate.
+
+## Credits
+
+Eight upstream files are preserved unchanged under `vendor/pyvene_upstream/`
+from Stanford pyvene commit `9e333904dcf9e597ca76170010d17f4d4580de8d`
+(Apache 2.0). Dataset-generation code is adapted from
+[activation-patching-illusion](https://github.com/amakelov/activation-patching-illusion),
+as upstream credits. See [docs/UPSTREAM.md](docs/UPSTREAM.md).
